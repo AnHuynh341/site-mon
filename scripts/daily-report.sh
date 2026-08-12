@@ -275,28 +275,28 @@ Week: $YEAR-$WEEK
 ==========================================
 
 OVERALL STATUS
-  Status            : $OVERALL
+  Status             : $OVERALL
 
 FRONTEND
-  Uptime            : ${FRONT_UPTIME}%
-  Successful checks : $FRONT_UP / $FRONT_TOTAL
-  Average response  : ${FRONT_AVG} ms
+  Uptime             : ${FRONT_UPTIME}%
+  Successful checks  : $FRONT_UP / $FRONT_TOTAL
+  Average response   : ${FRONT_AVG} ms
 
 DATABASE
-  Uptime            : ${APP_UPTIME}%
-  Successful checks : $APP_UP / $APP_TOTAL
-  Average response  : ${APP_AVG} ms
+  Uptime             : ${APP_UPTIME}%
+  Successful checks  : $APP_UP / $APP_TOTAL
+  Average response   : ${APP_AVG} ms
 
 STORAGE
-  Data stored       : ${R2_GB} GB 
-  Object count      : $R2_OBJECTS
-  Media availabilit : ${R2_UPTIME}%
-  Average response  : ${R2_AVG} ms
-  Worst response    : ${R2_WORST} ms
+  Data stored        : ${R2_GB} GB 
+  Object count       : $R2_OBJECTS
+  Media availability : ${R2_UPTIME}%
+  Average response   : ${R2_AVG} ms
+  Worst response     : ${R2_WORST} ms
 
 ANALYTICS
-  Visits            : $WEB_VISITS
-  Average load time : ${WEB_LOAD_MS} ms
+  Visits             : $WEB_VISITS
+  Average load time  : ${WEB_LOAD_MS} ms
 
 INCIDENTS
 $INCIDENTS
