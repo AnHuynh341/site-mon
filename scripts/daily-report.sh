@@ -310,13 +310,24 @@ EOF
 # Keep only seven days of raw health data
 # ------------------------------------------------------------
 
+
 CUTOFF_DATE=$(date -d '6 days ago' +%F)
 
 awk -v cutoff="$CUTOFF_DATE" '
-    substr($0, 1, 10) >= cutoff
+    /^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] / {
+        keep = (substr($0, 1, 10) >= cutoff)
+        if (keep)
+            print
+        next
+    }
+
+    keep && /^[-=]+$/ {
+        print
+    }
 ' "$LOG_FILE" > "${LOG_FILE}.tmp"
 
 mv "${LOG_FILE}.tmp" "$LOG_FILE"
+
 
 
 echo "Report created:"

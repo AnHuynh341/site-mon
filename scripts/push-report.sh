@@ -10,7 +10,7 @@ cd "$REPO"
 "$REPO/scripts/daily-report.sh"
 
 # Stage reports and logs
-git add reports/ 
+git add reports/   logs/health.log
 
 # Don't create an empty commit
 if git diff --cached --quiet; then

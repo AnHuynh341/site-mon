@@ -226,6 +226,21 @@ check_r2_media() {
 # Run checks
 # ------------------------------------------------------------
 
+#check_url "frontend" "$FRONTEND_URL"
+#check_appwrite
+#check_r2_media
+
+
+# Hour boundary
+# Cron runs at :00, :05, :10, etc.
+# Add a stronger separator at the beginning of each hour.
+if [[ "$(date +%M)" == "00" ]]; then
+    echo "====================================================================================" >> "$LOG_FILE"
+fi
+
 check_url "frontend" "$FRONTEND_URL"
 check_appwrite
 check_r2_media
+
+# Separate each set of 3 checks
+    echo "------------------------------------------------------------------------------------" >> "$LOG_FILE"
