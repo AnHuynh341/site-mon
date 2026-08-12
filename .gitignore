@@ -2,4 +2,5 @@
 .env
 __pycache__/
 *.pyc
-logs/
+logs/*
+!logs/health.log
