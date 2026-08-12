@@ -5,6 +5,7 @@ set -u
 BASE_DIR="$HOME/repos/site-mon"
 LOG_FILE="$BASE_DIR/logs/health.log"
 R2_SCRIPT="$BASE_DIR/scripts/r2-storage.py"
+WEB_SCRIPT="$BASE_DIR/scripts/web-analytics.py"
 
 TODAY=$(date +%F)
 YEAR=$(date +%G)
@@ -20,51 +21,84 @@ if [[ ! -f "$LOG_FILE" ]]; then
     exit 1
 fi
 
-#
-# Extract only today's checks
-#
+
+# ------------------------------------------------------------
+# Extract today's checks
+# ------------------------------------------------------------
+
 TODAY_LOG=$(mktemp)
 trap 'rm -f "$TODAY_LOG"' EXIT
 
 grep "^$TODAY " "$LOG_FILE" > "$TODAY_LOG" || true
 
 
-#
-# Calculate statistics for one service
-#
+# ------------------------------------------------------------
+# Statistics
+# ------------------------------------------------------------
+
 get_stats() {
     local service="$1"
 
     local total
-    local successful
+    local up
+    local unstable
+    local down
+    local available
     local uptime
     local avg_ms
+    local worst_ms
 
     total=$(awk -F'|' -v s="$service" '
         {
             gsub(/^ +| +$/, "", $2)
-            if ($2 == s)
-                count++
+            if ($2 == s) count++
         }
-        END { print count+0 }
+        END {
+            print count+0
+        }
     ' "$TODAY_LOG")
 
-    successful=$(awk -F'|' -v s="$service" '
+    up=$(awk -F'|' -v s="$service" '
         {
             gsub(/^ +| +$/, "", $2)
             gsub(/^ +| +$/, "", $3)
-
-            if ($2 == s && $3 == "UP")
-                count++
+            if ($2 == s && $3 == "UP") count++
         }
-        END { print count+0 }
+        END {
+            print count+0
+        }
     ' "$TODAY_LOG")
 
+    unstable=$(awk -F'|' -v s="$service" '
+        {
+            gsub(/^ +| +$/, "", $2)
+            gsub(/^ +| +$/, "", $3)
+            if ($2 == s && $3 == "UNSTABLE") count++
+        }
+        END {
+            print count+0
+        }
+    ' "$TODAY_LOG")
+
+    down=$(awk -F'|' -v s="$service" '
+        {
+            gsub(/^ +| +$/, "", $2)
+            gsub(/^ +| +$/, "", $3)
+            if ($2 == s && $3 == "DOWN") count++
+        }
+        END {
+            print count+0
+        }
+    ' "$TODAY_LOG")
+
+    available=$((up + unstable))
+
     if [[ "$total" -gt 0 ]]; then
-        uptime=$(awk \
-            -v ok="$successful" \
-            -v total="$total" \
-            'BEGIN { printf "%.2f", (ok / total) * 100 }')
+        uptime=$(awk -v ok="$available" -v total="$total" '
+            BEGIN {
+                printf "%.2f", (ok / total) * 100
+            }
+        ')
     else
         uptime="0.00"
     fi
@@ -75,7 +109,7 @@ get_stats() {
             gsub(/^ +| +$/, "", $3)
             gsub(/^ +| +$/, "", $5)
 
-            if ($2 == s && $3 == "UP" && $5 ~ /^[0-9]+ms$/) {
+            if ($2 == s && ($3 == "UP" || $3 == "UNSTABLE") && $5 ~ /^[0-9]+ms$/) {
                 gsub(/ms/, "", $5)
                 total += $5
                 count++
@@ -90,29 +124,59 @@ get_stats() {
         }
     ' "$TODAY_LOG")
 
-    echo "$total|$successful|$uptime|$avg_ms"
+    worst_ms=$(awk -F'|' -v s="$service" '
+        {
+            gsub(/^ +| +$/, "", $2)
+
+            if ($2 == s && NF >= 6) {
+                field=$6
+
+                gsub(/^ +| +$/, "", field)
+                gsub(/^worst=/, "", field)
+                gsub(/ms$/, "", field)
+
+                if (field ~ /^[0-9]+$/ && field > worst)
+                    worst=field
+            }
+        }
+
+        END {
+            print worst+0
+        }
+    ' "$TODAY_LOG")
+
+    echo "$total|$up|$unstable|$down|$uptime|$avg_ms|$worst_ms"
 }
 
 
-#
-# Get stats
-#
-IFS='|' read -r FRONT_TOTAL FRONT_OK FRONT_UPTIME FRONT_AVG \
+# ------------------------------------------------------------
+# Read statistics
+# ------------------------------------------------------------
+
+IFS='|' read -r \
+    FRONT_TOTAL FRONT_UP FRONT_UNSTABLE FRONT_DOWN \
+    FRONT_UPTIME FRONT_AVG FRONT_WORST \
     <<< "$(get_stats frontend)"
 
-IFS='|' read -r APP_TOTAL APP_OK APP_UPTIME APP_AVG \
+IFS='|' read -r \
+    APP_TOTAL APP_UP APP_UNSTABLE APP_DOWN \
+    APP_UPTIME APP_AVG APP_WORST \
     <<< "$(get_stats appwrite)"
 
-IFS='|' read -r R2_TOTAL R2_OK R2_UPTIME R2_AVG \
+IFS='|' read -r \
+    R2_TOTAL R2_UP R2_UNSTABLE R2_DOWN \
+    R2_UPTIME R2_AVG R2_WORST \
     <<< "$(get_stats r2-media)"
 
 
-#
-# Query current R2 storage
-#
-R2_RESULT=$("$R2_SCRIPT" 2>/dev/null)
+# ------------------------------------------------------------
+# R2 storage
+# ------------------------------------------------------------
 
-if [[ $? -eq 0 ]]; then
+R2_RESULT=$("$R2_SCRIPT" 2>/dev/null)
+R2_EXIT=$?
+
+if [[ $R2_EXIT -eq 0 ]]; then
     R2_OBJECTS=$(awk -F= '/^objects=/ {print $2}' <<< "$R2_RESULT")
     R2_GB=$(awk -F= '/^gb=/ {print $2}' <<< "$R2_RESULT")
 else
@@ -121,90 +185,131 @@ else
 fi
 
 
-#
-# Determine overall status
-#
-OVERALL="HEALTHY"
 
-if [[ "$FRONT_UPTIME" != "100.00" ]] || \
-   [[ "$APP_UPTIME" != "100.00" ]] || \
-   [[ "$R2_UPTIME" != "100.00" ]]; then
-    OVERALL="DEGRADED"
+# ------------------------------------------------------------
+# Web Analytics
+# ------------------------------------------------------------
+
+WEB_RESULT=$("$WEB_SCRIPT" 2>/dev/null)
+WEB_EXIT=$?
+
+if [[ $WEB_EXIT -eq 0 ]]; then
+
+    WEB_VISITS=$(awk -F= \
+        '/^visits=/ {print $2}' <<< "$WEB_RESULT")
+
+    WEB_LOAD_MS=$(awk -F= \
+        '/^page_load_ms=/ {print $2}' <<< "$WEB_RESULT")
+
+else
+
+    WEB_VISITS="Unknown"
+    WEB_LOAD_MS="Unknown"
+
 fi
 
-if [[ "$FRONT_OK" -eq 0 ]] || \
-   [[ "$APP_OK" -eq 0 ]] || \
-   [[ "$R2_OK" -eq 0 ]]; then
+
+
+# ------------------------------------------------------------
+# Overall status
+# ------------------------------------------------------------
+
+OVERALL="HEALTHY"
+
+if (( FRONT_DOWN > 0 || APP_DOWN > 0 || R2_DOWN > 0 || R2_UNSTABLE > 0 )); then
+    OVERALL="UNSTABLE"
+fi
+
+if (( FRONT_UP == 0 || APP_UP == 0 || (R2_UP + R2_UNSTABLE) == 0 )); then
     OVERALL="DOWN"
 fi
 
 
-#
-# Build incident list
-#
+# ------------------------------------------------------------
+# Incidents
+# ------------------------------------------------------------
+
 INCIDENTS=$(awk -F'|' '
     {
         time=$1
         service=$2
         status=$3
-        code=$4
+        detail=$4
 
         gsub(/^ +| +$/, "", time)
         gsub(/^ +| +$/, "", service)
         gsub(/^ +| +$/, "", status)
-        gsub(/^ +| +$/, "", code)
+        gsub(/^ +| +$/, "", detail)
+
+        split(time, t, " ")
 
         if (status == "DOWN") {
-            split(time, t, " ")
-            printf "  %s - %s failed (%s)\n", t[2], service, code
+            printf "  %s - %s DOWN (%s)\n", t[2], service, detail
+        }
+        else if (status == "UNSTABLE") {
+            avg=$5
+            worst=$6
+
+            gsub(/^ +| +$/, "", avg)
+            gsub(/^ +| +$/, "", worst)
+
+            printf "  %s - %s UNSTABLE (%s, avg %s, %s)\n", \
+                t[2], service, detail, avg, worst
         }
     }
 ' "$TODAY_LOG")
 
 if [[ -z "$INCIDENTS" ]]; then
-    INCIDENTS="  None."
+    INCIDENTS="  None"
 fi
 
 
-#
-# Write report
-#
+# ------------------------------------------------------------
+# Generate report
+# ------------------------------------------------------------
+
 cat > "$REPORT_FILE" <<EOF
- DAILY REPORT
+W41IT DAILY REPORT
 Date: $TODAY
 Week: $YEAR-$WEEK
-============================================================
+==========================================
 
 OVERALL STATUS
-  Status               : $OVERALL
+  Status            : $OVERALL
 
 FRONTEND
-  Uptime               : ${FRONT_UPTIME}%
-  Successful checks    : $FRONT_OK / $FRONT_TOTAL
-  Average response     : ${FRONT_AVG} ms
+  Uptime            : ${FRONT_UPTIME}%
+  Successful checks : $FRONT_UP / $FRONT_TOTAL
+  Average response  : ${FRONT_AVG} ms
 
-APPWRITE
-  Uptime               : ${APP_UPTIME}%
-  Successful checks    : $APP_OK / $APP_TOTAL
-  Average response     : ${APP_AVG} ms
+DATABASE
+  Uptime            : ${APP_UPTIME}%
+  Successful checks : $APP_UP / $APP_TOTAL
+  Average response  : ${APP_AVG} ms
 
-CLOUDFLARE R2
-  Media uptime         : ${R2_UPTIME}%
-  Successful checks    : $R2_OK / $R2_TOTAL
-  Average response     : ${R2_AVG} ms
-  Storage used         : ${R2_GB} GB
-  Object count         : $R2_OBJECTS
+STORAGE
+  Data stored       : ${R2_GB} GB 
+  Object count      : $R2_OBJECTS
+  Media availabilit : ${R2_UPTIME}%
+  Average response  : ${R2_AVG} ms
+  Worst response    : ${R2_WORST} ms
+
+ANALYTICS
+  Visits            : $WEB_VISITS
+  Average load time : ${WEB_LOAD_MS} ms
 
 INCIDENTS
 $INCIDENTS
 
-============================================================
+==========================================
 Generated: $(date '+%Y-%m-%d %H:%M:%S')
 EOF
 
 
+# ------------------------------------------------------------
+# Keep only seven days of raw health data
+# ------------------------------------------------------------
 
-# Keep only the last 7 days of raw health checks
 CUTOFF_DATE=$(date -d '6 days ago' +%F)
 
 awk -v cutoff="$CUTOFF_DATE" '
