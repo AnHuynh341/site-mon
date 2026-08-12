@@ -4,31 +4,55 @@ Week: 2026-W33
 ==========================================
 
 OVERALL STATUS
-  Status             : HEALTHY
+  Status             : UNSTABLE
 
 FRONTEND
   Uptime             : 100.00%
-  Successful checks  : 130 / 130
-  Average response   : 142 ms
+  Successful checks  : 156 / 156
+  Average response   : 129 ms
 
 DATABASE
   Uptime             : 100.00%
-  Successful checks  : 130 / 130
-  Average response   : 252 ms
+  Successful checks  : 156 / 156
+  Average response   : 244 ms
 
 STORAGE
   Data stored        : 12.83 GB 
   Object count       : 399
   Media availability : 100.00%
-  Average response   : 161 ms
-  Worst response     : 96 ms
+  Average response   : 449 ms
+  Worst response     : 931 ms
 
 ANALYTICS
-  Visits             : 3
-  Average load time  : 1044 ms
+  Visits             : 6
+  Average load time  : 2855 ms
 
 INCIDENTS
-  None
+  14:00:04 - r2-media UNSTABLE (3/3, avg 1355ms, worst=3162ms)
+  14:05:03 - r2-media UNSTABLE (3/3, avg 733ms, worst=1808ms)
+  15:05:03 - r2-media UNSTABLE (3/3, avg 800ms, worst=2085ms)
+  20:05:03 - r2-media UNSTABLE (3/3, avg 831ms, worst=2189ms)
+  20:20:06 - r2-media UNSTABLE (3/3, avg 1887ms, worst=4301ms)
+  20:25:05 - r2-media UNSTABLE (3/3, avg 1215ms, worst=2386ms)
+  20:45:03 - r2-media UNSTABLE (3/3, avg 866ms, worst=1529ms)
+  20:55:03 - r2-media UNSTABLE (3/3, avg 728ms, worst=1703ms)
+  21:05:18 - r2-media UNSTABLE (3/3, avg 5714ms, worst=10874ms)
+  21:15:04 - r2-media UNSTABLE (3/3, avg 1157ms, worst=3093ms)
+  21:50:05 - r2-media UNSTABLE (3/3, avg 1627ms, worst=4639ms)
+  21:55:04 - r2-media UNSTABLE (3/3, avg 1047ms, worst=2725ms)
+  22:05:12 - r2-media UNSTABLE (3/3, avg 3902ms, worst=11351ms)
+  22:25:12 - r2-media UNSTABLE (3/3, avg 3872ms, worst=10509ms)
+  22:40:04 - r2-media UNSTABLE (3/3, avg 1332ms, worst=3807ms)
+  22:50:04 - r2-media UNSTABLE (3/3, avg 1200ms, worst=3081ms)
+  22:55:05 - r2-media UNSTABLE (3/3, avg 1425ms, worst=4022ms)
+  23:00:03 - r2-media UNSTABLE (3/3, avg 767ms, worst=2115ms)
+  23:05:03 - r2-media UNSTABLE (3/3, avg 882ms, worst=2301ms)
+  23:10:03 - r2-media UNSTABLE (3/3, avg 998ms, worst=2794ms)
+  23:20:06 - r2-media UNSTABLE (3/3, avg 1660ms, worst=4426ms)
+  23:25:09 - r2-media UNSTABLE (3/3, avg 2819ms, worst=4660ms)
+  23:35:09 - r2-media UNSTABLE (3/3, avg 2430ms, worst=4444ms)
+  23:45:08 - r2-media UNSTABLE (3/3, avg 2232ms, worst=5953ms)
+  23:50:08 - r2-media UNSTABLE (3/3, avg 2551ms, worst=6923ms)
 
 ==========================================
-Generated: 2026-08-12 10:35:39
+Generated: 2026-08-12 23:57:02
