@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Mediser service monitoring dashboard"
+  >
+
+  <title>Mediser Site Monitor</title>
+
+  <link rel="stylesheet" href="./style.css">
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
+    defer
+  ></script>
+
+  <script src="./app.js" defer></script>
+</head>
+
+<body>
+
+  <main class="dashboard">
+
+    <!-- =====================================================
+         Header
+    ====================================================== -->
+
+    <header class="dashboard-header">
+
+      <div>
+        <p class="eyebrow">SYSTEM MONITOR</p>
+
+        <h1>Mediser Site Monitor</h1>
+
+        <p class="header-subtitle">
+          Service health, traffic and delivery performance
+        </p>
+      </div>
+
+      <div class="header-status">
+
+        <div
+          class="live-badge"
+          id="live-badge"
+        >
+          <span class="live-dot"></span>
+          LIVE
+        </div>
+
+        <p>
+          Last update
+          <strong id="last-update">--:--:--</strong>
+        </p>
+
+      </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         Main / upper section
+    ====================================================== -->
+
+    <section class="top-grid">
+
+      <!-- Visits graph -->
+
+      <article class="panel visits-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <p class="panel-kicker">
+              WEB ANALYTICS
+            </p>
+
+            <h2>Visits — last 24 hours</h2>
+          </div>
+
+          <div class="headline-stat">
+            <span id="visits-total">0</span>
+            <small>today</small>
+          </div>
+
+        </div>
+
+        <div class="chart-container chart-large">
+          <canvas id="visits-chart"></canvas>
+        </div>
+
+      </article>
+
+
+      <!-- Gauges -->
+
+      <aside class="gauges-panel">
+
+        <article class="gauge-card">
+
+          <div class="gauge-heading">
+            <div>
+              <p class="panel-kicker">
+                HEALTH CHECK
+              </p>
+
+              <h2>Frontend</h2>
+            </div>
+
+            <span
+              class="status-pill status-up"
+              id="frontend-status"
+            >
+              UP
+            </span>
+          </div>
+
+          <div
+            class="gauge"
+            id="frontend-gauge"
+            data-value="22"
+          >
+
+            <svg viewBox="0 0 200 115">
+              <path
+                class="gauge-track"
+                d="M 25 100 A 75 75 0 0 1 175 100"
+              />
+
+              <path
+                class="gauge-fill"
+                d="M 25 100 A 75 75 0 0 1 175 100"
+              />
+
+              <line
+                class="gauge-needle"
+                x1="100"
+                y1="100"
+                x2="100"
+                y2="42"
+              />
+
+              <circle
+                class="gauge-center"
+                cx="100"
+                cy="100"
+                r="8"
+              />
+            </svg>
+
+            <div class="gauge-value">
+              <strong id="frontend-response">0</strong>
+              <span>ms</span>
+            </div>
+
+          </div>
+
+          <div class="gauge-scale">
+            <span>0</span>
+            <span>800 ms</span>
+          </div>
+
+        </article>
+
+
+        <article class="gauge-card">
+
+          <div class="gauge-heading">
+            <div>
+              <p class="panel-kicker">
+                HEALTH CHECK
+              </p>
+
+              <h2>Database</h2>
+            </div>
+
+            <span
+              class="status-pill status-up"
+              id="database-status"
+            >
+              UP
+            </span>
+          </div>
+
+          <div
+            class="gauge"
+            id="database-gauge"
+            data-value="55"
+          >
+
+            <svg viewBox="0 0 200 115">
+
+              <path
+                class="gauge-track"
+                d="M 25 100 A 75 75 0 0 1 175 100"
+              />
+
+              <path
+                class="gauge-fill"
+                d="M 25 100 A 75 75 0 0 1 175 100"
+              />
+
+              <line
+                class="gauge-needle"
+                x1="100"
+                y1="100"
+                x2="100"
+                y2="42"
+              />
+
+              <circle
+                class="gauge-center"
+                cx="100"
+                cy="100"
+                r="8"
+              />
+
+            </svg>
+
+            <div class="gauge-value">
+              <strong id="database-response">0</strong>
+              <span>ms</span>
+            </div>
+
+          </div>
+
+          <div class="gauge-scale">
+            <span>0</span>
+            <span>800 ms</span>
+          </div>
+
+        </article>
+
+
+        <article class="gauge-card">
+
+          <div class="gauge-heading">
+
+            <div>
+              <p class="panel-kicker">
+                HEALTH CHECK
+              </p>
+
+              <h2>Storage</h2>
+            </div>
+
+            <span
+              class="status-pill status-unstable"
+              id="storage-status"
+            >
+              UNSTABLE
+            </span>
+
+          </div>
+
+          <div
+            class="gauge"
+            id="storage-gauge"
+            data-value="882"
+          >
+
+            <svg viewBox="0 0 200 115">
+
+              <path
+                class="gauge-track"
+                d="M 25 100 A 75 75 0 0 1 175 100"
+              />
+
+              <path
+                class="gauge-fill"
+                d="M 25 100 A 75 75 0 0 1 175 100"
+              />
+
+              <line
+                class="gauge-needle"
+                x1="100"
+                y1="100"
+                x2="100"
+                y2="42"
+              />
+
+              <circle
+                class="gauge-center"
+                cx="100"
+                cy="100"
+                r="8"
+              />
+
+            </svg>
+
+            <div class="gauge-value">
+              <strong id="storage-response">0</strong>
+              <span>ms</span>
+            </div>
+
+          </div>
+
+          <div class="gauge-meta">
+
+            <span>
+              Worst
+              <strong id="storage-worst">0 ms</strong>
+            </span>
+
+            <span>
+              3 / 3 objects
+            </span>
+
+          </div>
+
+        </article>
+
+      </aside>
+
+    </section>
+
+
+    <!-- =====================================================
+         Page-load graph
+    ====================================================== -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div>
+          <p class="panel-kicker">
+            REAL USER MONITORING
+          </p>
+
+          <h2>
+            Average page load time — last 24 hours
+          </h2>
+        </div>
+
+        <div class="headline-stat">
+
+          <span id="page-load-current">0</span>
+
+          <small>ms average</small>
+
+        </div>
+
+      </div>
+
+      <div class="chart-container chart-wide">
+        <canvas id="page-load-chart"></canvas>
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         R2 graph
+    ====================================================== -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div>
+          <p class="panel-kicker">
+            STORAGE DELIVERY
+          </p>
+
+          <h2>
+            R2 response time — last 24 hours
+          </h2>
+        </div>
+
+        <div class="legend">
+
+          <span>
+            <i class="legend-dot legend-average"></i>
+            Average
+          </span>
+
+          <span>
+            <i class="legend-dot legend-worst"></i>
+            Worst
+          </span>
+
+          <span>
+            <i class="legend-line"></i>
+            1500 ms threshold
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="chart-container chart-wide">
+        <canvas id="r2-chart"></canvas>
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         Summary
+    ====================================================== -->
+
+    <section class="summary-strip">
+
+      <article class="summary-item">
+        <span>Data stored</span>
+        <strong id="data-stored">12.83 GB</strong>
+      </article>
+
+      <article class="summary-item">
+        <span>Objects</span>
+        <strong id="object-count">399</strong>
+      </article>
+
+      <article class="summary-item">
+        <span>Visits today</span>
+        <strong id="summary-visits">0</strong>
+      </article>
+
+      <article class="summary-item">
+        <span>Average page load</span>
+        <strong id="summary-page-load">0 ms</strong>
+      </article>
+
+    </section>
+
+
+    <footer class="dashboard-footer">
+
+      <span>
+        Mediser monitoring
+      </span>
+
+      <span>
+        Auto refresh every 60 seconds
+      </span>
+
+    </footer>
+
+  </main>
+
+</body>
+</html>
