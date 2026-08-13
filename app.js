@@ -356,6 +356,19 @@ function chartOptions() {
 
         displayColors: true
 
+
+
+  filter: function(context) {
+
+    return (
+      context.dataset.label !==
+      "Unstable threshold"
+    );
+
+  }
+
+
+
       }
 
     },
