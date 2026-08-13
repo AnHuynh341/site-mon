@@ -201,6 +201,21 @@ body {
 }
 
 
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(0.75);
+  }
+}
+
+
+
 .live-dot {
 
   width: 8px;
@@ -212,6 +227,9 @@ body {
 
   box-shadow:
     0 0 8px currentColor;
+
+
+  animation: live-pulse 1.4s ease-in-out infinite;
 
 }
 
