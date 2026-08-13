@@ -349,12 +349,7 @@ function buildPageLoadChart() {
 
               pointHoverRadius: 5,
 
-              /*
-               * Missing analytics
-               * measurements remain
-               * visible as gaps.
-               */
-              spanGaps: false
+              spanGaps:true
             }
           ]
         },

@@ -1,20 +1,20 @@
 {
-  "generated": "2026-08-13T09:45:01+07:00",
-  "published": "2026-08-13T09:45:07.254078+07:00",
-  "analyticsGenerated": "2026-08-13T09:45:02.317203+07:00",
+  "generated": "2026-08-13T09:50:01+07:00",
+  "published": "2026-08-13T09:50:07.398975+07:00",
+  "analyticsGenerated": "2026-08-13T09:50:02.157557+07:00",
   "latest": {
     "frontend": {
       "status": "UP",
-      "ms": 264
+      "ms": 360
     },
     "database": {
       "status": "UP",
-      "ms": 183
+      "ms": 119
     },
     "storage": {
       "status": "UP",
-      "ms": 140,
-      "worst": 408,
+      "ms": 92,
+      "worst": 156,
       "successfulSamples": 5,
       "totalSamples": 5
     },
@@ -411,7 +411,8 @@
       "09:30",
       "09:35",
       "09:40",
-      "09:45"
+      "09:45",
+      "09:50"
     ],
     "average": [
       75,
@@ -688,7 +689,8 @@
       76,
       107,
       122,
-      140
+      140,
+      92
     ],
     "worst": [
       92,
@@ -965,29 +967,30 @@
       84,
       162,
       299,
-      408
+      408,
+      156
     ]
   },
   "samples": [
     {
       "name": "Sample 1",
-      "ms": 408
+      "ms": 156
     },
     {
       "name": "Sample 2",
-      "ms": 70
+      "ms": 89
     },
     {
       "name": "Sample 3",
-      "ms": 64
+      "ms": 79
     },
     {
       "name": "Sample 4",
-      "ms": 87
+      "ms": 75
     },
     {
       "name": "Sample 5",
-      "ms": 75
+      "ms": 63
     }
   ]
 }
