@@ -1,205 +1,420 @@
 #!/usr/bin/env python3
 
+import argparse
 import json
 import os
 import sys
-import urllib.request
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from datetime import datetime, timezone
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 
-CONFIG_FILE = Path.home() / ".config/mediser-monitor/config.env"
+CONFIG = Path.home() / ".config/mediser-monitor/config.env"
+GRAPHQL_URL = "https://api.cloudflare.com/client/v4/graphql"
+LOCAL_TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 
 
-def load_env_file(path):
-    if not path.exists():
-        print(f"Missing config file: {path}", file=sys.stderr)
-        sys.exit(1)
-
-    for line in path.read_text().splitlines():
-        line = line.strip()
+def load_env(path):
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
 
         if not line or line.startswith("#") or "=" not in line:
             continue
 
         key, value = line.split("=", 1)
-        value = value.strip().strip('"').strip("'")
+        value = value.strip()
+
+        if (
+            len(value) >= 2
+            and value[0] == value[-1]
+            and value[0] in "\"'"
+        ):
+            value = value[1:-1]
+
         os.environ.setdefault(key.strip(), value)
 
 
-load_env_file(CONFIG_FILE)
+def required(name):
+    value = os.environ.get(name)
 
-required = [
-    "CLOUDFLARE_ACCOUNT_ID",
-    "CLOUDFLARE_ANALYTICS_TOKEN",
-    "WEB_ANALYTICS_HOST",
-]
+    if not value:
+        raise RuntimeError(f"Missing config value: {name}")
 
-missing = [x for x in required if not os.environ.get(x)]
+    return value
 
-if missing:
-    print(
-        "Missing config values: " + ", ".join(missing),
-        file=sys.stderr,
+
+def iso_utc(value):
+    return (
+        value.astimezone(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
     )
-    sys.exit(1)
 
 
-account_id = os.environ["CLOUDFLARE_ACCOUNT_ID"]
-token = os.environ["CLOUDFLARE_ANALYTICS_TOKEN"]
-host = os.environ["WEB_ANALYTICS_HOST"]
+def graphql(query, variables):
+    token = required("CLOUDFLARE_ANALYTICS_TOKEN")
+
+    payload = json.dumps(
+        {
+            "query": query,
+            "variables": variables,
+        }
+    ).encode("utf-8")
+
+    request = Request(
+        GRAPHQL_URL,
+        data=payload,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+    )
+
+    try:
+        with urlopen(request, timeout=30) as response:
+            result = json.load(response)
+
+    except HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(
+            f"Cloudflare GraphQL HTTP {exc.code}: {body}"
+        ) from exc
+
+    except URLError as exc:
+        raise RuntimeError(
+            f"Cloudflare GraphQL connection failed: {exc}"
+        ) from exc
+
+    if result.get("errors"):
+        raise RuntimeError(
+            "Cloudflare GraphQL error: "
+            + json.dumps(result["errors"])
+        )
+
+    return result
 
 
-# ------------------------------------------------------------
-# Today's boundaries in Vietnam time
-# Then convert them to UTC for Cloudflare
-# ------------------------------------------------------------
-
-local_tz = ZoneInfo("Asia/Ho_Chi_Minh")
-
-now_local = datetime.now(local_tz)
-
-start_local = now_local.replace(
-    hour=0,
-    minute=0,
-    second=0,
-    microsecond=0,
-)
-
-start_utc = start_local.astimezone(timezone.utc)
-end_utc = now_local.astimezone(timezone.utc)
-
-
-def iso(dt):
-    return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-start = iso(start_utc)
-end = iso(end_utc)
-
-
-# ------------------------------------------------------------
-# Cloudflare GraphQL query
-# ------------------------------------------------------------
-
-query = f"""
-query {{
-  viewer {{
-    accounts(filter: {{accountTag: "{account_id}"}}) {{
-
-      rumPageloadEventsAdaptiveGroups(
-        limit: 1
-        filter: {{
-          datetime_geq: "{start}"
-          datetime_lt: "{end}"
-          requestHost: "{host}"
-        }}
-      ) {{
-        sum {{
+SUMMARY_QUERY = """
+query W41ITSummary(
+  $accountTag: String!
+  $start: Time!
+  $end: Time!
+  $host: String!
+) {
+  viewer {
+    accounts(filter: {accountTag: $accountTag}) {
+      pageload: rumPageloadEventsAdaptiveGroups(
+        limit: 100
+        filter: {
+          datetime_geq: $start
+          datetime_lt: $end
+          requestHost: $host
+        }
+      ) {
+        sum {
           visits
-        }}
-      }}
+        }
+      }
 
-      rumPerformanceEventsAdaptiveGroups(
-        limit: 1
-        filter: {{
-          datetime_geq: "{start}"
-          datetime_lt: "{end}"
-          requestHost: "{host}"
-        }}
-      ) {{
-        avg {{
+      performance: rumPerformanceEventsAdaptiveGroups(
+        limit: 100
+        filter: {
+          datetime_geq: $start
+          datetime_lt: $end
+          requestHost: $host
+        }
+      ) {
+        avg {
           pageLoadTime
-        }}
-      }}
-
-    }}
-  }}
-}}
+        }
+      }
+    }
+  }
+}
 """
 
 
-payload = json.dumps({
-    "query": query
-}).encode("utf-8")
+HOURLY_QUERY = """
+query W41ITHourly(
+  $accountTag: String!
+  $start: Time!
+  $end: Time!
+  $host: String!
+) {
+  viewer {
+    accounts(filter: {accountTag: $accountTag}) {
+      pageload: rumPageloadEventsAdaptiveGroups(
+        limit: 1000
+        orderBy: [datetimeHour_ASC]
+        filter: {
+          datetime_geq: $start
+          datetime_lt: $end
+          requestHost: $host
+        }
+      ) {
+        dimensions {
+          datetimeHour
+        }
+        sum {
+          visits
+        }
+      }
+
+      performance: rumPerformanceEventsAdaptiveGroups(
+        limit: 1000
+        orderBy: [datetimeHour_ASC]
+        filter: {
+          datetime_geq: $start
+          datetime_lt: $end
+          requestHost: $host
+        }
+      ) {
+        dimensions {
+          datetimeHour
+        }
+        avg {
+          pageLoadTime
+        }
+      }
+    }
+  }
+}
+"""
 
 
-request = urllib.request.Request(
-    "https://api.cloudflare.com/client/v4/graphql",
-    data=payload,
-    headers={
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json",
-    },
-)
+def get_account_block(result):
+    accounts = (
+        result.get("data", {})
+        .get("viewer", {})
+        .get("accounts", [])
+    )
 
-
-try:
-    with urllib.request.urlopen(request, timeout=20) as response:
-        result = json.load(response)
-
-except Exception as exc:
-    print(f"ERROR: {exc}", file=sys.stderr)
-    sys.exit(1)
-
-
-if result.get("errors"):
-    for error in result["errors"]:
-        print(
-            "ERROR: " + error.get("message", "Unknown GraphQL error"),
-            file=sys.stderr,
+    if not accounts:
+        raise RuntimeError(
+            "Cloudflare GraphQL returned no account data"
         )
 
-    sys.exit(1)
+    return accounts[0]
 
 
-try:
-    account = result["data"]["viewer"]["accounts"][0]
+def page_load_ms(raw):
+    if raw is None:
+        return None
 
-except (KeyError, IndexError, TypeError):
-    print("ERROR: Invalid Cloudflare response", file=sys.stderr)
-    sys.exit(1)
-
-
-# ------------------------------------------------------------
-# Visits
-# ------------------------------------------------------------
-
-pageload = account.get(
-    "rumPageloadEventsAdaptiveGroups",
-    []
-)
-
-if pageload:
-    visits = pageload[0].get("sum", {}).get("visits", 0)
-else:
-    visits = 0
+    return round(float(raw) / 1000)
 
 
-# ------------------------------------------------------------
-# Average page load
-# ------------------------------------------------------------
+def get_today_summary(account_id, host, now_local):
+    start_local = now_local.replace(
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+    )
 
-performance = account.get(
-    "rumPerformanceEventsAdaptiveGroups",
-    []
-)
+    result = graphql(
+        SUMMARY_QUERY,
+        {
+            "accountTag": account_id,
+            "start": iso_utc(start_local),
+            "end": iso_utc(now_local),
+            "host": host,
+        },
+    )
 
-if performance:
-    page_load = performance[0].get(
-        "avg",
-        {}
-    ).get("pageLoadTime")
-else:
-    page_load = None
+    account = get_account_block(result)
+
+    visits = sum(
+        int(group.get("sum", {}).get("visits") or 0)
+        for group in account.get("pageload", [])
+    )
+
+    load_values = [
+        group.get("avg", {}).get("pageLoadTime")
+        for group in account.get("performance", [])
+        if group.get("avg", {}).get("pageLoadTime") is not None
+    ]
+
+    if load_values:
+        raw_page_load = (
+            sum(float(value) for value in load_values)
+            / len(load_values)
+        )
+        load_ms = page_load_ms(raw_page_load)
+    else:
+        load_ms = None
+
+    return {
+        "visits": visits,
+        "pageLoad": load_ms,
+    }
 
 
-if page_load is None:
-    page_load_output = "Unknown"
-else:
-    page_load_output = str(round(page_load / 1000))
+def get_hourly(account_id, host, now_local):
+    current_hour = now_local.replace(
+        minute=0,
+        second=0,
+        microsecond=0,
+    )
+
+    hours = [
+        current_hour - timedelta(hours=offset)
+        for offset in range(23, -1, -1)
+    ]
+
+    result = graphql(
+        HOURLY_QUERY,
+        {
+            "accountTag": account_id,
+            "start": iso_utc(hours[0]),
+            "end": iso_utc(now_local),
+            "host": host,
+        },
+    )
+
+    account = get_account_block(result)
+
+    visits_by_hour = {}
+    load_by_hour = {}
+
+    for group in account.get("pageload", []):
+        stamp = group.get("dimensions", {}).get("datetimeHour")
+
+        if not stamp:
+            continue
+
+        dt = datetime.fromisoformat(
+            stamp.replace("Z", "+00:00")
+        ).astimezone(LOCAL_TZ)
+
+        key = dt.strftime("%Y-%m-%dT%H")
+
+        visits_by_hour[key] = (
+            visits_by_hour.get(key, 0)
+            + int(group.get("sum", {}).get("visits") or 0)
+        )
+
+    for group in account.get("performance", []):
+        stamp = group.get("dimensions", {}).get("datetimeHour")
+        raw = group.get("avg", {}).get("pageLoadTime")
+
+        if not stamp or raw is None:
+            continue
+
+        dt = datetime.fromisoformat(
+            stamp.replace("Z", "+00:00")
+        ).astimezone(LOCAL_TZ)
+
+        key = dt.strftime("%Y-%m-%dT%H")
+        load_by_hour[key] = page_load_ms(raw)
+
+    labels = [
+        hour.strftime("%H:%M")
+        for hour in hours
+    ]
+
+    visit_values = [
+        visits_by_hour.get(
+            hour.strftime("%Y-%m-%dT%H"),
+            0,
+        )
+        for hour in hours
+    ]
+
+    page_load_values = [
+        load_by_hour.get(
+            hour.strftime("%Y-%m-%dT%H")
+        )
+        for hour in hours
+    ]
+
+    return {
+        "visits": {
+            "labels": labels,
+            "values": visit_values,
+        },
+        "pageLoad": {
+            "labels": labels,
+            "values": page_load_values,
+        },
+    }
 
 
-print(f"visits={round(visits)}")
-print(f"page_load_ms={page_load_output}")
+def build_dashboard_payload():
+    account_id = required("CLOUDFLARE_ACCOUNT_ID")
+    host = required("WEB_ANALYTICS_HOST")
+
+    now_local = datetime.now(LOCAL_TZ)
+
+    summary = get_today_summary(
+        account_id,
+        host,
+        now_local,
+    )
+
+    hourly = get_hourly(
+        account_id,
+        host,
+        now_local,
+    )
+
+    return {
+        "generated": now_local.isoformat(),
+        "summary": summary,
+        **hourly,
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--dashboard-json",
+        action="store_true",
+    )
+
+    args = parser.parse_args()
+
+    load_env(CONFIG)
+
+    try:
+        payload = build_dashboard_payload()
+
+    except Exception as exc:
+        print(
+            f"web analytics error: {exc}",
+            file=sys.stderr,
+        )
+        return 1
+
+    if args.dashboard_json:
+        print(
+            json.dumps(
+                payload,
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return 0
+
+    print(
+        f"visits={payload['summary']['visits']}"
+    )
+
+    page_load = payload["summary"]["pageLoad"]
+
+    if page_load is None:
+        print("page_load_ms=Unknown")
+    else:
+        print(f"page_load_ms={page_load}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

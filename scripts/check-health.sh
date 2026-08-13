@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
-
 set -u
+set -o pipefail
 
 BASE_DIR="$HOME/repos/site-mon"
 LOG_FILE="$BASE_DIR/logs/health.log"
 CONFIG="$HOME/.config/mediser-monitor/config.env"
-
-if [[ ! -f "$CONFIG" ]]; then
-    echo "Missing config: $CONFIG" >&2
-    exit 1
-fi
+PUBLISHER="$BASE_DIR/scripts/publish-dashboard.py"
 
 source "$CONFIG"
+
+R2_SLOW_MS="${R2_SLOW_MS:-1500}"
 
 mkdir -p "$BASE_DIR/logs"
 
@@ -21,184 +19,149 @@ timestamp() {
 }
 
 
-# ------------------------------------------------------------
-# Generic URL check
-# ------------------------------------------------------------
+to_ms() {
+    awk -v seconds="$1" \
+        'BEGIN { printf "%.0f", seconds * 1000 }'
+}
+
 
 check_url() {
     local name="$1"
     local url="$2"
 
-    local result
-    result=$(curl \
-        --silent \
-        --show-error \
-        --location \
-        --output /dev/null \
-        --max-time 15 \
-        --write-out '%{http_code} %{time_total}' \
-        "$url" 2>/dev/null)
+    local result code seconds ms status
 
-    local curl_status=$?
+    result=$(
+        curl \
+            --silent \
+            --show-error \
+            --location \
+            --output /dev/null \
+            --max-time 15 \
+            --write-out '%{http_code} %{time_total}' \
+            "$url" \
+            2>/dev/null
+    ) || result="000 0"
 
-    if [[ $curl_status -ne 0 ]]; then
-        echo "$(timestamp) | $name | DOWN | curl_error | -" \
-            >> "$LOG_FILE"
-        return
-    fi
+    read -r code seconds <<< "$result"
 
-    local code
-    local time
-    local ms
+    ms=$(to_ms "$seconds")
 
-    code=$(awk '{print $1}' <<< "$result")
-    time=$(awk '{print $2}' <<< "$result")
-
-    ms=$(awk -v t="$time" \
-        'BEGIN { printf "%.0f", t * 1000 }')
-
-    if [[ "$code" =~ ^[23] ]]; then
-        echo "$(timestamp) | $name | UP | $code | ${ms}ms" \
-            >> "$LOG_FILE"
+    if [[ "$code" =~ ^[23][0-9][0-9]$ ]]; then
+        status="UP"
     else
-        echo "$(timestamp) | $name | DOWN | $code | ${ms}ms" \
-            >> "$LOG_FILE"
+        status="DOWN"
     fi
+
+    printf '%s | %s | %s | %s | %sms\n' \
+        "$(timestamp)" \
+        "$name" \
+        "$status" \
+        "$code" \
+        "$ms" \
+        >> "$LOG_FILE"
 }
 
-
-# ------------------------------------------------------------
-# Appwrite health check
-# ------------------------------------------------------------
 
 check_appwrite() {
-    local result
+    local result code seconds ms status
 
-    result=$(curl \
-        --silent \
-        --show-error \
-        --output /dev/null \
-        --max-time 15 \
-        --header "X-Appwrite-Project: $APPWRITE_PROJECT_ID" \
-        --header "X-Appwrite-Key: $APPWRITE_API_KEY" \
-        --write-out '%{http_code} %{time_total}' \
-        "$APPWRITE_ENDPOINT/health" 2>/dev/null)
+    result=$(
+        curl \
+            --silent \
+            --show-error \
+            --location \
+            --output /dev/null \
+            --max-time 15 \
+            --header "X-Appwrite-Project: $APPWRITE_PROJECT_ID" \
+            --header "X-Appwrite-Key: $APPWRITE_API_KEY" \
+            --write-out '%{http_code} %{time_total}' \
+            "$APPWRITE_ENDPOINT/health" \
+            2>/dev/null
+    ) || result="000 0"
 
-    local curl_status=$?
+    read -r code seconds <<< "$result"
 
-    if [[ $curl_status -ne 0 ]]; then
-        echo "$(timestamp) | appwrite | DOWN | curl_error | -" \
-            >> "$LOG_FILE"
-        return
-    fi
+    ms=$(to_ms "$seconds")
 
-    local code
-    local time
-    local ms
-
-    code=$(awk '{print $1}' <<< "$result")
-    time=$(awk '{print $2}' <<< "$result")
-
-    ms=$(awk -v t="$time" \
-        'BEGIN { printf "%.0f", t * 1000 }')
-
-    if [[ "$code" =~ ^2 ]]; then
-        echo "$(timestamp) | appwrite | UP | $code | ${ms}ms" \
-            >> "$LOG_FILE"
+    if [[ "$code" =~ ^2[0-9][0-9]$ ]]; then
+        status="UP"
     else
-        echo "$(timestamp) | appwrite | DOWN | $code | ${ms}ms" \
-            >> "$LOG_FILE"
+        status="DOWN"
     fi
+
+    printf '%s | appwrite | %s | %s | %sms\n' \
+        "$(timestamp)" \
+        "$status" \
+        "$code" \
+        "$ms" \
+        >> "$LOG_FILE"
 }
 
 
-# ------------------------------------------------------------
-# R2 media delivery test
-#
-# Tests:
-#   3 different objects
-#   128 KiB from each
-#
-# Status:
-#   UP       = all files succeeded within latency threshold
-#   UNSTABLE = at least one failure OR slow successful request
-#   DOWN     = every file failed
-# ------------------------------------------------------------
-
 check_r2_media() {
-
     local urls=(
         "$R2_TEST_URL_1"
         "$R2_TEST_URL_2"
         "$R2_TEST_URL_3"
+        "$R2_TEST_URL_4"
+        "$R2_TEST_URL_5"
     )
 
+    local total="${#urls[@]}"
     local success=0
-    local failures=0
-    local slow_count=0
+    local sum=0
+    local worst=0
 
-    local total_ms=0
-    local worst_ms=0
+    local result code seconds ms average status sample_csv
 
-    local total_files=${#urls[@]}
-    local slow_limit="${R2_SLOW_MS:-1500}"
+    local samples=()
+
 
     for url in "${urls[@]}"; do
 
-        local result
-        local curl_status
-        local code
-        local time
-        local ms
+        result=$(
+            curl \
+                --silent \
+                --show-error \
+                --location \
+                --output /dev/null \
+                --range 0-131071 \
+                --max-time 20 \
+                --write-out '%{http_code} %{time_total}' \
+                "$url" \
+                2>/dev/null
+        ) || result="000 0"
 
-        result=$(curl \
-            --silent \
-            --show-error \
-            --location \
-            --range 0-131071 \
-            --output /dev/null \
-            --max-time 20 \
-            --write-out '%{http_code} %{time_total}' \
-            "$url" 2>/dev/null)
+        read -r code seconds <<< "$result"
 
-        curl_status=$?
+        ms=$(to_ms "$seconds")
 
-        if [[ $curl_status -ne 0 ]]; then
-            ((failures++))
-            continue
-        fi
-
-        code=$(awk '{print $1}' <<< "$result")
-        time=$(awk '{print $2}' <<< "$result")
-
-        ms=$(awk -v t="$time" \
-            'BEGIN { printf "%.0f", t * 1000 }')
 
         if [[ "$code" == "200" || "$code" == "206" ]]; then
 
-            ((success++))
+            success=$((success + 1))
+            sum=$((sum + ms))
 
-            total_ms=$((total_ms + ms))
-
-            if (( ms > worst_ms )); then
-                worst_ms=$ms
+            if (( ms > worst )); then
+                worst="$ms"
             fi
 
-            if (( ms >= slow_limit )); then
-                ((slow_count++))
-            fi
+            samples+=("$ms")
 
         else
-            ((failures++))
+
+            samples+=("FAIL")
+
         fi
+
     done
 
 
-    local avg_ms=0
-    local status
-
     if (( success > 0 )); then
-        avg_ms=$((total_ms / success))
+        average=$((sum / success))
+    else
+        average=0
     fi
 
 
@@ -206,7 +169,7 @@ check_r2_media() {
 
         status="DOWN"
 
-    elif (( failures > 0 || slow_count > 0 )); then
+    elif (( success < total || worst >= R2_SLOW_MS )); then
 
         status="UNSTABLE"
 
@@ -217,30 +180,53 @@ check_r2_media() {
     fi
 
 
-    echo "$(timestamp) | r2-media | $status | ${success}/${total_files} | ${avg_ms}ms | worst=${worst_ms}ms" \
+    sample_csv=$(
+        IFS=,
+        echo "${samples[*]}"
+    )
+
+
+    printf '%s | r2-media | %s | %d/%d | %dms | worst=%dms | samples=%s\n' \
+        "$(timestamp)" \
+        "$status" \
+        "$success" \
+        "$total" \
+        "$average" \
+        "$worst" \
+        "$sample_csv" \
         >> "$LOG_FILE"
 }
 
 
-# ------------------------------------------------------------
-# Run checks
-# ------------------------------------------------------------
-
-#check_url "frontend" "$FRONTEND_URL"
-#check_appwrite
-#check_r2_media
-
-
-# Hour boundary
-# Cron runs at :00, :05, :10, etc.
-# Add a stronger separator at the beginning of each hour.
 if [[ "$(date +%M)" == "00" ]]; then
-    echo "====================================================================================" >> "$LOG_FILE"
+    echo "====================================================================================================" \
+        >> "$LOG_FILE"
 fi
 
-check_url "frontend" "$FRONTEND_URL"
+
+check_url \
+    "frontend" \
+    "$FRONTEND_URL"
+
 check_appwrite
+
 check_r2_media
 
-# Separate each set of 3 checks
-    echo "------------------------------------------------------------------------------------" >> "$LOG_FILE"
+
+echo "----------------------------------------------------------------------------------------------------" \
+    >> "$LOG_FILE"
+
+
+# Once publish-dashboard.py exists, every health run
+# will also publish the latest dashboard JSON.
+if [[ -x "$PUBLISHER" ]]; then
+
+    if ! "$PUBLISHER"; then
+
+        printf '%s | publisher | ERROR | dashboard publish failed\n' \
+            "$(timestamp)" \
+            >&2
+
+    fi
+
+fi
