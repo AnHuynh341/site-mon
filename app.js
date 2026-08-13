@@ -371,7 +371,7 @@ function chartOptions() {
 
       
 
-    },
+    }
 
 
     scales: {
