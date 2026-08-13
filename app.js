@@ -11,6 +11,7 @@ const STALE_AFTER_MS = 10 * 60_000;
 let visitsChart;
 let pageLoadChart;
 let r2Chart;
+let r2OperationsChart;
 let lastGoodData = null;
 
 
@@ -46,6 +47,48 @@ function formatNumber(value) {
   return Number.isFinite(value)
     ? value.toLocaleString()
     : "—";
+}
+
+
+function formatMonth(value) {
+  if (
+    typeof value !== "string" ||
+    !/^\d{4}-\d{2}$/.test(value)
+  ) {
+    return "—";
+  }
+
+  const [
+    year,
+    month
+  ] = value
+    .split("-")
+    .map(Number);
+
+  const date =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        1
+      )
+    );
+
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      month:
+        "short",
+
+      year:
+        "numeric",
+
+      timeZone:
+        "UTC"
+    }
+  )
+    .format(date)
+    .toUpperCase();
 }
 
 
@@ -457,6 +500,100 @@ function buildR2Chart() {
 
 
 /* ============================================================
+   R2 OPERATIONS CHART
+============================================================ */
+
+function buildR2OperationsChart() {
+  const options =
+    chartOptions();
+
+  options.indexAxis =
+    "y";
+
+  options.scales.x.beginAtZero =
+    true;
+
+  options.scales.x.ticks.precision =
+    0;
+
+  options.scales.x.ticks.callback =
+    value =>
+      Number(value)
+        .toLocaleString();
+
+  options.scales.y.grid.display =
+    false;
+
+  options.plugins.tooltip.callbacks = {
+    label(context) {
+      const value =
+        Number(context.raw);
+
+      return (
+        `${context.label}: ` +
+        formatNumber(value)
+      );
+    }
+  };
+
+  r2OperationsChart =
+    new Chart(
+      document.getElementById(
+        "r2-operations-chart"
+      ),
+
+      {
+        type:
+          "bar",
+
+        data: {
+          labels: [
+            "Class A",
+            "Class B"
+          ],
+
+          datasets: [
+            {
+              label:
+                "Operations",
+
+              data: [
+                0,
+                0
+              ],
+
+              backgroundColor: [
+                cssVar(
+                  "--red"
+                ),
+
+                cssVar(
+                  "--blue"
+                )
+              ],
+
+              borderWidth:
+                0,
+
+              borderRadius:
+                5,
+
+              minBarLength:
+                5,
+
+              barThickness:
+                24
+            }
+          ]
+        },
+
+        options
+      }
+    );
+}
+
+
+/* ============================================================
    SERVICE HEALTH
 ============================================================ */
 
@@ -809,6 +946,9 @@ function updateCharts(
   const r2History =
     data.r2History ?? {};
 
+  const r2Usage =
+    data.r2Usage ?? {};
+
 
   /* ---------------- Visits ---------------- */
 
@@ -911,6 +1051,35 @@ function updateCharts(
 
 
   r2Chart.update();
+
+
+  /* ---------------- R2 operations ---------------- */
+
+  const classA =
+    Number.isFinite(
+      r2Usage.classA
+    )
+      ? r2Usage.classA
+      : 0;
+
+  const classB =
+    Number.isFinite(
+      r2Usage.classB
+    )
+      ? r2Usage.classB
+      : 0;
+
+
+  r2OperationsChart
+    .data
+    .datasets[0]
+    .data = [
+      classA,
+      classB
+    ];
+
+
+  r2OperationsChart.update();
 }
 
 
@@ -929,6 +1098,9 @@ function updateNumbers(
 
   const storageInfo =
     latest.storageInfo ?? {};
+
+  const r2Usage =
+    data.r2Usage ?? {};
 
 
   const visitsToday =
@@ -962,6 +1134,44 @@ function updateNumbers(
           pageLoad
         )
       : "—"
+  );
+
+
+  /* ---------------- R2 operation usage ---------------- */
+
+  setText(
+    "r2-usage-month",
+
+    formatMonth(
+      r2Usage.month
+    )
+  );
+
+
+  setText(
+    "r2-class-a",
+
+    formatNumber(
+      r2Usage.classA
+    )
+  );
+
+
+  setText(
+    "r2-class-b",
+
+    formatNumber(
+      r2Usage.classB
+    )
+  );
+
+
+  setText(
+    "r2-other-operations",
+
+    formatNumber(
+      r2Usage.other
+    )
   );
 
 
@@ -1147,6 +1357,8 @@ function init() {
   buildPageLoadChart();
 
   buildR2Chart();
+
+  buildR2OperationsChart();
 
 
   /*
