@@ -1,368 +1,205 @@
-/* ============================================================
-   Chart globals
-============================================================ */
-
 let visitsChart;
 let pageLoadChart;
 let r2Chart;
 
 
 /* ============================================================
-   Demo data
-
-   This is temporary.
-   Later this function will fetch latest.json/history.json from R2.
+   Theme helpers
 ============================================================ */
 
-async function getDashboardData() {
-
-  const hours = [
-    "00:00",
-    "01:00",
-    "02:00",
-    "03:00",
-    "04:00",
-    "05:00",
-    "06:00",
-    "07:00",
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-    "23:00"
-  ];
-
-
-  return {
-
-    generated: new Date().toISOString(),
-
-    latest: {
-
-      frontend: {
-        status: "UP",
-        response_ms: 22
-      },
-
-      database: {
-        status: "UP",
-        response_ms: 55
-      },
-
-      storage: {
-        status: "UNSTABLE",
-        response_ms: 882,
-        worst_ms: 2301,
-        successful_objects: 3,
-        total_objects: 3
-      },
-
-      analytics: {
-        visits_today: 23,
-        page_load_ms: 486
-      },
-
-      r2: {
-        stored_gb: 12.83,
-        objects: 399
-      }
-
-    },
-
-
-    visits: {
-
-      labels: hours,
-
-      values: [
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        1,
-        2,
-        1,
-        3,
-        2,
-        1,
-        2,
-        3,
-        1,
-        0,
-        2,
-        1,
-        0,
-        1,
-        0,
-        1,
-        1,
-        0
-      ]
-
-    },
-
-
-    pageLoad: {
-
-      labels: hours,
-
-      values: [
-        440,
-        421,
-        405,
-        398,
-        430,
-        451,
-        412,
-        389,
-        401,
-        440,
-        478,
-        510,
-        493,
-        455,
-        431,
-        418,
-        423,
-        460,
-        501,
-        483,
-        472,
-        495,
-        486,
-        486
-      ]
-
-    },
-
-
-    r2: {
-
-      labels: [
-        "18:00",
-        "18:30",
-        "19:00",
-        "19:30",
-        "20:00",
-        "20:30",
-        "21:00",
-        "21:30",
-        "22:00",
-        "22:30",
-        "23:00",
-        "23:05"
-      ],
-
-      average: [
-        91,
-        87,
-        95,
-        102,
-        89,
-        110,
-        94,
-        101,
-        126,
-        108,
-        117,
-        882
-      ],
-
-      worst: [
-        131,
-        119,
-        143,
-        156,
-        126,
-        181,
-        145,
-        160,
-        244,
-        173,
-        209,
-        2301
-      ]
-
-    }
-
-  };
-
-}
-
-
-/* ============================================================
-   Helpers
-============================================================ */
-
-function cssVariable(name) {
-
+function cssVar(name) {
   return getComputedStyle(
     document.documentElement
   )
     .getPropertyValue(name)
     .trim();
+}
+
+
+/* ============================================================
+   Mock data
+============================================================ */
+
+function buildHours() {
+
+  return Array.from(
+    { length: 24 },
+    (_, hour) =>
+      `${String(hour).padStart(2, "0")}:00`
+  );
 
 }
 
 
-function formatTime(dateString) {
+function buildR2Labels() {
 
-  const date = new Date(dateString);
+  return Array.from(
+    { length: 48 },
+    (_, index) => {
 
-  return date.toLocaleTimeString(
-    [],
-    {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
+      const minutes =
+        index * 30;
+
+      const hour =
+        Math.floor(minutes / 60);
+
+      const minute =
+        minutes % 60;
+
+      return (
+        `${String(hour).padStart(2, "0")}:` +
+        `${String(minute).padStart(2, "0")}`
+      );
+
     }
   );
 
 }
 
 
-function statusClass(status) {
+const mockData = {
 
-  switch (status) {
+  generated:
+    new Date().toISOString(),
 
-    case "UP":
-      return "status-up";
+  latest: {
 
-    case "UNSTABLE":
-      return "status-unstable";
+    frontend: {
+      status: "UP",
+      ms: 22
+    },
 
-    default:
-      return "status-down";
+    database: {
+      status: "UP",
+      ms: 55
+    },
 
+    storage: {
+      status: "UNSTABLE",
+      ms: 882,
+      worst: 2301
+    },
+
+    analytics: {
+      visits: 23,
+      pageLoad: 486
+    },
+
+    storageInfo: {
+      gb: 12.83,
+      objects: 399
+    }
+
+  },
+
+
+  visits: {
+    labels: buildHours(),
+
+    values: [
+      0, 0, 0, 1, 0, 0,
+      1, 2, 1, 3, 2, 1,
+      2, 3, 1, 0, 2, 1,
+      0, 1, 0, 1, 1, 0
+    ]
+  },
+
+
+  pageLoad: {
+    labels: buildHours(),
+
+    values: [
+      440, 421, 405, 398,
+      430, 451, 412, 389,
+      401, 440, 478, 510,
+      493, 455, 431, 418,
+      423, 460, 501, 483,
+      472, 495, 486, 486
+    ]
+  },
+
+
+  r2History: {
+    labels: buildR2Labels(),
+
+    average: [],
+    worst: []
+  },
+
+
+  samples: [
+    { name: "File 1", ms: 84 },
+    { name: "File 2", ms: 103 },
+    { name: "File 3", ms: 129 },
+    { name: "File 4", ms: 341 },
+    { name: "File 5", ms: 882 }
+  ]
+
+};
+
+
+/* ============================================================
+   Generate mock R2 history
+============================================================ */
+
+for (
+  let i = 0;
+  i < mockData.r2History.labels.length;
+  i++
+) {
+
+  let avg =
+    95 +
+    Math.sin(i / 3) * 22 +
+    Math.random() * 30;
+
+
+  let worst =
+    avg +
+    30 +
+    Math.random() * 80;
+
+
+  /*
+   * Throw in some ugly spikes so the graph
+   * doesn't look suspiciously perfect.
+   */
+
+  if (i === 17) {
+    avg = 530;
+    worst = 1260;
   }
+
+
+  if (i === 31) {
+    avg = 420;
+    worst = 970;
+  }
+
+
+  if (i === 46) {
+    avg = 882;
+    worst = 2301;
+  }
+
+
+  mockData.r2History.average.push(
+    Math.round(avg)
+  );
+
+
+  mockData.r2History.worst.push(
+    Math.round(worst)
+  );
 
 }
 
 
 /* ============================================================
-   Gauges
+   Chart options
 ============================================================ */
 
-function updateGauge(
-  gaugeId,
-  value,
-  max,
-  status
-) {
-
-  const gauge =
-    document.getElementById(gaugeId);
-
-  if (!gauge) {
-    return;
-  }
-
-
-  const needle =
-    gauge.querySelector(".gauge-needle");
-
-  const fill =
-    gauge.querySelector(".gauge-fill");
-
-
-  const clamped =
-    Math.min(
-      Math.max(value, 0),
-      max
-    );
-
-
-  const ratio =
-    clamped / max;
-
-
-  /* -90° = far left
-      90° = far right
-  */
-
-  const angle =
-    -90 + ratio * 180;
-
-
-  needle.style.transform =
-    `rotate(${angle}deg)`;
-
-
-  const arcLength = 235.62;
-
-  fill.style.strokeDashoffset =
-    arcLength * (1 - ratio);
-
-
-  if (status === "DOWN") {
-
-    fill.style.stroke =
-      cssVariable("--red");
-
-  }
-
-  else if (status === "UNSTABLE") {
-
-    fill.style.stroke =
-      cssVariable("--yellow");
-
-  }
-
-  else {
-
-    fill.style.stroke =
-      cssVariable("--green");
-
-  }
-
-}
-
-
-function updateStatusPill(
-  id,
-  status
-) {
-
-  const element =
-    document.getElementById(id);
-
-
-  element.textContent =
-    status;
-
-
-  element.classList.remove(
-    "status-up",
-    "status-unstable",
-    "status-down"
-  );
-
-
-  element.classList.add(
-    statusClass(status)
-  );
-
-}
-
-
-/* ============================================================
-   Chart defaults
-============================================================ */
-
-function commonChartOptions() {
+function chartOptions() {
 
   return {
 
@@ -370,13 +207,13 @@ function commonChartOptions() {
 
     maintainAspectRatio: false,
 
+    animation: {
+      duration: 350
+    },
+
     interaction: {
       mode: "index",
       intersect: false
-    },
-
-    animation: {
-      duration: 450
     },
 
     plugins: {
@@ -388,22 +225,20 @@ function commonChartOptions() {
       tooltip: {
 
         backgroundColor:
-          "#151731",
+          "#080b13",
 
         borderColor:
-          "rgba(255,255,255,.10)",
+          "rgba(255,255,255,.12)",
 
         borderWidth: 1,
 
         titleColor:
-          "#f4f5ff",
+          "#ffffff",
 
         bodyColor:
-          "#c5c7dc",
+          "#c8ccda",
 
-        padding: 11,
-
-        displayColors: true
+        padding: 9
 
       }
 
@@ -413,32 +248,41 @@ function commonChartOptions() {
 
       x: {
 
-        grid: {
+        border: {
           display: false
         },
 
-        border: {
+        grid: {
           display: false
         },
 
         ticks: {
 
           color:
-            "#878aa7",
+            "#7f869b",
+
+          font: {
+            size: 9
+          },
 
           maxRotation: 0,
 
           autoSkip: true,
 
-          maxTicksLimit: 12
+          maxTicksLimit: 8
 
         }
 
       },
 
+
       y: {
 
         beginAtZero: true,
+
+        border: {
+          display: false
+        },
 
         grid: {
 
@@ -447,16 +291,16 @@ function commonChartOptions() {
 
         },
 
-        border: {
-          display: false
-        },
-
         ticks: {
 
           color:
-            "#878aa7",
+            "#7f869b",
 
-          padding: 10
+          font: {
+            size: 9
+          },
+
+          padding: 5
 
         }
 
@@ -470,20 +314,28 @@ function commonChartOptions() {
 
 
 /* ============================================================
-   Visits chart
+   Visits
 ============================================================ */
 
-function buildVisitsChart(data) {
+function buildVisitsChart() {
 
-  const ctx =
-    document
-      .getElementById("visits-chart")
-      .getContext("2d");
+  const options =
+    chartOptions();
+
+
+  /*
+   * Visits cannot be fractional people.
+   */
+
+  options.scales.y.ticks.stepSize = 1;
+  options.scales.y.ticks.precision = 0;
 
 
   visitsChart =
     new Chart(
-      ctx,
+      document.getElementById(
+        "visits-chart"
+      ),
       {
 
         type: "line",
@@ -491,114 +343,36 @@ function buildVisitsChart(data) {
         data: {
 
           labels:
-            data.labels,
+            mockData.visits.labels,
 
           datasets: [
 
             {
 
-              label:
-                "Visits",
-
               data:
-                data.values,
+                mockData.visits.values,
 
               borderColor:
-                cssVariable("--cyan"),
+                cssVar("--cyan"),
 
               backgroundColor:
-                "rgba(35,213,255,.11)",
+                "rgba(33,213,255,.12)",
 
               fill: true,
 
-              pointRadius: 2,
-
-              pointHoverRadius: 5,
-
-              borderWidth: 2,
-
-              tension: 0.35
-
-            }
-
-          ]
-
-        },
-
-
-        options:
-          commonChartOptions()
-
-      }
-    );
-
-}
-
-
-/* ============================================================
-   Page-load chart
-============================================================ */
-
-function buildPageLoadChart(data) {
-
-  const ctx =
-    document
-      .getElementById("page-load-chart")
-      .getContext("2d");
-
-
-  const options =
-    commonChartOptions();
-
-
-  options.scales.y.ticks.callback =
-    value => `${value} ms`;
-
-
-  pageLoadChart =
-    new Chart(
-      ctx,
-      {
-
-        type: "line",
-
-        data: {
-
-          labels:
-            data.labels,
-
-          datasets: [
-
-            {
-
-              label:
-                "Average page load",
-
-              data:
-                data.values,
-
-              borderColor:
-                cssVariable("--purple"),
-
-              backgroundColor:
-                "rgba(210,98,255,.08)",
-
-              fill: true,
-
-              borderWidth: 2,
+              tension: 0.28,
 
               pointRadius: 1,
 
-              pointHoverRadius: 5,
+              pointHoverRadius: 4,
 
-              tension: 0.32
+              borderWidth: 2
 
             }
 
           ]
 
         },
-
 
         options
 
@@ -609,28 +383,24 @@ function buildPageLoadChart(data) {
 
 
 /* ============================================================
-   R2 chart
+   Page load
 ============================================================ */
 
-function buildR2Chart(data) {
-
-  const ctx =
-    document
-      .getElementById("r2-chart")
-      .getContext("2d");
-
+function buildPageLoadChart() {
 
   const options =
-    commonChartOptions();
+    chartOptions();
 
 
   options.scales.y.ticks.callback =
-    value => `${value} ms`;
+    value => `${value}ms`;
 
 
-  r2Chart =
+  pageLoadChart =
     new Chart(
-      ctx,
+      document.getElementById(
+        "page-load-chart"
+      ),
       {
 
         type: "line",
@@ -638,59 +408,116 @@ function buildR2Chart(data) {
         data: {
 
           labels:
-            data.labels,
+            mockData.pageLoad.labels,
 
           datasets: [
 
             {
 
-              label:
-                "Average",
-
               data:
-                data.average,
+                mockData.pageLoad.values,
 
               borderColor:
-                cssVariable("--cyan"),
+                cssVar("--purple"),
 
-              borderWidth:
-                2,
+              backgroundColor:
+                "rgba(198,92,255,.09)",
 
-              pointRadius:
-                1,
+              fill: true,
 
-              pointHoverRadius:
-                5,
+              tension: 0.28,
 
-              tension:
-                0.28
+              borderWidth: 2,
 
-            },
+              pointRadius: 1,
+
+              pointHoverRadius: 4
+
+            }
+
+          ]
+
+        },
+
+        options
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   R2 history
+============================================================ */
+
+function buildR2Chart() {
+
+  const options =
+    chartOptions();
+
+
+  options.scales.y.ticks.callback =
+    value => `${value}ms`;
+
+
+  r2Chart =
+    new Chart(
+      document.getElementById(
+        "r2-chart"
+      ),
+      {
+
+        type: "line",
+
+        data: {
+
+          labels:
+            mockData.r2History.labels,
+
+          datasets: [
 
             {
 
-              label:
-                "Worst",
+              label: "Average",
 
               data:
-                data.worst,
+                mockData.r2History.average,
 
               borderColor:
-                cssVariable("--purple"),
+                cssVar("--cyan"),
 
-              borderWidth:
-                2,
+              borderWidth: 2,
 
-              pointRadius:
-                1,
+              pointRadius: 0,
 
-              pointHoverRadius:
-                5,
+              pointHoverRadius: 4,
 
-              tension:
-                0.28
+              tension: 0.25
 
             },
+
+
+            {
+
+              label: "Worst",
+
+              data:
+                mockData.r2History.worst,
+
+              borderColor:
+                cssVar("--purple"),
+
+              borderWidth: 2,
+
+              pointRadius: 0,
+
+              pointHoverRadius: 4,
+
+              tension: 0.25
+
+            },
+
 
             {
 
@@ -698,31 +525,26 @@ function buildR2Chart(data) {
                 "Unstable threshold",
 
               data:
-                data.labels.map(
+                mockData.r2History.labels.map(
                   () => 1500
                 ),
 
               borderColor:
-                cssVariable("--yellow"),
+                cssVar("--yellow"),
 
-              borderDash:
-                [7, 7],
+              borderWidth: 1,
 
-              borderWidth:
-                1,
+              borderDash: [7, 6],
 
-              pointRadius:
-                0,
+              pointRadius: 0,
 
-              tension:
-                0
+              tension: 0
 
             }
 
           ]
 
         },
-
 
         options
 
@@ -733,191 +555,455 @@ function buildR2Chart(data) {
 
 
 /* ============================================================
-   Dashboard update
+   Health
 ============================================================ */
 
-function updateDashboard(data) {
+function applyHealth(
+  prefix,
+  service
+) {
 
-  const latest =
-    data.latest;
-
-
-  /* Header */
-
-  document
-    .getElementById("last-update")
-    .textContent =
-      formatTime(data.generated);
+  const status =
+    service.status;
 
 
-  /* Frontend */
-
-  document
-    .getElementById("frontend-response")
-    .textContent =
-      latest.frontend.response_ms;
+  const statusElement =
+    document.getElementById(
+      `${prefix}-status`
+    );
 
 
-  updateStatusPill(
-    "frontend-status",
-    latest.frontend.status
-  );
+  const dot =
+    document.getElementById(
+      `${prefix}-dot`
+    );
 
 
-  updateGauge(
-    "frontend-gauge",
-    latest.frontend.response_ms,
-    800,
-    latest.frontend.status
-  );
+  statusElement.textContent =
+    status;
 
 
-  /* Database */
-
-  document
-    .getElementById("database-response")
-    .textContent =
-      latest.database.response_ms;
+  let color =
+    cssVar("--green");
 
 
-  updateStatusPill(
-    "database-status",
-    latest.database.status
-  );
+  if (status === "UNSTABLE") {
+
+    color =
+      cssVar("--yellow");
+
+  }
 
 
-  updateGauge(
-    "database-gauge",
-    latest.database.response_ms,
-    800,
-    latest.database.status
-  );
+  if (status === "DOWN") {
+
+    color =
+      cssVar("--red");
+
+  }
 
 
-  /* Storage */
-
-  document
-    .getElementById("storage-response")
-    .textContent =
-      latest.storage.response_ms;
+  statusElement.style.color =
+    color;
 
 
-  document
-    .getElementById("storage-worst")
-    .textContent =
-      `${latest.storage.worst_ms} ms`;
+  dot.style.background =
+    color;
 
 
-  updateStatusPill(
-    "storage-status",
-    latest.storage.status
-  );
-
-
-  updateGauge(
-    "storage-gauge",
-    latest.storage.response_ms,
-    1500,
-    latest.storage.status
-  );
-
-
-  /* Analytics */
-
-  document
-    .getElementById("visits-total")
-    .textContent =
-      latest.analytics.visits_today;
-
-
-  document
-    .getElementById("page-load-current")
-    .textContent =
-      latest.analytics.page_load_ms;
-
-
-  /* Summary */
-
-  document
-    .getElementById("data-stored")
-    .textContent =
-      `${latest.r2.stored_gb.toFixed(2)} GB`;
-
-
-  document
-    .getElementById("object-count")
-    .textContent =
-      latest.r2.objects;
-
-
-  document
-    .getElementById("summary-visits")
-    .textContent =
-      latest.analytics.visits_today;
-
-
-  document
-    .getElementById("summary-page-load")
-    .textContent =
-      `${latest.analytics.page_load_ms} ms`;
+  dot.style.boxShadow =
+    `0 0 8px ${color}`;
 
 }
 
 
 /* ============================================================
-   Initialisation
+   R2 sample bars
 ============================================================ */
 
-async function init() {
+function updateSampleBars(samples) {
 
-  try {
-
-    const data =
-      await getDashboardData();
-
-
-    updateDashboard(data);
-
-
-    buildVisitsChart(
-      data.visits
+  const container =
+    document.getElementById(
+      "sample-bars"
     );
 
 
-    buildPageLoadChart(
-      data.pageLoad
+  container.innerHTML = "";
+
+
+  const times =
+    samples.map(
+      sample => sample.ms
     );
 
 
-    buildR2Chart(
-      data.r2
-    );
+  const min =
+    Math.min(...times);
 
 
-  }
-
-  catch (error) {
-
-    console.error(
-      "Dashboard failed to initialise:",
-      error
-    );
+  const max =
+    Math.max(...times);
 
 
-    const badge =
-      document.getElementById(
-        "live-badge"
+  const range =
+    max - min;
+
+
+  samples.forEach(
+    sample => {
+
+      /*
+       * Relative performance:
+       *
+       * fastest = green (120°)
+       * slowest = red   (0°)
+       */
+
+      const ratio =
+        range === 0
+          ? 0
+          : (
+              sample.ms - min
+            ) / range;
+
+
+      const hue =
+        120 * (1 - ratio);
+
+
+      const color =
+        `hsl(${hue}, 78%, 50%)`;
+
+
+      /*
+       * Bar length represents latency.
+       */
+
+      const width =
+        Math.max(
+          7,
+          sample.ms / max * 100
+        );
+
+
+      const row =
+        document.createElement("div");
+
+
+      row.className =
+        "sample-row";
+
+
+      row.innerHTML = `
+        <span class="sample-label">
+          ${sample.name}
+        </span>
+
+        <div class="sample-track">
+          <div
+            class="sample-fill"
+            style="
+              width: ${width}%;
+              background-color: ${color};
+            "
+          ></div>
+        </div>
+
+        <span class="sample-ms">
+          ${sample.ms} ms
+        </span>
+      `;
+
+
+      container.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   Dashboard numbers
+============================================================ */
+
+function updateNumbers() {
+
+  const latest =
+    mockData.latest;
+
+
+  document.getElementById(
+    "last-update"
+  ).textContent =
+    new Date(
+      mockData.generated
+    ).toLocaleTimeString();
+
+
+  document.getElementById(
+    "visits-today"
+  ).textContent =
+    latest.analytics.visits;
+
+
+  document.getElementById(
+    "page-load-now"
+  ).textContent =
+    latest.analytics.pageLoad;
+
+
+  document.getElementById(
+    "frontend-ms"
+  ).textContent =
+    latest.frontend.ms;
+
+
+  document.getElementById(
+    "database-ms"
+  ).textContent =
+    latest.database.ms;
+
+
+  document.getElementById(
+    "storage-ms"
+  ).textContent =
+    latest.storage.ms;
+
+
+  document.getElementById(
+    "storage-worst"
+  ).textContent =
+    `${latest.storage.worst} ms`;
+
+
+  document.getElementById(
+    "stored-data"
+  ).textContent =
+    `${latest.storageInfo.gb.toFixed(2)} GB`;
+
+
+  document.getElementById(
+    "object-count"
+  ).textContent =
+    latest.storageInfo.objects;
+
+
+  document.getElementById(
+    "summary-visits"
+  ).textContent =
+    latest.analytics.visits;
+
+
+  document.getElementById(
+    "summary-page-load"
+  ).textContent =
+    `${latest.analytics.pageLoad} ms`;
+
+
+  document.getElementById(
+    "summary-r2"
+  ).textContent =
+    `${latest.storage.ms} ms`;
+
+
+  applyHealth(
+    "frontend",
+    latest.frontend
+  );
+
+
+  applyHealth(
+    "database",
+    latest.database
+  );
+
+
+  applyHealth(
+    "storage",
+    latest.storage
+  );
+
+
+  document.getElementById(
+    "sample-success"
+  ).textContent =
+    `${mockData.samples.length} / ${mockData.samples.length}`;
+
+}
+
+
+/* ============================================================
+   Fake live updates
+
+   Purely for frontend testing.
+   Backend will replace this later.
+============================================================ */
+
+function simulateLiveUpdate() {
+
+  const randomBetween =
+    (min, max) =>
+      Math.round(
+        min +
+        Math.random() *
+        (max - min)
       );
 
 
-    badge.innerHTML =
-      "<span class='live-dot'></span> DATA ERROR";
+  /*
+   * Small current-value movements.
+   */
+
+  mockData.latest.frontend.ms =
+    randomBetween(
+      18,
+      40
+    );
 
 
-    badge.style.color =
-      cssVariable("--red");
+  mockData.latest.database.ms =
+    randomBetween(
+      40,
+      100
+    );
 
-  }
+
+  const samples =
+    mockData.samples.map(
+      (sample, index) => {
+
+        let ms =
+          sample.ms +
+          randomBetween(
+            -25,
+            25
+          );
+
+
+        ms =
+          Math.max(
+            40,
+            ms
+          );
+
+
+        /*
+         * Occasionally spike one sample.
+         */
+
+        if (
+          index === 4 &&
+          Math.random() < 0.25
+        ) {
+
+          ms =
+            randomBetween(
+              1100,
+              2400
+            );
+
+        }
+
+
+        return {
+          ...sample,
+          ms
+        };
+
+      }
+    );
+
+
+  mockData.samples =
+    samples;
+
+
+  const average =
+    Math.round(
+      samples.reduce(
+        (sum, sample) =>
+          sum + sample.ms,
+        0
+      ) /
+      samples.length
+    );
+
+
+  const worst =
+    Math.max(
+      ...samples.map(
+        sample => sample.ms
+      )
+    );
+
+
+  mockData.latest.storage.ms =
+    average;
+
+
+  mockData.latest.storage.worst =
+    worst;
+
+
+  mockData.latest.storage.status =
+    worst >= 1500
+      ? "UNSTABLE"
+      : "UP";
+
+
+  mockData.latest.analytics.pageLoad =
+    randomBetween(
+      380,
+      620
+    );
+
+
+  mockData.generated =
+    new Date().toISOString();
+
+
+  updateNumbers();
+
+  updateSampleBars(
+    mockData.samples
+  );
+
+}
+
+
+/* ============================================================
+   Start
+============================================================ */
+
+function init() {
+
+  buildVisitsChart();
+
+  buildPageLoadChart();
+
+  buildR2Chart();
+
+  updateNumbers();
+
+  updateSampleBars(
+    mockData.samples
+  );
+
+
+  /*
+   * Mock refresh every 5 seconds.
+   *
+   * Later this becomes the real R2 JSON refresh.
+   */
+
+  setInterval(
+    simulateLiveUpdate,
+    5000
+  );
 
 }
 

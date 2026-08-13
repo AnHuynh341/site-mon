@@ -8,12 +8,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <meta
-    name="description"
-    content="Mediser service monitoring dashboard"
-  >
-
-  <title>Mediser Site Monitor</title>
+  <title>W41IT Monitor</title>
 
   <link rel="stylesheet" href="./style.css">
 
@@ -33,32 +28,24 @@
          Header
     ====================================================== -->
 
-    <header class="dashboard-header">
+    <header class="topbar">
 
       <div>
-        <p class="eyebrow">SYSTEM MONITOR</p>
-
-        <h1>Mediser Site Monitor</h1>
-
-        <p class="header-subtitle">
-          Service health, traffic and delivery performance
-        </p>
+        <span class="eyebrow">SYSTEM MONITOR</span>
+        <h1>W41IT Monitor</h1>
       </div>
 
-      <div class="header-status">
+      <div class="topbar-right">
 
-        <div
-          class="live-badge"
-          id="live-badge"
-        >
+        <span class="live-badge">
           <span class="live-dot"></span>
           LIVE
-        </div>
+        </span>
 
-        <p>
+        <div class="update-time">
           Last update
           <strong id="last-update">--:--:--</strong>
-        </p>
+        </div>
 
       </div>
 
@@ -66,382 +53,317 @@
 
 
     <!-- =====================================================
-         Main / upper section
+         Dashboard grid
     ====================================================== -->
 
-    <section class="top-grid">
+    <div class="dashboard-grid">
 
-      <!-- Visits graph -->
 
-      <article class="panel visits-panel">
+      <!-- ===================================================
+           Visits
+      ==================================================== -->
+
+      <section class="panel visits-panel">
 
         <div class="panel-header">
 
           <div>
-            <p class="panel-kicker">
+            <span class="panel-kicker">
               WEB ANALYTICS
-            </p>
+            </span>
 
             <h2>Visits — last 24 hours</h2>
           </div>
 
-          <div class="headline-stat">
-            <span id="visits-total">0</span>
-            <small>today</small>
+          <div class="big-number">
+            <strong id="visits-today">0</strong>
+            <span>today</span>
           </div>
 
         </div>
 
-        <div class="chart-container chart-large">
+        <div class="chart-box">
           <canvas id="visits-chart"></canvas>
         </div>
 
-      </article>
+      </section>
 
 
-      <!-- Gauges -->
+      <!-- ===================================================
+           Page load
+      ==================================================== -->
 
-      <aside class="gauges-panel">
+      <section class="panel page-load-panel">
 
-        <article class="gauge-card">
+        <div class="panel-header">
 
-          <div class="gauge-heading">
-            <div>
-              <p class="panel-kicker">
-                HEALTH CHECK
-              </p>
+          <div>
+            <span class="panel-kicker">
+              USER PERFORMANCE
+            </span>
 
-              <h2>Frontend</h2>
+            <h2>Average page load — 24h</h2>
+          </div>
+
+          <div class="big-number">
+            <strong id="page-load-now">0</strong>
+            <span>ms</span>
+          </div>
+
+        </div>
+
+        <div class="chart-box">
+          <canvas id="page-load-chart"></canvas>
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           Service health
+      ==================================================== -->
+
+      <section class="panel health-panel">
+
+        <div class="panel-header compact-header">
+          <div>
+            <span class="panel-kicker">
+              CURRENT
+            </span>
+
+            <h2>Service health</h2>
+          </div>
+        </div>
+
+
+        <div class="health-list">
+
+          <div class="health-row">
+
+            <div class="health-name">
+              <span
+                class="status-dot"
+                id="frontend-dot"
+              ></span>
+
+              <div>
+                <strong>Frontend</strong>
+                <small>GitHub Pages</small>
+              </div>
+            </div>
+
+            <div class="health-value">
+              <strong id="frontend-ms">--</strong>
+              <span>ms</span>
             </div>
 
             <span
-              class="status-pill status-up"
+              class="health-status"
               id="frontend-status"
             >
               UP
             </span>
+
           </div>
 
-          <div
-            class="gauge"
-            id="frontend-gauge"
-            data-value="22"
-          >
 
-            <svg viewBox="0 0 200 115">
-              <path
-                class="gauge-track"
-                d="M 25 100 A 75 75 0 0 1 175 100"
-              />
+          <div class="health-row">
 
-              <path
-                class="gauge-fill"
-                d="M 25 100 A 75 75 0 0 1 175 100"
-              />
+            <div class="health-name">
+              <span
+                class="status-dot"
+                id="database-dot"
+              ></span>
 
-              <line
-                class="gauge-needle"
-                x1="100"
-                y1="100"
-                x2="100"
-                y2="42"
-              />
+              <div>
+                <strong>Database</strong>
+                <small>Appwrite</small>
+              </div>
+            </div>
 
-              <circle
-                class="gauge-center"
-                cx="100"
-                cy="100"
-                r="8"
-              />
-            </svg>
-
-            <div class="gauge-value">
-              <strong id="frontend-response">0</strong>
+            <div class="health-value">
+              <strong id="database-ms">--</strong>
               <span>ms</span>
             </div>
 
-          </div>
-
-          <div class="gauge-scale">
-            <span>0</span>
-            <span>800 ms</span>
-          </div>
-
-        </article>
-
-
-        <article class="gauge-card">
-
-          <div class="gauge-heading">
-            <div>
-              <p class="panel-kicker">
-                HEALTH CHECK
-              </p>
-
-              <h2>Database</h2>
-            </div>
-
             <span
-              class="status-pill status-up"
+              class="health-status"
               id="database-status"
             >
               UP
             </span>
+
           </div>
 
-          <div
-            class="gauge"
-            id="database-gauge"
-            data-value="55"
-          >
 
-            <svg viewBox="0 0 200 115">
+          <div class="health-row storage-health">
 
-              <path
-                class="gauge-track"
-                d="M 25 100 A 75 75 0 0 1 175 100"
-              />
+            <div class="health-name">
 
-              <path
-                class="gauge-fill"
-                d="M 25 100 A 75 75 0 0 1 175 100"
-              />
+              <span
+                class="status-dot"
+                id="storage-dot"
+              ></span>
 
-              <line
-                class="gauge-needle"
-                x1="100"
-                y1="100"
-                x2="100"
-                y2="42"
-              />
+              <div>
+                <strong>Storage</strong>
+                <small>Cloudflare R2</small>
+              </div>
 
-              <circle
-                class="gauge-center"
-                cx="100"
-                cy="100"
-                r="8"
-              />
-
-            </svg>
-
-            <div class="gauge-value">
-              <strong id="database-response">0</strong>
-              <span>ms</span>
             </div>
 
-          </div>
-
-          <div class="gauge-scale">
-            <span>0</span>
-            <span>800 ms</span>
-          </div>
-
-        </article>
-
-
-        <article class="gauge-card">
-
-          <div class="gauge-heading">
-
-            <div>
-              <p class="panel-kicker">
-                HEALTH CHECK
-              </p>
-
-              <h2>Storage</h2>
+            <div class="health-value">
+              <strong id="storage-ms">--</strong>
+              <span>ms</span>
             </div>
 
             <span
-              class="status-pill status-unstable"
+              class="health-status"
               id="storage-status"
             >
-              UNSTABLE
+              UP
             </span>
 
           </div>
 
-          <div
-            class="gauge"
-            id="storage-gauge"
-            data-value="882"
-          >
+        </div>
 
-            <svg viewBox="0 0 200 115">
 
-              <path
-                class="gauge-track"
-                d="M 25 100 A 75 75 0 0 1 175 100"
-              />
+        <div class="health-extra">
 
-              <path
-                class="gauge-fill"
-                d="M 25 100 A 75 75 0 0 1 175 100"
-              />
+          <span>
+            Worst R2
+            <strong id="storage-worst">-- ms</strong>
+          </span>
 
-              <line
-                class="gauge-needle"
-                x1="100"
-                y1="100"
-                x2="100"
-                y2="42"
-              />
+          <span>
+            Samples
+            <strong id="sample-success">5 / 5</strong>
+          </span>
 
-              <circle
-                class="gauge-center"
-                cx="100"
-                cy="100"
-                r="8"
-              />
+        </div>
 
-            </svg>
+      </section>
 
-            <div class="gauge-value">
-              <strong id="storage-response">0</strong>
-              <span>ms</span>
-            </div>
 
+      <!-- ===================================================
+           R2 historical graph
+      ==================================================== -->
+
+      <section class="panel r2-history-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <span class="panel-kicker">
+              STORAGE DELIVERY
+            </span>
+
+            <h2>R2 response time — last 24 hours</h2>
           </div>
 
-          <div class="gauge-meta">
+
+          <div class="legend">
 
             <span>
+              <i class="legend-dot average"></i>
+              Average
+            </span>
+
+            <span>
+              <i class="legend-dot worst"></i>
               Worst
-              <strong id="storage-worst">0 ms</strong>
             </span>
 
             <span>
-              3 / 3 objects
+              <i class="legend-threshold"></i>
+              1500 ms threshold
             </span>
 
           </div>
 
-        </article>
-
-      </aside>
-
-    </section>
-
-
-    <!-- =====================================================
-         Page-load graph
-    ====================================================== -->
-
-    <section class="panel">
-
-      <div class="panel-header">
-
-        <div>
-          <p class="panel-kicker">
-            REAL USER MONITORING
-          </p>
-
-          <h2>
-            Average page load time — last 24 hours
-          </h2>
         </div>
 
-        <div class="headline-stat">
+        <div class="chart-box r2-chart-box">
+          <canvas id="r2-chart"></canvas>
+        </div>
 
-          <span id="page-load-current">0</span>
+      </section>
 
-          <small>ms average</small>
+
+      <!-- ===================================================
+           R2 five-sample test
+      ==================================================== -->
+
+      <section class="panel samples-panel">
+
+        <div class="panel-header compact-header">
+
+          <div>
+            <span class="panel-kicker">
+              LIVE PROBE
+            </span>
+
+            <h2>R2 sample latency</h2>
+          </div>
 
         </div>
 
-      </div>
 
-      <div class="chart-container chart-wide">
-        <canvas id="page-load-chart"></canvas>
-      </div>
-
-    </section>
+        <div
+          class="sample-bars"
+          id="sample-bars"
+        ></div>
 
 
-    <!-- =====================================================
-         R2 graph
-    ====================================================== -->
-
-    <section class="panel">
-
-      <div class="panel-header">
-
-        <div>
-          <p class="panel-kicker">
-            STORAGE DELIVERY
-          </p>
-
-          <h2>
-            R2 response time — last 24 hours
-          </h2>
+        <div class="sample-scale">
+          <span>Fast</span>
+          <span>Slow</span>
         </div>
 
-        <div class="legend">
+      </section>
 
-          <span>
-            <i class="legend-dot legend-average"></i>
-            Average
-          </span>
 
-          <span>
-            <i class="legend-dot legend-worst"></i>
-            Worst
-          </span>
+      <!-- ===================================================
+           Summary strip
+      ==================================================== -->
 
-          <span>
-            <i class="legend-line"></i>
-            1500 ms threshold
-          </span>
+      <section class="summary-strip">
 
+        <div class="summary-item">
+          <span>Data stored</span>
+          <strong id="stored-data">12.83 GB</strong>
         </div>
 
-      </div>
+        <div class="summary-item">
+          <span>Objects</span>
+          <strong id="object-count">399</strong>
+        </div>
 
-      <div class="chart-container chart-wide">
-        <canvas id="r2-chart"></canvas>
-      </div>
+        <div class="summary-item">
+          <span>Visits today</span>
+          <strong id="summary-visits">0</strong>
+        </div>
 
-    </section>
+        <div class="summary-item">
+          <span>Page load</span>
+          <strong id="summary-page-load">0 ms</strong>
+        </div>
 
+        <div class="summary-item">
+          <span>R2 average</span>
+          <strong id="summary-r2">0 ms</strong>
+        </div>
 
-    <!-- =====================================================
-         Summary
-    ====================================================== -->
-
-    <section class="summary-strip">
-
-      <article class="summary-item">
-        <span>Data stored</span>
-        <strong id="data-stored">12.83 GB</strong>
-      </article>
-
-      <article class="summary-item">
-        <span>Objects</span>
-        <strong id="object-count">399</strong>
-      </article>
-
-      <article class="summary-item">
-        <span>Visits today</span>
-        <strong id="summary-visits">0</strong>
-      </article>
-
-      <article class="summary-item">
-        <span>Average page load</span>
-        <strong id="summary-page-load">0 ms</strong>
-      </article>
-
-    </section>
+      </section>
 
 
-    <footer class="dashboard-footer">
+    </div>
 
-      <span>
-        Mediser monitoring
-      </span>
 
-      <span>
-        Auto refresh every 60 seconds
-      </span>
-
+    <footer class="footer">
+      <span>W41IT monitoring</span>
+      <span>Mock data · frontend preview</span>
     </footer>
 
   </main>
