@@ -369,7 +369,7 @@ function chartOptions() {
 
 
 
-      }
+      
 
     },
 
