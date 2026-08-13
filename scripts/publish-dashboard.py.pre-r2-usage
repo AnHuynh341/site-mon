@@ -90,7 +90,7 @@ def required(name):
 
 
 # ============================================================
-# HEALTH LOG PARSING
+# LOG PARSING
 # ============================================================
 
 def parse_ms(value):
@@ -200,13 +200,11 @@ def parse_health():
             and len(parts) >= 5
         ):
             latest["frontend"] = {
-                "status":
-                    parts[2],
+                "status": parts[2],
 
-                "ms":
-                    parse_ms(
-                        parts[4]
-                    ),
+                "ms": parse_ms(
+                    parts[4]
+                ),
             }
 
             latest_time["frontend"] = (
@@ -222,13 +220,11 @@ def parse_health():
             and len(parts) >= 5
         ):
             latest["database"] = {
-                "status":
-                    parts[2],
+                "status": parts[2],
 
-                "ms":
-                    parse_ms(
-                        parts[4]
-                    ),
+                "ms": parse_ms(
+                    parts[4]
+                ),
             }
 
             latest_time["database"] = (
@@ -258,17 +254,13 @@ def parse_health():
                 total = 5
 
             average = (
-                parse_ms(
-                    parts[4]
-                )
+                parse_ms(parts[4])
                 if ok
                 else None
             )
 
             worst = (
-                parse_ms(
-                    parts[5]
-                )
+                parse_ms(parts[5])
                 if ok
                 else None
             )
@@ -321,7 +313,7 @@ def parse_health():
                 )
 
     # --------------------------------------------------------
-    # Missing data fallbacks
+    # Missing-data fallbacks
     # --------------------------------------------------------
 
     if latest["frontend"] is None:
@@ -571,9 +563,10 @@ def main():
     ) = parse_health()
 
     # --------------------------------------------------------
-    # Web analytics
+    # Fetch web analytics
     #
-    # Failure must not prevent health publishing.
+    # Analytics failure must NOT prevent health data
+    # from being published.
     # --------------------------------------------------------
 
     analytics_summary = {
@@ -634,9 +627,10 @@ def main():
         )
 
     # --------------------------------------------------------
-    # R2 operation usage
+    # Fetch R2 operation usage
     #
-    # Failure must not prevent dashboard publishing.
+    # Failure here must NOT prevent the dashboard
+    # from being published.
     # --------------------------------------------------------
 
     r2_usage = {
@@ -663,7 +657,7 @@ def main():
         )
 
     # --------------------------------------------------------
-    # R2 storage information
+    # R2
     # --------------------------------------------------------
 
     s3 = make_s3()
@@ -676,7 +670,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # Final dashboard JSON
+    # Final dashboard payload
     # --------------------------------------------------------
 
     payload = {

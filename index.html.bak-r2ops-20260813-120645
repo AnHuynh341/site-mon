@@ -156,7 +156,7 @@
           <div>
 
             <span class="panel-kicker">
-              SITE PERFORMANCE
+         PERFORMANCE
             </span>
 
             <h2>
@@ -374,99 +374,6 @@
 
 
 
-
-      <!-- ===================================================
-           R2 OPERATIONS
-      ==================================================== -->
-
-      <section class="panel r2-operations-panel">
-
-        <div class="panel-header compact-header">
-
-          <div>
-
-            <span class="panel-kicker">
-              ACCOUNT USAGE
-            </span>
-
-            <h2>
-              R2 operations
-            </h2>
-
-          </div>
-
-
-          <span
-            class="usage-month"
-            id="r2-usage-month"
-          >
-            —
-          </span>
-
-        </div>
-
-
-        <div class="r2-operations-chart-box">
-
-          <canvas
-            id="r2-operations-chart"
-          ></canvas>
-
-        </div>
-
-
-        <div class="r2-operation-legend">
-
-          <div class="r2-operation-line">
-
-            <span class="r2-operation-name">
-
-              <i class="r2-operation-dot class-a"></i>
-
-              Class A
-
-            </span>
-
-            <strong id="r2-class-a">
-              —
-            </strong>
-
-          </div>
-
-
-          <div class="r2-operation-line">
-
-            <span class="r2-operation-name">
-
-              <i class="r2-operation-dot class-b"></i>
-
-              Class B
-
-            </span>
-
-            <strong id="r2-class-b">
-              —
-            </strong>
-
-          </div>
-
-        </div>
-
-
-        <div class="r2-operations-other">
-
-          Other
-
-          <strong id="r2-other-operations">
-            —
-          </strong>
-
-        </div>
-
-      </section>
-
-
-
       <!-- ===================================================
            R2 HISTORY
       ==================================================== -->
@@ -555,7 +462,9 @@
 
       </section>
 
-<!-- ===================================================
+
+
+      <!-- ===================================================
            SUMMARY
       ==================================================== -->
 

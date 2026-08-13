@@ -504,6 +504,37 @@ function buildR2Chart() {
 ============================================================ */
 
 function buildR2OperationsChart() {
+  const options =
+    chartOptions();
+
+  options.indexAxis =
+    "y";
+
+  options.scales.x.beginAtZero =
+    true;
+
+  options.scales.x.ticks.precision =
+    0;
+
+  options.scales.x.ticks.callback =
+    value =>
+      Number(value)
+        .toLocaleString();
+
+  options.scales.y.grid.display =
+    false;
+
+  options.plugins.tooltip.callbacks = {
+    label(context) {
+      const value =
+        Number(context.raw);
+
+      return (
+        `${context.label}: ` +
+        formatNumber(value)
+      );
+    }
+  };
 
   r2OperationsChart =
     new Chart(
@@ -513,10 +544,9 @@ function buildR2OperationsChart() {
 
       {
         type:
-          "pie",
+          "bar",
 
         data: {
-
           labels: [
             "Class A",
             "Class B"
@@ -524,6 +554,8 @@ function buildR2OperationsChart() {
 
           datasets: [
             {
+              label:
+                "Operations",
 
               data: [
                 0,
@@ -540,112 +572,22 @@ function buildR2OperationsChart() {
                 )
               ],
 
-              borderColor:
-                cssVar(
-                  "--panel"
-                ),
-
               borderWidth:
-                3,
+                0,
 
-              hoverOffset:
-                5
+              borderRadius:
+                5,
 
+              minBarLength:
+                5,
+
+              barThickness:
+                24
             }
           ]
-
         },
 
-        options: {
-
-          responsive:
-            true,
-
-          maintainAspectRatio:
-            false,
-
-          animation: {
-            duration:
-              300
-          },
-
-          plugins: {
-
-            legend: {
-              display:
-                false
-            },
-
-            tooltip: {
-
-              backgroundColor:
-                "#080b13",
-
-              borderColor:
-                "rgba(255,255,255,.15)",
-
-              borderWidth:
-                1,
-
-              titleColor:
-                "#ffffff",
-
-              bodyColor:
-                "#e0e4ef",
-
-              padding:
-                10,
-
-              callbacks: {
-
-                label(context) {
-
-                  const value =
-                    Number(
-                      context.raw
-                    );
-
-                  const values =
-                    context.dataset.data;
-
-                  const total =
-                    values.reduce(
-                      (
-                        sum,
-                        current
-                      ) =>
-                        sum +
-                        Number(
-                          current || 0
-                        ),
-                      0
-                    );
-
-                  const percent =
-                    total > 0
-                      ? (
-                          (
-                            value /
-                            total
-                          ) * 100
-                        ).toFixed(1)
-                      : "0.0";
-
-                  return (
-                    `${context.label}: ` +
-                    `${formatNumber(value)} ` +
-                    `(${percent}%)`
-                  );
-                }
-
-              }
-
-            }
-
-          }
-
-        }
-
+        options
       }
     );
 }

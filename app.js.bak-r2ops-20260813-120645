@@ -11,7 +11,6 @@ const STALE_AFTER_MS = 10 * 60_000;
 let visitsChart;
 let pageLoadChart;
 let r2Chart;
-let r2OperationsChart;
 let lastGoodData = null;
 
 
@@ -47,48 +46,6 @@ function formatNumber(value) {
   return Number.isFinite(value)
     ? value.toLocaleString()
     : "—";
-}
-
-
-function formatMonth(value) {
-  if (
-    typeof value !== "string" ||
-    !/^\d{4}-\d{2}$/.test(value)
-  ) {
-    return "—";
-  }
-
-  const [
-    year,
-    month
-  ] = value
-    .split("-")
-    .map(Number);
-
-  const date =
-    new Date(
-      Date.UTC(
-        year,
-        month - 1,
-        1
-      )
-    );
-
-  return new Intl.DateTimeFormat(
-    "en-US",
-    {
-      month:
-        "short",
-
-      year:
-        "numeric",
-
-      timeZone:
-        "UTC"
-    }
-  )
-    .format(date)
-    .toUpperCase();
 }
 
 
@@ -500,158 +457,6 @@ function buildR2Chart() {
 
 
 /* ============================================================
-   R2 OPERATIONS CHART
-============================================================ */
-
-function buildR2OperationsChart() {
-
-  r2OperationsChart =
-    new Chart(
-      document.getElementById(
-        "r2-operations-chart"
-      ),
-
-      {
-        type:
-          "pie",
-
-        data: {
-
-          labels: [
-            "Class A",
-            "Class B"
-          ],
-
-          datasets: [
-            {
-
-              data: [
-                0,
-                0
-              ],
-
-              backgroundColor: [
-                cssVar(
-                  "--red"
-                ),
-
-                cssVar(
-                  "--blue"
-                )
-              ],
-
-              borderColor:
-                cssVar(
-                  "--panel"
-                ),
-
-              borderWidth:
-                3,
-
-              hoverOffset:
-                5
-
-            }
-          ]
-
-        },
-
-        options: {
-
-          responsive:
-            true,
-
-          maintainAspectRatio:
-            false,
-
-          animation: {
-            duration:
-              300
-          },
-
-          plugins: {
-
-            legend: {
-              display:
-                false
-            },
-
-            tooltip: {
-
-              backgroundColor:
-                "#080b13",
-
-              borderColor:
-                "rgba(255,255,255,.15)",
-
-              borderWidth:
-                1,
-
-              titleColor:
-                "#ffffff",
-
-              bodyColor:
-                "#e0e4ef",
-
-              padding:
-                10,
-
-              callbacks: {
-
-                label(context) {
-
-                  const value =
-                    Number(
-                      context.raw
-                    );
-
-                  const values =
-                    context.dataset.data;
-
-                  const total =
-                    values.reduce(
-                      (
-                        sum,
-                        current
-                      ) =>
-                        sum +
-                        Number(
-                          current || 0
-                        ),
-                      0
-                    );
-
-                  const percent =
-                    total > 0
-                      ? (
-                          (
-                            value /
-                            total
-                          ) * 100
-                        ).toFixed(1)
-                      : "0.0";
-
-                  return (
-                    `${context.label}: ` +
-                    `${formatNumber(value)} ` +
-                    `(${percent}%)`
-                  );
-                }
-
-              }
-
-            }
-
-          }
-
-        }
-
-      }
-    );
-}
-
-
-/* ============================================================
    SERVICE HEALTH
 ============================================================ */
 
@@ -1004,9 +809,6 @@ function updateCharts(
   const r2History =
     data.r2History ?? {};
 
-  const r2Usage =
-    data.r2Usage ?? {};
-
 
   /* ---------------- Visits ---------------- */
 
@@ -1109,35 +911,6 @@ function updateCharts(
 
 
   r2Chart.update();
-
-
-  /* ---------------- R2 operations ---------------- */
-
-  const classA =
-    Number.isFinite(
-      r2Usage.classA
-    )
-      ? r2Usage.classA
-      : 0;
-
-  const classB =
-    Number.isFinite(
-      r2Usage.classB
-    )
-      ? r2Usage.classB
-      : 0;
-
-
-  r2OperationsChart
-    .data
-    .datasets[0]
-    .data = [
-      classA,
-      classB
-    ];
-
-
-  r2OperationsChart.update();
 }
 
 
@@ -1156,9 +929,6 @@ function updateNumbers(
 
   const storageInfo =
     latest.storageInfo ?? {};
-
-  const r2Usage =
-    data.r2Usage ?? {};
 
 
   const visitsToday =
@@ -1192,44 +962,6 @@ function updateNumbers(
           pageLoad
         )
       : "—"
-  );
-
-
-  /* ---------------- R2 operation usage ---------------- */
-
-  setText(
-    "r2-usage-month",
-
-    formatMonth(
-      r2Usage.month
-    )
-  );
-
-
-  setText(
-    "r2-class-a",
-
-    formatNumber(
-      r2Usage.classA
-    )
-  );
-
-
-  setText(
-    "r2-class-b",
-
-    formatNumber(
-      r2Usage.classB
-    )
-  );
-
-
-  setText(
-    "r2-other-operations",
-
-    formatNumber(
-      r2Usage.other
-    )
   );
 
 
@@ -1415,8 +1147,6 @@ function init() {
   buildPageLoadChart();
 
   buildR2Chart();
-
-  buildR2OperationsChart();
 
 
   /*
