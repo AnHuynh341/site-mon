@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
 
@@ -8,43 +9,81 @@
     content="width=device-width, initial-scale=1.0"
   >
 
+  <meta
+    name="description"
+    content="W41IT service monitoring dashboard"
+  >
+
   <title>W41IT Monitor</title>
 
-  <link rel="stylesheet" href="./style.css">
+  <link
+    rel="stylesheet"
+    href="./style.css"
+  >
 
   <script
     src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
     defer
   ></script>
 
-  <script src="./app.js" defer></script>
+  <script
+    src="./app.js"
+    defer
+  ></script>
 </head>
+
 
 <body>
 
   <main class="dashboard">
 
     <!-- =====================================================
-         Header
+         HEADER
     ====================================================== -->
 
     <header class="topbar">
 
-      <div>
-        <span class="eyebrow">SYSTEM MONITOR</span>
-        <h1>W41IT Monitor</h1>
+      <div class="title-container">
+
+        <h1>
+
+          <a
+            class="site-title"
+            href="https://anhuynh341.github.io/briansmediaserver/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            W41IT
+          </a>
+
+          <span class="monitor-title">
+            Monitor
+          </span>
+
+        </h1>
+
       </div>
+
 
       <div class="topbar-right">
 
         <span class="live-badge">
+
           <span class="live-dot"></span>
+
           LIVE
+
         </span>
 
+
         <div class="update-time">
+
           Last update
-          <strong id="last-update">--:--:--</strong>
+
+          <strong id="last-update">
+            --:--:--
+          </strong>
+
         </div>
 
       </div>
@@ -52,15 +91,16 @@
     </header>
 
 
+
     <!-- =====================================================
-         Dashboard grid
+         DASHBOARD GRID
     ====================================================== -->
 
     <div class="dashboard-grid">
 
 
       <!-- ===================================================
-           Visits
+           VISITS
       ==================================================== -->
 
       <section class="panel visits-panel">
@@ -68,29 +108,45 @@
         <div class="panel-header">
 
           <div>
+
             <span class="panel-kicker">
               WEB ANALYTICS
             </span>
 
-            <h2>Visits — last 24 hours</h2>
+            <h2>
+              Visits — last 24 hours
+            </h2>
+
           </div>
 
+
           <div class="big-number">
-            <strong id="visits-today">0</strong>
-            <span>today</span>
+
+            <strong id="visits-today">
+              0
+            </strong>
+
+            <span>
+              today
+            </span>
+
           </div>
 
         </div>
 
+
         <div class="chart-box">
+
           <canvas id="visits-chart"></canvas>
+
         </div>
 
       </section>
 
 
+
       <!-- ===================================================
-           Page load
+           PAGE LOAD TIME
       ==================================================== -->
 
       <section class="panel page-load-panel">
@@ -98,64 +154,108 @@
         <div class="panel-header">
 
           <div>
+
             <span class="panel-kicker">
               USER PERFORMANCE
             </span>
 
-            <h2>Average page load — 24h</h2>
+            <h2>
+              Average page load — 24h
+            </h2>
+
           </div>
 
+
           <div class="big-number">
-            <strong id="page-load-now">0</strong>
-            <span>ms</span>
+
+            <strong id="page-load-now">
+              0
+            </strong>
+
+            <span>
+              ms
+            </span>
+
           </div>
 
         </div>
 
+
         <div class="chart-box">
+
           <canvas id="page-load-chart"></canvas>
+
         </div>
 
       </section>
 
 
+
       <!-- ===================================================
-           Service health
+           SERVICE HEALTH
       ==================================================== -->
 
       <section class="panel health-panel">
 
         <div class="panel-header compact-header">
+
           <div>
+
             <span class="panel-kicker">
               CURRENT
             </span>
 
-            <h2>Service health</h2>
+            <h2>
+              Service health
+            </h2>
+
           </div>
+
         </div>
 
 
         <div class="health-list">
 
+
+          <!-- FRONTEND -->
+
           <div class="health-row">
 
             <div class="health-name">
+
               <span
                 class="status-dot"
                 id="frontend-dot"
               ></span>
 
+
               <div>
-                <strong>Frontend</strong>
-                <small>GitHub Pages</small>
+
+                <strong>
+                  Frontend
+                </strong>
+
+                <small>
+                  GitHub Pages
+                </small>
+
               </div>
+
             </div>
 
+
             <div class="health-value">
-              <strong id="frontend-ms">--</strong>
-              <span>ms</span>
+
+              <strong id="frontend-ms">
+                --
+              </strong>
+
+              <span>
+                ms
+              </span>
+
             </div>
+
 
             <span
               class="health-status"
@@ -167,24 +267,46 @@
           </div>
 
 
+
+          <!-- DATABASE -->
+
           <div class="health-row">
 
             <div class="health-name">
+
               <span
                 class="status-dot"
                 id="database-dot"
               ></span>
 
+
               <div>
-                <strong>Database</strong>
-                <small>Appwrite</small>
+
+                <strong>
+                  Database
+                </strong>
+
+                <small>
+                  Appwrite
+                </small>
+
               </div>
+
             </div>
 
+
             <div class="health-value">
-              <strong id="database-ms">--</strong>
-              <span>ms</span>
+
+              <strong id="database-ms">
+                --
+              </strong>
+
+              <span>
+                ms
+              </span>
+
             </div>
+
 
             <span
               class="health-status"
@@ -196,7 +318,10 @@
           </div>
 
 
-          <div class="health-row storage-health">
+
+          <!-- STORAGE -->
+
+          <div class="health-row">
 
             <div class="health-name">
 
@@ -205,17 +330,34 @@
                 id="storage-dot"
               ></span>
 
+
               <div>
-                <strong>Storage</strong>
-                <small>Cloudflare R2</small>
+
+                <strong>
+                  Storage
+                </strong>
+
+                <small>
+                  Cloudflare R2
+                </small>
+
               </div>
 
             </div>
 
+
             <div class="health-value">
-              <strong id="storage-ms">--</strong>
-              <span>ms</span>
+
+              <strong id="storage-ms">
+                --
+              </strong>
+
+              <span>
+                ms
+              </span>
+
             </div>
+
 
             <span
               class="health-status"
@@ -228,26 +370,12 @@
 
         </div>
 
-
-        <div class="health-extra">
-
-          <span>
-            Worst R2
-            <strong id="storage-worst">-- ms</strong>
-          </span>
-
-          <span>
-            Samples
-            <strong id="sample-success">5 / 5</strong>
-          </span>
-
-        </div>
-
       </section>
 
 
+
       <!-- ===================================================
-           R2 historical graph
+           R2 HISTORY
       ==================================================== -->
 
       <section class="panel r2-history-panel">
@@ -255,44 +383,63 @@
         <div class="panel-header">
 
           <div>
+
             <span class="panel-kicker">
               STORAGE DELIVERY
             </span>
 
-            <h2>R2 response time — last 24 hours</h2>
+            <h2>
+              R2 response time — last 24 hours
+            </h2>
+
           </div>
 
 
           <div class="legend">
 
             <span>
+
               <i class="legend-dot average"></i>
+
               Average
+
             </span>
 
+
             <span>
+
               <i class="legend-dot worst"></i>
+
               Worst
+
             </span>
 
+
             <span>
+
               <i class="legend-threshold"></i>
+
               1500 ms threshold
+
             </span>
 
           </div>
 
         </div>
 
+
         <div class="chart-box r2-chart-box">
+
           <canvas id="r2-chart"></canvas>
+
         </div>
 
       </section>
 
 
+
       <!-- ===================================================
-           R2 five-sample test
+           R2 LIVE PROBE
       ==================================================== -->
 
       <section class="panel samples-panel">
@@ -300,11 +447,15 @@
         <div class="panel-header compact-header">
 
           <div>
+
             <span class="panel-kicker">
               LIVE PROBE
             </span>
 
-            <h2>R2 sample latency</h2>
+            <h2>
+              R2 sample latency
+            </h2>
+
           </div>
 
         </div>
@@ -315,58 +466,105 @@
           id="sample-bars"
         ></div>
 
-
-        <div class="sample-scale">
-          <span>Fast</span>
-          <span>Slow</span>
-        </div>
-
       </section>
 
 
+
       <!-- ===================================================
-           Summary strip
+           SUMMARY
       ==================================================== -->
 
       <section class="summary-strip">
 
-        <div class="summary-item">
-          <span>Data stored</span>
-          <strong id="stored-data">12.83 GB</strong>
-        </div>
 
         <div class="summary-item">
-          <span>Objects</span>
-          <strong id="object-count">399</strong>
+
+          <span>
+            Data stored
+          </span>
+
+          <strong id="stored-data">
+            12.83 GB
+          </strong>
+
         </div>
 
-        <div class="summary-item">
-          <span>Visits today</span>
-          <strong id="summary-visits">0</strong>
-        </div>
 
         <div class="summary-item">
-          <span>Page load</span>
-          <strong id="summary-page-load">0 ms</strong>
+
+          <span>
+            Objects
+          </span>
+
+          <strong id="object-count">
+            399
+          </strong>
+
         </div>
 
+
         <div class="summary-item">
-          <span>R2 average</span>
-          <strong id="summary-r2">0 ms</strong>
+
+          <span>
+            Visits today
+          </span>
+
+          <strong id="summary-visits">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="summary-item">
+
+          <span>
+            Page load
+          </span>
+
+          <strong id="summary-page-load">
+            0 ms
+          </strong>
+
+        </div>
+
+
+        <div class="summary-item">
+
+          <span>
+            R2 average
+          </span>
+
+          <strong id="summary-r2">
+            0 ms
+          </strong>
+
         </div>
 
       </section>
 
-
     </div>
 
 
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
     <footer class="footer">
-      <span>W41IT monitoring</span>
-      <span>Mock data · frontend preview</span>
+
+      <span>
+        W41IT monitoring
+      </span>
+
+      <span>
+        Mock data · frontend preview
+      </span>
+
     </footer>
 
   </main>
 
 </body>
+
 </html>

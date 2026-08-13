@@ -1,24 +1,37 @@
+/* ============================================================
+   THEME
+============================================================ */
+
 :root {
+
   --bg: #090b14;
-  --panel: #111522;
-  --panel-2: #151a29;
 
-  --border: rgba(255, 255, 255, 0.08);
-  --grid: rgba(255, 255, 255, 0.055);
+  --panel: #121725;
+  --panel-2: #181e2e;
 
-  --text: #f4f6fb;
-  --muted: #8c93a8;
+  --border: rgba(255, 255, 255, 0.11);
 
-  --cyan: #21d5ff;
-  --purple: #c65cff;
+  --grid: rgba(255, 255, 255, 0.07);
 
-  --green: #22d86f;
-  --yellow: #f1c84c;
-  --red: #ff5364;
+  --text: #ffffff;
+  --muted: #b8bfd1;
+
+  --cyan: #2addff;
+  --purple: #d16cff;
+
+  --green: #2be47b;
+  --yellow: #ffd04f;
+  --red: #ff5e70;
 
   --radius: 8px;
+
 }
 
+
+
+/* ============================================================
+   BASE
+============================================================ */
 
 * {
   box-sizing: border-box;
@@ -31,6 +44,7 @@ html {
 
 
 body {
+
   margin: 0;
 
   min-height: 100vh;
@@ -51,30 +65,39 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+
 }
 
 
+
 /* ============================================================
-   Page
+   PAGE
 ============================================================ */
 
 .dashboard {
+
   width: calc(100% - 20px);
 
   max-width: 1800px;
 
   margin: auto;
 
-  padding: 10px 0 8px;
+  padding:
+    10px
+    0
+    8px;
+
 }
 
 
+
 /* ============================================================
-   Header
+   HEADER
 ============================================================ */
 
 .topbar {
-  min-height: 60px;
+
+  min-height: 58px;
 
   display: flex;
 
@@ -82,74 +105,106 @@ body {
 
   align-items: center;
 
-  padding: 4px 8px 10px;
-}
+  padding:
+    5px
+    8px
+    10px;
 
-
-.eyebrow,
-.panel-kicker {
-  display: block;
-
-  color: var(--cyan);
-
-  font-size: 0.65rem;
-
-  font-weight: 700;
-
-  letter-spacing: 0.13em;
-
-  text-transform: uppercase;
 }
 
 
 .topbar h1 {
-  margin: 2px 0 0;
 
-  font-size: 1.55rem;
+  margin: 0;
+
+  font-size: 1.9rem;
 
   line-height: 1;
 
   letter-spacing: -0.025em;
+
+}
+
+
+.site-title {
+
+  color: var(--text);
+
+  font-weight: 750;
+
+  text-decoration: none;
+
+  transition:
+    color 150ms ease;
+
+}
+
+
+.site-title:hover {
+
+  color: var(--cyan);
+
+}
+
+
+.monitor-title {
+
+  margin-left: 4px;
+
+  color: var(--muted);
+
+  font-weight: 500;
+
 }
 
 
 .topbar-right {
+
   display: flex;
 
   align-items: center;
 
   gap: 18px;
+
 }
 
 
 .live-badge {
+
   display: flex;
 
   align-items: center;
 
-  gap: 6px;
+  gap: 7px;
 
-  padding: 5px 9px;
+  padding:
+    6px
+    10px;
 
   border:
-    1px solid rgba(34, 216, 111, 0.3);
+    1px solid
+    rgba(43, 228, 123, 0.35);
 
   border-radius: 999px;
 
   background:
-    rgba(34, 216, 111, 0.08);
+    rgba(43, 228, 123, 0.09);
 
   color: var(--green);
 
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 
-  font-weight: 700;
+  font-weight: 750;
+
+  letter-spacing: 0.05em;
+
 }
 
 
 .live-dot {
-  width: 7px;
-  height: 7px;
+
+  width: 8px;
+  height: 8px;
 
   border-radius: 50%;
 
@@ -157,41 +212,54 @@ body {
 
   box-shadow:
     0 0 8px currentColor;
+
 }
 
 
 .update-time {
+
   color: var(--muted);
 
-  font-size: 0.72rem;
+  font-size: 0.8rem;
+
 }
 
 
 .update-time strong {
+
   margin-left: 5px;
 
   color: var(--text);
+
+  font-size: 0.85rem;
+
 }
 
 
+
 /* ============================================================
-   Main grid
+   MAIN GRID
 ============================================================ */
 
 .dashboard-grid {
+
   display: grid;
 
   grid-template-columns:
     minmax(0, 1.35fr)
     minmax(0, 1.15fr)
-    minmax(260px, 0.72fr);
+    minmax(280px, 0.72fr);
 
   grid-template-areas:
+
     "visits page health"
+
     "r2 r2 samples"
+
     "summary summary summary";
 
   gap: 8px;
+
 }
 
 
@@ -225,33 +293,41 @@ body {
 }
 
 
+
 /* ============================================================
-   Panels
+   PANELS
 ============================================================ */
 
 .panel {
+
   min-width: 0;
 
-  padding: 12px;
+  padding: 14px;
 
   overflow: hidden;
 
   background:
+
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.015),
+      rgba(255, 255, 255, 0.018),
       transparent
     ),
+
     var(--panel);
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
 
-  border-radius: var(--radius);
+  border-radius:
+    var(--radius);
+
 }
 
 
 .panel-header {
-  min-height: 42px;
+
+  min-height: 46px;
 
   display: flex;
 
@@ -260,78 +336,133 @@ body {
   align-items: flex-start;
 
   gap: 12px;
+
 }
 
 
 .compact-header {
-  min-height: 35px;
+
+  min-height: 38px;
+
+}
+
+
+.panel-kicker {
+
+  display: block;
+
+  color: var(--cyan);
+
+  font-size: 0.72rem;
+
+  font-weight: 750;
+
+  letter-spacing: 0.11em;
+
+  text-transform: uppercase;
+
 }
 
 
 .panel h2 {
-  margin: 2px 0 0;
 
-  font-size: 0.88rem;
+  margin: 3px 0 0;
 
-  font-weight: 600;
+  color: var(--text);
+
+  font-size: 1.02rem;
+
+  font-weight: 650;
+
 }
 
 
+
+/* ============================================================
+   BIG NUMBERS
+============================================================ */
+
 .big-number {
+
   text-align: right;
+
 }
 
 
 .big-number strong {
+
   display: block;
 
-  font-size: 1.8rem;
+  color: #ffffff;
+
+  font-size: 2.05rem;
 
   line-height: 0.9;
 
-  font-weight: 500;
+  font-weight: 600;
+
+  font-variant-numeric:
+    tabular-nums;
+
 }
 
 
 .big-number span {
+
+  display: block;
+
+  margin-top: 4px;
+
   color: var(--muted);
 
-  font-size: 0.65rem;
+  font-size: 0.75rem;
+
+  font-weight: 500;
+
 }
 
 
+
 /* ============================================================
-   Charts
+   CHARTS
 ============================================================ */
 
 .chart-box {
+
   position: relative;
 
   width: 100%;
 
-  height: 245px;
+  height: 250px;
+
 }
 
 
 .r2-chart-box {
-  height: 255px;
+
+  height: 270px;
+
 }
 
 
+
 /* ============================================================
-   Health
+   SERVICE HEALTH
 ============================================================ */
 
 .health-list {
+
   display: grid;
 
-  gap: 7px;
+  gap: 9px;
 
-  margin-top: 7px;
+  margin-top: 10px;
+
 }
 
 
 .health-row {
+
   display: grid;
 
   grid-template-columns:
@@ -342,261 +473,310 @@ body {
 
   gap: 8px;
 
-  position: relative;
+  padding: 12px;
 
-  padding: 9px;
-
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
 
   border-radius: 6px;
 
-  background: var(--panel-2);
+  background:
+    var(--panel-2);
+
 }
 
 
 .health-name {
+
   display: flex;
 
   align-items: center;
 
-  gap: 8px;
+  gap: 10px;
+
 }
 
 
 .health-name strong {
+
   display: block;
 
-  font-size: 0.8rem;
+  color: var(--text);
 
-  font-weight: 600;
+  font-size: 0.9rem;
+
+  font-weight: 650;
+
 }
 
 
 .health-name small {
+
   display: block;
 
-  margin-top: 1px;
+  margin-top: 2px;
 
   color: var(--muted);
 
-  font-size: 0.61rem;
+  font-size: 0.7rem;
+
+  font-weight: 500;
+
 }
 
 
 .status-dot {
+
   flex: 0 0 auto;
 
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
 
   border-radius: 50%;
 
-  background: var(--green);
+  background:
+    var(--green);
 
   box-shadow:
-    0 0 8px rgba(34, 216, 111, 0.5);
+    0 0 8px
+    rgba(43, 228, 123, 0.5);
+
 }
 
 
 .health-value {
+
   text-align: right;
+
 }
 
 
 .health-value strong {
-  font-size: 1rem;
+
+  color: #ffffff;
+
+  font-size: 1.18rem;
+
+  font-weight: 650;
+
+  font-variant-numeric:
+    tabular-nums;
+
 }
 
 
 .health-value span {
+
+  margin-left: 2px;
+
   color: var(--muted);
 
-  font-size: 0.62rem;
+  font-size: 0.72rem;
+
 }
 
 
 .health-status {
-  grid-column: 1 / -1;
 
-  font-size: 0.59rem;
+  grid-column:
+    1 / -1;
 
-  font-weight: 700;
+  font-size: 0.68rem;
+
+  font-weight: 750;
 
   letter-spacing: 0.08em;
 
-  color: var(--green);
 }
 
-
-.health-extra {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 10px;
-
-  margin-top: 10px;
-
-  padding-top: 8px;
-
-  border-top: 1px solid var(--border);
-
-  color: var(--muted);
-
-  font-size: 0.62rem;
-}
-
-
-.health-extra strong {
-  margin-left: 4px;
-
-  color: var(--text);
-}
 
 
 /* ============================================================
-   Chart legend
+   R2 LEGEND
 ============================================================ */
 
 .legend {
+
   display: flex;
 
   flex-wrap: wrap;
 
   justify-content: flex-end;
 
-  gap: 10px;
+  gap: 12px;
 
   color: var(--muted);
 
-  font-size: 0.62rem;
+  font-size: 0.7rem;
+
+  font-weight: 500;
+
 }
 
 
 .legend span {
+
   display: flex;
 
   align-items: center;
 
-  gap: 5px;
+  gap: 6px;
+
 }
 
 
 .legend-dot {
-  width: 7px;
-  height: 7px;
+
+  width: 8px;
+  height: 8px;
 
   border-radius: 50%;
+
 }
 
 
 .legend-dot.average {
-  background: var(--cyan);
+
+  background:
+    var(--cyan);
+
 }
 
 
 .legend-dot.worst {
-  background: var(--purple);
+
+  background:
+    var(--purple);
+
 }
 
 
 .legend-threshold {
-  width: 13px;
+
+  width: 15px;
 
   border-top:
-    1px dashed var(--yellow);
+    2px dashed
+    var(--yellow);
+
 }
 
 
+
 /* ============================================================
-   Sample bars
+   LIVE SAMPLE PANEL
 ============================================================ */
 
+.samples-panel {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
 .sample-bars {
+
+  flex: 1;
+
   display: grid;
 
-  gap: 12px;
+  grid-template-rows:
+    repeat(5, 1fr);
 
-  margin-top: 12px;
+  gap: 10px;
+
+  margin-top: 10px;
+
+  align-items: stretch;
+
 }
 
 
 .sample-row {
+
   display: grid;
 
   grid-template-columns:
-    55px
+    72px
     minmax(0, 1fr)
-    62px;
+    72px;
 
   align-items: center;
 
-  gap: 8px;
+  gap: 10px;
+
+  min-height: 40px;
+
 }
 
 
 .sample-label {
-  color: var(--muted);
 
-  font-size: 0.68rem;
+  color: var(--text);
+
+  font-size: 0.8rem;
+
+  font-weight: 600;
+
 }
 
 
 .sample-track {
-  height: 15px;
+
+  height: 23px;
 
   overflow: hidden;
 
   position: relative;
 
-  border-radius: 3px;
+  border-radius: 4px;
 
   background:
-    rgba(255, 255, 255, 0.06);
+    rgba(255, 255, 255, 0.075);
+
 }
 
 
 .sample-fill {
+
   height: 100%;
 
-  min-width: 5px;
+  min-width: 6px;
 
-  border-radius: 3px;
+  border-radius: 4px;
 
   transition:
     width 450ms ease,
     background-color 450ms ease;
+
 }
 
 
 .sample-ms {
+
+  color: var(--text);
+
   text-align: right;
 
-  font-size: 0.72rem;
+  font-size: 0.82rem;
+
+  font-weight: 600;
 
   font-variant-numeric:
     tabular-nums;
+
 }
 
-
-.sample-scale {
-  display: flex;
-
-  justify-content: space-between;
-
-  margin-top: 9px;
-
-  color: var(--muted);
-
-  font-size: 0.58rem;
-}
 
 
 /* ============================================================
-   Summary
+   SUMMARY
 ============================================================ */
 
 .summary-strip {
+
   display: grid;
 
   grid-template-columns:
@@ -604,147 +784,307 @@ body {
 
   overflow: hidden;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
 
-  border-radius: var(--radius);
+  border-radius:
+    var(--radius);
 
-  background: var(--panel);
+  background:
+    var(--panel);
+
 }
 
 
 .summary-item {
-  padding: 9px 13px;
+
+  padding:
+    11px
+    14px;
 
   border-right:
     1px solid var(--border);
+
 }
 
 
 .summary-item:last-child {
+
   border-right: 0;
+
 }
 
 
 .summary-item span {
+
   display: block;
 
   color: var(--muted);
 
-  font-size: 0.59rem;
+  font-size: 0.68rem;
+
+  font-weight: 500;
+
 }
 
 
 .summary-item strong {
+
   display: block;
 
-  margin-top: 2px;
+  margin-top: 3px;
 
-  font-size: 0.9rem;
+  color: var(--text);
 
-  font-weight: 500;
+  font-size: 1rem;
+
+  font-weight: 600;
+
+  font-variant-numeric:
+    tabular-nums;
+
 }
 
 
+
 /* ============================================================
-   Footer
+   FOOTER
 ============================================================ */
 
 .footer {
+
   display: flex;
 
   justify-content: space-between;
 
-  padding: 7px 5px 0;
+  padding:
+    8px
+    5px
+    0;
 
   color: var(--muted);
 
-  font-size: 0.58rem;
+  font-size: 0.68rem;
+
 }
 
 
+
 /* ============================================================
-   Responsive
+   RESPONSIVE — MEDIUM
 ============================================================ */
 
 @media (max-width: 1150px) {
 
   .dashboard-grid {
+
     grid-template-columns:
       1fr
       1fr;
 
     grid-template-areas:
+
       "visits page"
+
       "health samples"
+
       "r2 r2"
+
       "summary summary";
+
   }
 
 
   .health-panel,
   .samples-panel {
-    min-height: 265px;
+
+    min-height: 285px;
+
   }
 
 }
 
 
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+============================================================ */
+
 @media (max-width: 760px) {
 
   .dashboard {
-    width: calc(100% - 12px);
+
+    width:
+      calc(100% - 12px);
+
   }
 
 
   .topbar {
-    align-items: flex-start;
+
+    align-items:
+      flex-start;
 
     gap: 10px;
+
+  }
+
+
+  .topbar h1 {
+
+    font-size: 1.6rem;
+
   }
 
 
   .topbar-right {
-    flex-direction: column;
 
-    align-items: flex-end;
+    flex-direction:
+      column;
 
-    gap: 5px;
+    align-items:
+      flex-end;
+
+    gap: 6px;
+
   }
 
 
   .dashboard-grid {
-    grid-template-columns: 1fr;
+
+    grid-template-columns:
+      1fr;
 
     grid-template-areas:
+
       "visits"
+
       "page"
+
       "health"
+
       "r2"
+
       "samples"
+
       "summary";
+
   }
 
 
   .chart-box,
   .r2-chart-box {
-    height: 230px;
+
+    height: 235px;
+
+  }
+
+
+  .samples-panel {
+
+    min-height: 330px;
+
   }
 
 
   .summary-strip {
+
     grid-template-columns:
       repeat(2, 1fr);
+
   }
 
 
   .summary-item {
+
     border-bottom:
       1px solid var(--border);
+
   }
 
 
   .legend {
-    justify-content: flex-start;
+
+    justify-content:
+      flex-start;
+
+  }
+
+}
+
+
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE
+============================================================ */
+
+@media (max-width: 480px) {
+
+  .topbar {
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .topbar-right {
+
+    width: 100%;
+
+    flex-direction:
+      row;
+
+    justify-content:
+      space-between;
+
+    align-items:
+      center;
+
+  }
+
+
+  .panel-header {
+
+    gap: 8px;
+
+  }
+
+
+  .sample-row {
+
+    grid-template-columns:
+      65px
+      minmax(0, 1fr)
+      65px;
+
+    gap: 7px;
+
+  }
+
+
+  .summary-strip {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .summary-item {
+
+    border-right: 0;
+
+  }
+
+
+  .footer {
+
+    flex-direction:
+      column;
+
+    gap: 3px;
+
   }
 
 }
