@@ -1,20 +1,20 @@
 {
-  "generated": "2026-08-13T12:15:01+07:00",
-  "published": "2026-08-13T12:15:06.886312+07:00",
-  "analyticsGenerated": "2026-08-13T12:15:02.274417+07:00",
+  "generated": "2026-08-13T12:20:01+07:00",
+  "published": "2026-08-13T12:20:08.507121+07:00",
+  "analyticsGenerated": "2026-08-13T12:20:02.053246+07:00",
   "latest": {
     "frontend": {
       "status": "UP",
-      "ms": 252
+      "ms": 255
     },
     "database": {
       "status": "UP",
-      "ms": 325
+      "ms": 196
     },
     "storage": {
       "status": "UP",
-      "ms": 109,
-      "worst": 224,
+      "ms": 120,
+      "worst": 217,
       "successfulSamples": 5,
       "totalSamples": 5
     },
@@ -190,17 +190,17 @@
     ]
   },
   "r2Usage": {
-    "generated": "2026-08-13T12:15:05.924529+07:00",
+    "generated": "2026-08-13T12:20:07.480138+07:00",
     "month": "2026-08",
     "classA": 280,
-    "classB": 10510,
+    "classB": 10550,
     "freeOperations": 0,
     "other": 10,
     "breakdown": {
       "GetBucketSippyConfiguration": 10,
       "HeadBucket": 40,
       "HeadObject": 20,
-      "GetObject": 10450,
+      "GetObject": 10490,
       "ListObjects": 80,
       "PutObject": 180,
       "ListBuckets": 20
@@ -208,7 +208,6 @@
   },
   "r2History": {
     "labels": [
-      "12:20",
       "12:25",
       "12:30",
       "12:35",
@@ -496,10 +495,10 @@
       "12:00",
       "12:05",
       "12:10",
-      "12:15"
+      "12:15",
+      "12:20"
     ],
     "average": [
-      138,
       89,
       114,
       102,
@@ -787,10 +786,10 @@
       91,
       116,
       106,
-      109
+      109,
+      120
     ],
     "worst": [
-      218,
       116,
       171,
       140,
@@ -1078,29 +1077,30 @@
       105,
       191,
       161,
-      224
+      224,
+      217
     ]
   },
   "samples": [
     {
       "name": "Sample 1",
-      "ms": 78
+      "ms": 217
     },
     {
       "name": "Sample 2",
-      "ms": 85
+      "ms": 74
     },
     {
       "name": "Sample 3",
-      "ms": 80
+      "ms": 118
     },
     {
       "name": "Sample 4",
-      "ms": 224
+      "ms": 70
     },
     {
       "name": "Sample 5",
-      "ms": 81
+      "ms": 122
     }
   ]
 }
