@@ -438,18 +438,27 @@ def get_today_summary(
     )
 
     # --------------------------------------------------------
-    # Visit count
-    #
-    # Cloudflare's value is authoritative.
-    #
-    # Do not subtract headless Chromium runs here. A
-    # successful browser probe does not necessarily become
-    # a Cloudflare visit, so log-based subtraction can remove
-    # genuine human traffic.
+    # Count only successful synthetic probes today
     # --------------------------------------------------------
 
-    visits = raw_visits
+    synthetic_today = len(
+        successful_probes(
+            start_local,
+            now_local,
+        )
+    )
 
+    # --------------------------------------------------------
+    # Human-ish visit count
+    #
+    # max(0, ...) prevents hilarious negative visits.
+    # --------------------------------------------------------
+
+    visits = max(
+        0,
+        raw_visits
+        - synthetic_today,
+    )
 
     # --------------------------------------------------------
     # Page-load performance
@@ -500,10 +509,13 @@ def get_today_summary(
 
         "pageLoad":
             load_ms,
-        # Raw value retained for debugging.
+
+        # Debugging information.
         "rawVisits":
             raw_visits,
 
+        "syntheticVisitsRemoved":
+            synthetic_today,
     }
 
 
@@ -757,12 +769,18 @@ def get_hourly(
     # Cloudflare reports only one visit, result stays 0.
     # --------------------------------------------------------
 
-    # Cloudflare's hourly visit values are used directly.
-    #
-    # Chromium probe logs are intentionally NOT subtracted.
-    visit_values = list(
-        raw_visit_values
-    )
+    visit_values = [
+        max(
+            0,
+            raw - synthetic,
+        )
+
+        for raw, synthetic
+        in zip(
+            raw_visit_values,
+            synthetic_values,
+        )
+    ]
 
 
     # --------------------------------------------------------
@@ -795,6 +813,9 @@ def get_hourly(
             # Useful for debugging.
             "rawValues":
                 raw_visit_values,
+
+            "syntheticRemoved":
+                synthetic_values,
         },
 
         "pageLoad": {
