@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -14,33 +15,14 @@ import boto3
 
 
 BASE = Path.home() / "repos" / "site-mon"
-
 LOG = BASE / "logs" / "health.log"
-
 OUT = BASE / "data" / "dashboard.json"
-
-CONFIG = (
-    Path.home()
-    / ".config"
-    / "mediser-monitor"
-    / "config.env"
-)
-
-WEB_ANALYTICS = (
-    BASE
-    / "scripts"
-    / "web-analytics.py"
-)
-
-R2_USAGE = (
-    BASE
-    / "scripts"
-    / "r2-usage.py"
-)
-
+CONFIG = Path.home() / ".config" / "mediser-monitor" / "config.env"
+WEB_ANALYTICS = BASE / "scripts" / "web-analytics.py"
+R2_USAGE = BASE / "scripts" / "r2-usage.py"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
-
 TIME_FMT = "%Y-%m-%d %H:%M:%S"
+FALLBACK_MAX_AGE = timedelta(hours=2)
 
 
 # ============================================================
@@ -48,21 +30,13 @@ TIME_FMT = "%Y-%m-%d %H:%M:%S"
 # ============================================================
 
 def load_env(path):
-    for raw in path.read_text(
-        encoding="utf-8"
-    ).splitlines():
-
+    for raw in path.read_text(encoding="utf-8").splitlines():
         line = raw.strip()
 
-        if (
-            not line
-            or line.startswith("#")
-            or "=" not in line
-        ):
+        if not line or line.startswith("#") or "=" not in line:
             continue
 
         key, value = line.split("=", 1)
-
         value = value.strip()
 
         if (
@@ -72,21 +46,107 @@ def load_env(path):
         ):
             value = value[1:-1]
 
-        os.environ.setdefault(
-            key.strip(),
-            value,
-        )
+        os.environ.setdefault(key.strip(), value)
 
 
 def required(name):
     value = os.environ.get(name)
 
     if not value:
-        raise RuntimeError(
-            f"Missing config value: {name}"
-        )
+        raise RuntimeError(f"Missing config value: {name}")
 
     return value
+
+
+# ============================================================
+# LAST-KNOWN-GOOD FALLBACK HELPERS
+# ============================================================
+
+def load_previous_dashboard():
+    if not OUT.exists():
+        return {}
+
+    try:
+        payload = json.loads(OUT.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+    return payload if isinstance(payload, dict) else {}
+
+
+def parse_iso(value):
+    if not value:
+        return None
+
+    try:
+        stamp = datetime.fromisoformat(
+            str(value).replace("Z", "+00:00")
+        )
+    except ValueError:
+        return None
+
+    if stamp.tzinfo is None:
+        stamp = stamp.replace(tzinfo=TZ)
+
+    return stamp.astimezone(TZ)
+
+
+def recent_enough(value):
+    stamp = parse_iso(value)
+
+    if stamp is None:
+        return False
+
+    age = datetime.now(TZ) - stamp
+    return timedelta(0) <= age <= FALLBACK_MAX_AGE
+
+
+def finite_number(value):
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+    )
+
+
+def has_positive_values(chart):
+    if not isinstance(chart, dict):
+        return False
+
+    return any(
+        finite_number(value) and value > 0
+        for value in chart.get("values", [])
+    )
+
+
+def has_useful_analytics_history(visits, page_load):
+    # The headless browser normally gives the performance chart
+    # samples even during hours with no human visits. If BOTH
+    # rolling datasets suddenly go empty, treat it as a transient
+    # Cloudflare analytics gap rather than overwriting good data.
+    return (
+        has_positive_values(visits)
+        or has_positive_values(page_load)
+    )
+
+
+def r2_operation_total(payload):
+    if not isinstance(payload, dict):
+        return 0
+
+    total = 0
+
+    for key in (
+        "classA",
+        "classB",
+        "freeOperations",
+        "other",
+    ):
+        value = payload.get(key)
+
+        if finite_number(value):
+            total += value
+
+    return total
 
 
 # ============================================================
@@ -94,17 +154,12 @@ def required(name):
 # ============================================================
 
 def parse_ms(value):
-    match = re.search(
-        r"(\d+(?:\.\d+)?)ms",
-        value,
-    )
+    match = re.search(r"(\d+(?:\.\d+)?)ms", value)
 
     if not match:
         return None
 
-    return round(
-        float(match.group(1))
-    )
+    return round(float(match.group(1)))
 
 
 def parse_sample_values(value):
@@ -113,25 +168,15 @@ def parse_sample_values(value):
 
     result = []
 
-    for item in value.split(
-        "=",
-        1,
-    )[1].split(","):
-
+    for item in value.split("=", 1)[1].split(","):
         item = item.strip()
 
-        if (
-            not item
-            or item.upper() == "FAIL"
-        ):
+        if not item or item.upper() == "FAIL":
             result.append(None)
             continue
 
         try:
-            result.append(
-                int(item)
-            )
-
+            result.append(int(item))
         except ValueError:
             result.append(None)
 
@@ -152,21 +197,14 @@ def parse_health():
     }
 
     latest_samples = []
-
     history = []
-
     now = datetime.now(TZ)
-
-    cutoff = (
-        now
-        - timedelta(hours=24)
-    )
+    cutoff = now - timedelta(hours=24)
 
     for line in LOG.read_text(
         encoding="utf-8",
         errors="replace",
     ).splitlines():
-
         if " | " not in line:
             continue
 
@@ -176,14 +214,8 @@ def parse_health():
             stamp = datetime.strptime(
                 parts[0],
                 TIME_FMT,
-            ).replace(
-                tzinfo=TZ
-            )
-
-        except (
-            ValueError,
-            IndexError,
-        ):
+            ).replace(tzinfo=TZ)
+        except (ValueError, IndexError):
             continue
 
         if len(parts) < 2:
@@ -191,138 +223,55 @@ def parse_health():
 
         service = parts[1]
 
-        # ----------------------------------------------------
-        # Frontend
-        # ----------------------------------------------------
-
-        if (
-            service == "frontend"
-            and len(parts) >= 5
-        ):
+        if service == "frontend" and len(parts) >= 5:
             latest["frontend"] = {
-                "status":
-                    parts[2],
-
-                "ms":
-                    parse_ms(
-                        parts[4]
-                    ),
+                "status": parts[2],
+                "ms": parse_ms(parts[4]),
             }
+            latest_time["frontend"] = stamp
 
-            latest_time["frontend"] = (
-                stamp
-            )
-
-        # ----------------------------------------------------
-        # Appwrite
-        # ----------------------------------------------------
-
-        elif (
-            service == "appwrite"
-            and len(parts) >= 5
-        ):
+        elif service == "appwrite" and len(parts) >= 5:
             latest["database"] = {
-                "status":
-                    parts[2],
-
-                "ms":
-                    parse_ms(
-                        parts[4]
-                    ),
+                "status": parts[2],
+                "ms": parse_ms(parts[4]),
             }
+            latest_time["database"] = stamp
 
-            latest_time["database"] = (
-                stamp
-            )
-
-        # ----------------------------------------------------
-        # R2
-        # ----------------------------------------------------
-
-        elif (
-            service == "r2-media"
-            and len(parts) >= 6
-        ):
+        elif service == "r2-media" and len(parts) >= 6:
             try:
                 ok, total = (
                     int(x)
-                    for x
-                    in parts[3].split(
-                        "/",
-                        1,
-                    )
+                    for x in parts[3].split("/", 1)
                 )
-
             except ValueError:
                 ok = 0
                 total = 5
 
-            average = (
-                parse_ms(
-                    parts[4]
-                )
-                if ok
-                else None
-            )
-
-            worst = (
-                parse_ms(
-                    parts[5]
-                )
-                if ok
-                else None
-            )
+            average = parse_ms(parts[4]) if ok else None
+            worst = parse_ms(parts[5]) if ok else None
 
             latest["storage"] = {
-                "status":
-                    parts[2],
-
-                "ms":
-                    average,
-
-                "worst":
-                    worst,
-
-                "successfulSamples":
-                    ok,
-
-                "totalSamples":
-                    total,
+                "status": parts[2],
+                "ms": average,
+                "worst": worst,
+                "successfulSamples": ok,
+                "totalSamples": total,
             }
-
-            latest_time["storage"] = (
-                stamp
-            )
+            latest_time["storage"] = stamp
 
             for extra in parts[6:]:
-                if extra.startswith(
-                    "samples="
-                ):
-                    latest_samples = (
-                        parse_sample_values(
-                            extra
-                        )
-                    )
-
+                if extra.startswith("samples="):
+                    latest_samples = parse_sample_values(extra)
                     break
 
             if stamp >= cutoff:
                 history.append(
                     {
-                        "stamp":
-                            stamp,
-
-                        "average":
-                            average,
-
-                        "worst":
-                            worst,
+                        "stamp": stamp,
+                        "average": average,
+                        "worst": worst,
                     }
                 )
-
-    # --------------------------------------------------------
-    # Missing data fallbacks
-    # --------------------------------------------------------
 
     if latest["frontend"] is None:
         latest["frontend"] = {
@@ -338,212 +287,124 @@ def parse_health():
 
     if latest["storage"] is None:
         latest["storage"] = {
-            "status":
-                "UNKNOWN",
-
-            "ms":
-                None,
-
-            "worst":
-                None,
-
-            "successfulSamples":
-                0,
-
-            "totalSamples":
-                5,
+            "status": "UNKNOWN",
+            "ms": None,
+            "worst": None,
+            "successfulSamples": 0,
+            "totalSamples": 5,
         }
 
     times = [
         value
-        for value
-        in latest_time.values()
+        for value in latest_time.values()
         if value is not None
     ]
 
-    generated = (
-        max(times).isoformat()
-        if times
-        else None
-    )
+    generated = max(times).isoformat() if times else None
 
-    history.sort(
-        key=lambda item:
-            item["stamp"]
-    )
+    history.sort(key=lambda item: item["stamp"])
 
     samples = [
         {
-            "name":
-                f"Sample {i + 1}",
-
-            "ms":
-                (
-                    latest_samples[i]
-                    if i < len(
-                        latest_samples
-                    )
-                    else None
-                ),
+            "name": f"Sample {i + 1}",
+            "ms": (
+                latest_samples[i]
+                if i < len(latest_samples)
+                else None
+            ),
         }
-
         for i in range(5)
     ]
 
-    return (
-        latest,
-        samples,
-        history,
-        generated,
+    return latest, samples, history, generated
+
+
+# ============================================================
+# EXTERNAL DATA SCRIPTS
+# ============================================================
+
+def run_json_script(command, label, attempts=3):
+    last_error = None
+
+    for attempt in range(1, attempts + 1):
+        try:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+
+            if result.returncode != 0:
+                error = (
+                    result.stderr.strip()
+                    or result.stdout.strip()
+                    or "unknown error"
+                )
+                raise RuntimeError(f"{label} failed: {error}")
+
+            try:
+                return json.loads(result.stdout)
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(
+                    f"{label} returned invalid JSON"
+                ) from exc
+
+        except Exception as exc:
+            last_error = exc
+
+            if attempt < attempts:
+                time.sleep(2)
+
+    raise RuntimeError(
+        str(last_error)
+        if last_error
+        else f"{label} failed"
     )
 
-
-# ============================================================
-# CLOUDFLARE WEB ANALYTICS
-# ============================================================
 
 def get_web_analytics():
-    result = subprocess.run(
-        [
-            str(WEB_ANALYTICS),
-            "--dashboard-json",
-        ],
-        capture_output=True,
-        text=True,
-        timeout=60,
+    return run_json_script(
+        [str(WEB_ANALYTICS), "--dashboard-json"],
+        "web-analytics.py",
     )
 
-    if result.returncode != 0:
-        error = (
-            result.stderr.strip()
-            or result.stdout.strip()
-            or "unknown error"
-        )
-
-        raise RuntimeError(
-            "web-analytics.py failed: "
-            + error
-        )
-
-    try:
-        payload = json.loads(
-            result.stdout
-        )
-
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(
-            "web-analytics.py returned "
-            "invalid JSON"
-        ) from exc
-
-    return payload
-
-
-# ============================================================
-# CLOUDFLARE R2 USAGE
-# ============================================================
 
 def get_r2_usage():
-    result = subprocess.run(
-        [
-            str(R2_USAGE),
-        ],
-        capture_output=True,
-        text=True,
-        timeout=60,
+    return run_json_script(
+        [str(R2_USAGE)],
+        "r2-usage.py",
     )
-
-    if result.returncode != 0:
-        error = (
-            result.stderr.strip()
-            or result.stdout.strip()
-            or "unknown error"
-        )
-
-        raise RuntimeError(
-            "r2-usage.py failed: "
-            + error
-        )
-
-    try:
-        payload = json.loads(
-            result.stdout
-        )
-
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(
-            "r2-usage.py returned "
-            "invalid JSON"
-        ) from exc
-
-    return payload
 
 
 # ============================================================
-# R2 CLIENT
+# R2 CLIENT / STORAGE INFO
 # ============================================================
 
 def make_s3():
     return boto3.client(
         "s3",
-
-        endpoint_url=required(
-            "R2_ENDPOINT"
-        ),
-
-        aws_access_key_id=required(
-            "R2_ACCESS_KEY_ID"
-        ),
-
-        aws_secret_access_key=required(
-            "R2_SECRET_ACCESS_KEY"
-        ),
-
+        endpoint_url=required("R2_ENDPOINT"),
+        aws_access_key_id=required("R2_ACCESS_KEY_ID"),
+        aws_secret_access_key=required("R2_SECRET_ACCESS_KEY"),
         region_name="auto",
     )
 
 
-# ============================================================
-# R2 STORAGE INFORMATION
-# ============================================================
-
-def storage_info(
-    s3,
-    bucket,
-):
+def storage_info(s3, bucket):
     objects = 0
     total_bytes = 0
 
-    paginator = (
-        s3.get_paginator(
-            "list_objects_v2"
-        )
-    )
+    paginator = s3.get_paginator("list_objects_v2")
 
-    for page in paginator.paginate(
-        Bucket=bucket
-    ):
-        for obj in page.get(
-            "Contents",
-            [],
-        ):
+    for page in paginator.paginate(Bucket=bucket):
+        for obj in page.get("Contents", []):
             objects += 1
-
-            total_bytes += obj.get(
-                "Size",
-                0,
-            )
+            total_bytes += obj.get("Size", 0)
 
     return {
-        "gb":
-            round(
-                total_bytes
-                / 1_000_000_000,
-                2,
-            ),
-
-        "objects":
-            objects,
+        "gb": round(total_bytes / 1_000_000_000, 2),
+        "objects": objects,
     }
 
 
@@ -553,90 +414,128 @@ def storage_info(
 
 def main():
     load_env(CONFIG)
+    previous = load_previous_dashboard()
 
-    bucket = required(
-        "R2_BUCKET"
-    )
-
+    bucket = required("R2_BUCKET")
     key = os.environ.get(
         "R2_DASHBOARD_KEY",
         "site-monitor/live/dashboard.json",
     )
 
-    (
-        latest,
-        samples,
-        history,
-        generated,
-    ) = parse_health()
+    latest, samples, history, generated = parse_health()
+
+    previous_summary = (
+        previous.get("latest", {}).get("analytics", {})
+    )
+    previous_visits = previous.get("visits", {})
+    previous_page_load = previous.get("pageLoad", {})
+    previous_analytics_generated = previous.get(
+        "analyticsGenerated"
+    )
+    previous_r2_usage = previous.get("r2Usage", {})
 
     # --------------------------------------------------------
-    # Web analytics
-    #
-    # Failure must not prevent health publishing.
+    # Web Analytics / Site Performance
     # --------------------------------------------------------
 
     analytics_summary = {
         "visits": None,
         "pageLoad": None,
     }
-
     visits = {
         "labels": [],
         "values": [],
     }
-
     page_load = {
         "labels": [],
         "values": [],
     }
-
     analytics_generated = None
+    analytics_fallback = False
+
+    previous_analytics_recent = recent_enough(
+        previous_analytics_generated
+    )
 
     try:
-        analytics = (
-            get_web_analytics()
+        analytics = get_web_analytics()
+
+        analytics_generated = analytics.get("generated")
+        analytics_summary = analytics.get(
+            "summary",
+            analytics_summary,
+        )
+        visits = analytics.get("visits", visits)
+        page_load = analytics.get("pageLoad", page_load)
+
+        current_history_useful = has_useful_analytics_history(
+            visits,
+            page_load,
+        )
+        previous_history_useful = has_useful_analytics_history(
+            previous_visits,
+            previous_page_load,
         )
 
-        analytics_generated = (
-            analytics.get(
-                "generated"
-            )
-        )
+        if (
+            not current_history_useful
+            and previous_history_useful
+            and previous_analytics_recent
+        ):
+            visits = previous_visits
+            page_load = previous_page_load
+            analytics_generated = previous_analytics_generated
+            analytics_fallback = True
 
-        analytics_summary = (
-            analytics.get(
-                "summary",
-                analytics_summary,
+            print(
+                "WARNING: analytics returned an empty 24-hour "
+                "dataset; keeping recent last-known-good chart data",
+                file=sys.stderr,
             )
-        )
 
-        visits = (
-            analytics.get(
-                "visits",
-                visits,
-            )
-        )
-
-        page_load = (
-            analytics.get(
-                "pageLoad",
-                page_load,
-            )
-        )
+        # The daily page-load summary can briefly be null just
+        # after midnight. Keep the recent value rather than
+        # flashing a dash while Cloudflare catches up.
+        if (
+            analytics_summary.get("pageLoad") is None
+            and finite_number(previous_summary.get("pageLoad"))
+            and previous_analytics_recent
+        ):
+            analytics_summary = {
+                **analytics_summary,
+                "pageLoad": previous_summary["pageLoad"],
+            }
+            analytics_fallback = True
 
     except Exception as exc:
-        print(
-            "WARNING: analytics unavailable; "
-            "publishing health data anyway: "
-            f"{exc}",
-            file=sys.stderr,
-        )
+        if (
+            previous_analytics_recent
+            and has_useful_analytics_history(
+                previous_visits,
+                previous_page_load,
+            )
+        ):
+            analytics_summary = previous_summary
+            visits = previous_visits
+            page_load = previous_page_load
+            analytics_generated = previous_analytics_generated
+            analytics_fallback = True
+
+            print(
+                "WARNING: analytics unavailable; keeping recent "
+                f"last-known-good data: {exc}",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                "WARNING: analytics unavailable and no recent "
+                "fallback is available; publishing health data "
+                f"anyway: {exc}",
+                file=sys.stderr,
+            )
 
     # --------------------------------------------------------
     # R2 operation usage
-    #
-    # Failure must not prevent dashboard publishing.
     # --------------------------------------------------------
 
     r2_usage = {
@@ -648,92 +547,98 @@ def main():
         "other": None,
         "breakdown": {},
     }
+    r2_usage_fallback = False
+    previous_r2_recent = recent_enough(
+        previous_r2_usage.get("generated")
+    )
 
     try:
-        r2_usage = (
-            get_r2_usage()
+        r2_usage = get_r2_usage()
+
+        current_total = r2_operation_total(r2_usage)
+        previous_total = r2_operation_total(previous_r2_usage)
+        same_month = (
+            r2_usage.get("month")
+            == previous_r2_usage.get("month")
         )
 
+        if (
+            current_total == 0
+            and previous_total > 0
+            and same_month
+            and previous_r2_recent
+        ):
+            r2_usage = previous_r2_usage
+            r2_usage_fallback = True
+
+            print(
+                "WARNING: R2 usage returned zero mid-month; "
+                "keeping recent last-known-good operation totals",
+                file=sys.stderr,
+            )
+
     except Exception as exc:
-        print(
-            "WARNING: R2 usage unavailable; "
-            "publishing dashboard anyway: "
-            f"{exc}",
-            file=sys.stderr,
-        )
+        if (
+            previous_r2_recent
+            and r2_operation_total(previous_r2_usage) > 0
+        ):
+            r2_usage = previous_r2_usage
+            r2_usage_fallback = True
+
+            print(
+                "WARNING: R2 usage unavailable; keeping recent "
+                f"last-known-good data: {exc}",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                "WARNING: R2 usage unavailable and no recent "
+                "fallback is available; publishing dashboard "
+                f"anyway: {exc}",
+                file=sys.stderr,
+            )
 
     # --------------------------------------------------------
     # R2 storage information
     # --------------------------------------------------------
 
     s3 = make_s3()
-
-    latest["storageInfo"] = (
-        storage_info(
-            s3,
-            bucket,
-        )
-    )
+    latest["storageInfo"] = storage_info(s3, bucket)
 
     # --------------------------------------------------------
     # Final dashboard JSON
     # --------------------------------------------------------
 
     payload = {
-        "generated":
-            generated,
-
-        "published":
-            datetime.now(
-                TZ
-            ).isoformat(),
-
-        "analyticsGenerated":
-            analytics_generated,
-
+        "generated": generated,
+        "published": datetime.now(TZ).isoformat(),
+        "analyticsGenerated": analytics_generated,
+        "sourceFallback": {
+            "analytics": analytics_fallback,
+            "r2Usage": r2_usage_fallback,
+        },
         "latest": {
             **latest,
-
-            "analytics":
-                analytics_summary,
+            "analytics": analytics_summary,
         },
-
-        "visits":
-            visits,
-
-        "pageLoad":
-            page_load,
-
-        "r2Usage":
-            r2_usage,
-
+        "visits": visits,
+        "pageLoad": page_load,
+        "r2Usage": r2_usage,
         "r2History": {
             "labels": [
-                item["stamp"].strftime(
-                    "%H:%M"
-                )
-
-                for item
-                in history
+                item["stamp"].strftime("%H:%M")
+                for item in history
             ],
-
             "average": [
                 item["average"]
-
-                for item
-                in history
+                for item in history
             ],
-
             "worst": [
                 item["worst"]
-
-                for item
-                in history
+                for item in history
             ],
         },
-
-        "samples":
-            samples,
+        "samples": samples,
     }
 
     text = json.dumps(
@@ -742,48 +647,22 @@ def main():
         ensure_ascii=False,
     ) + "\n"
 
-    # --------------------------------------------------------
-    # Atomic local write
-    # --------------------------------------------------------
+    # Atomic local write.
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    temp = OUT.with_suffix(".json.tmp")
+    temp.write_text(text, encoding="utf-8")
+    temp.replace(OUT)
 
-    OUT.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    temp = OUT.with_suffix(
-        ".json.tmp"
-    )
-
-    temp.write_text(
-        text,
-        encoding="utf-8",
-    )
-
-    temp.replace(
-        OUT
-    )
-
-    # --------------------------------------------------------
-    # Publish to R2
-    # --------------------------------------------------------
-
+    # Publish to R2.
     response = s3.put_object(
         Bucket=bucket,
-
         Key=key,
-
-        Body=text.encode(
-            "utf-8"
-        ),
-
-        ContentType=
-            "application/json",
+        Body=text.encode("utf-8"),
+        ContentType="application/json",
     )
 
     print(
-        f"Published {key} "
-        f"{response.get('ETag', '')}"
+        f"Published {key} {response.get('ETag', '')}"
     )
 
 
