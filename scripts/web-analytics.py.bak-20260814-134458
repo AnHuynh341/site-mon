@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import sys
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -18,9 +19,19 @@ CONFIG = (
     / "config.env"
 )
 
+PROBE_LOG = (
+    Path.home()
+    / "repos"
+    / "site-mon"
+    / "logs"
+    / "page-load-probe.log"
+)
+
 GRAPHQL_URL = "https://api.cloudflare.com/client/v4/graphql"
 
 LOCAL_TZ = ZoneInfo("Asia/Ho_Chi_Minh")
+
+PROBE_TIME_FMT = "%Y-%m-%d %H:%M:%S"
 
 
 # ============================================================
@@ -155,13 +166,6 @@ def graphql(query, variables):
 
 # ============================================================
 # GRAPHQL QUERIES
-#
-# Visits use bot: 0, matching Cloudflare Web Analytics with
-# "Exclude bots = Yes".
-#
-# Page-load performance intentionally has NO bot filter so the
-# headless Chromium probes can still contribute performance
-# samples.
 # ============================================================
 
 SUMMARY_QUERY = """
@@ -185,7 +189,6 @@ query W41ITSummary(
             datetime_geq: $start
             datetime_lt: $end
             requestHost: $host
-            bot: 0
           }
         ) {
           sum {
@@ -235,7 +238,6 @@ query W41ITHourly(
             datetime_geq: $start
             datetime_lt: $end
             requestHost: $host
-            bot: 0
           }
         ) {
           dimensions {
@@ -297,9 +299,80 @@ def page_load_ms(raw):
     if raw is None:
         return None
 
+    # Same conversion used by the
+    # previously working analytics script.
     return round(
         float(raw) / 1000
     )
+
+
+# ============================================================
+# SYNTHETIC CHROMIUM PROBES
+# ============================================================
+
+def successful_probes(
+    start_local,
+    end_local,
+):
+    """
+    Return ONLY successful Chromium probes within:
+
+        start_local <= probe < end_local
+
+    FAILED probes are intentionally ignored and therefore
+    never subtract visits.
+    """
+
+    if not PROBE_LOG.exists():
+        return []
+
+    probes = []
+
+    for raw in PROBE_LOG.read_text(
+        encoding="utf-8",
+        errors="replace",
+    ).splitlines():
+
+        # This is the key safeguard:
+        #
+        # FAILED lines do not contain this exact marker,
+        # therefore they never reach the subtraction code.
+        if (
+            " | browser-probe | OK"
+            not in raw
+        ):
+            continue
+
+        stamp_text = (
+            raw
+            .split(
+                " | ",
+                1,
+            )[0]
+            .strip()
+        )
+
+        try:
+            stamp = datetime.strptime(
+                stamp_text,
+                PROBE_TIME_FMT,
+            ).replace(
+                tzinfo=LOCAL_TZ
+            )
+
+        except ValueError:
+            continue
+
+        if (
+            start_local
+            <= stamp
+            < end_local
+        ):
+            probes.append(
+                stamp
+            )
+
+    return probes
 
 
 # ============================================================
@@ -346,7 +419,11 @@ def get_today_summary(
         result
     )
 
-    visits = sum(
+    # --------------------------------------------------------
+    # Raw Cloudflare visits
+    # --------------------------------------------------------
+
+    raw_visits = sum(
         int(
             group
             .get("sum", {})
@@ -359,6 +436,26 @@ def get_today_summary(
             [],
         )
     )
+
+    # --------------------------------------------------------
+    # Visit count
+    #
+    # Cloudflare's value is authoritative.
+    #
+    # Do not subtract headless Chromium runs here. A
+    # successful browser probe does not necessarily become
+    # a Cloudflare visit, so log-based subtraction can remove
+    # genuine human traffic.
+    # --------------------------------------------------------
+
+    visits = raw_visits
+
+
+    # --------------------------------------------------------
+    # Page-load performance
+    #
+    # Synthetic probes remain included intentionally.
+    # --------------------------------------------------------
 
     load_values = [
         group
@@ -403,6 +500,10 @@ def get_today_summary(
 
         "pageLoad":
             load_ms,
+        # Raw value retained for debugging.
+        "rawVisits":
+            raw_visits,
+
     }
 
 
@@ -424,6 +525,8 @@ def get_hourly(
         )
     )
 
+    # Exactly 24 hourly buckets:
+    # current hour + previous 23.
     hours = [
         current_hour
         - timedelta(
@@ -469,6 +572,11 @@ def get_hourly(
 
     visits_by_hour = {}
     load_by_hour = {}
+
+
+    # --------------------------------------------------------
+    # Raw hourly visits from Cloudflare
+    # --------------------------------------------------------
 
     for group in account.get(
         "pageload",
@@ -519,6 +627,11 @@ def get_hourly(
                 or 0
             )
         )
+
+
+    # --------------------------------------------------------
+    # Hourly page-load performance
+    # --------------------------------------------------------
 
     for group in account.get(
         "performance",
@@ -571,6 +684,28 @@ def get_hourly(
             )
         )
 
+
+    # --------------------------------------------------------
+    # Count successful synthetic probes by hour
+    # --------------------------------------------------------
+
+    probe_counts = Counter(
+        probe.strftime(
+            "%Y-%m-%dT%H"
+        )
+
+        for probe
+        in successful_probes(
+            start_local,
+            now_local,
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # Build frontend labels
+    # --------------------------------------------------------
+
     labels = [
         hour.strftime(
             "%H:%M"
@@ -580,7 +715,12 @@ def get_hourly(
         in hours
     ]
 
-    visit_values = [
+
+    # --------------------------------------------------------
+    # Raw visit values
+    # --------------------------------------------------------
+
+    raw_visit_values = [
         visits_by_hour.get(
             hour.strftime(
                 "%Y-%m-%dT%H"
@@ -591,6 +731,45 @@ def get_hourly(
         for hour
         in hours
     ]
+
+
+    # --------------------------------------------------------
+    # Successful synthetic visits per bucket
+    # --------------------------------------------------------
+
+    synthetic_values = [
+        probe_counts.get(
+            hour.strftime(
+                "%Y-%m-%dT%H"
+            ),
+            0,
+        )
+
+        for hour
+        in hours
+    ]
+
+
+    # --------------------------------------------------------
+    # Remove synthetic visits
+    #
+    # max(0, ...) means even if two probes exist but
+    # Cloudflare reports only one visit, result stays 0.
+    # --------------------------------------------------------
+
+    # Cloudflare's hourly visit values are used directly.
+    #
+    # Chromium probe logs are intentionally NOT subtracted.
+    visit_values = list(
+        raw_visit_values
+    )
+
+
+    # --------------------------------------------------------
+    # Page-load values stay untouched.
+    #
+    # That's the entire reason the Chromium probes exist.
+    # --------------------------------------------------------
 
     page_load_values = [
         load_by_hour.get(
@@ -603,13 +782,19 @@ def get_hourly(
         in hours
     ]
 
+
     return {
         "visits": {
             "labels":
                 labels,
 
+            # What the dashboard displays.
             "values":
                 visit_values,
+
+            # Useful for debugging.
+            "rawValues":
+                raw_visit_values,
         },
 
         "pageLoad": {
@@ -700,6 +885,11 @@ def main():
 
         return 1
 
+
+    # --------------------------------------------------------
+    # Dashboard JSON mode
+    # --------------------------------------------------------
+
     if args.dashboard_json:
 
         print(
@@ -711,6 +901,11 @@ def main():
         )
 
         return 0
+
+
+    # --------------------------------------------------------
+    # Preserve old daily-report.sh interface
+    # --------------------------------------------------------
 
     print(
         "visits="
