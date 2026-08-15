@@ -565,7 +565,7 @@ function buildProbeHealthChart(
             display: false
           },
           tooltip: {
-            backgroundColor: "#080b13",
+            backgroundColor: "#000000",
             borderColor: "rgba(255,255,255,.15)",
             borderWidth: 1,
             titleColor: "#ffffff",
