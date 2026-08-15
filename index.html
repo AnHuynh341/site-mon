@@ -99,11 +99,6 @@
     <div class="dashboard-grid">
 
 
-      <div class="section-divider overall-divider">
-        <span>Overall</span>
-      </div>
-
-
       <!-- ===================================================
            VISITS
       ==================================================== -->
@@ -380,11 +375,6 @@
 
 
 
-      <div class="section-divider audio-divider">
-        <span>Audio</span>
-      </div>
-
-
       <!-- ===================================================
            R2 OPERATIONS
       ==================================================== -->
@@ -558,11 +548,6 @@
       </section>
 
 
-      <div class="section-divider video-divider">
-        <span>Video</span>
-      </div>
-
-
       <!-- ===================================================
            VIDEO FETCH TIME
       ==================================================== -->
@@ -573,7 +558,7 @@
 
           <div>
             <span class="panel-kicker">PUBLIC VIDEO DELIVERY</span>
-            <h2>Video fetch time — last 24 hours</h2>
+            <h2>Average video fetch — last 24 hours</h2>
           </div>
 
           <div class="big-number">
@@ -581,13 +566,6 @@
             <span>ms average</span>
           </div>
 
-        </div>
-
-        <div class="video-chart-legend">
-          <span><i class="legend-dot video-average"></i>Average</span>
-          <span><i class="legend-dot video-sample-1"></i>Sample 1</span>
-          <span><i class="legend-dot video-sample-2"></i>Sample 2</span>
-          <span><i class="legend-dot video-sample-3"></i>Sample 3</span>
         </div>
 
         <div class="chart-box video-chart-box">
@@ -598,35 +576,24 @@
 
 
       <!-- ===================================================
-           VIDEO TTFB
+           VIDEO LIVE PROBE
       ==================================================== -->
 
-      <section class="panel video-ttfb-panel">
+      <section class="panel video-probes-panel">
 
-        <div class="panel-header">
+        <div class="panel-header compact-header">
 
           <div>
-            <span class="panel-kicker">CLOUDFLARE PATH</span>
-            <h2>Public TTFB — last 24 hours</h2>
-          </div>
-
-          <div class="big-number">
-            <strong id="video-ttfb-now">—</strong>
-            <span>ms average</span>
+            <span class="panel-kicker">LIVE PROBE</span>
+            <h2>Video sample latency</h2>
           </div>
 
         </div>
 
-        <div class="video-chart-legend">
-          <span><i class="legend-dot video-average"></i>Average</span>
-          <span><i class="legend-dot video-sample-1"></i>Sample 1</span>
-          <span><i class="legend-dot video-sample-2"></i>Sample 2</span>
-          <span><i class="legend-dot video-sample-3"></i>Sample 3</span>
-        </div>
-
-        <div class="chart-box video-chart-box">
-          <canvas id="video-ttfb-chart"></canvas>
-        </div>
+        <div
+          class="sample-bars video-sample-bars"
+          id="video-sample-bars"
+        ></div>
 
       </section>
 

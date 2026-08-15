@@ -272,17 +272,11 @@ body {
 
   grid-template-areas:
 
-    "overall overall overall overall"
-
     "visits visits page health"
-
-    "audio audio audio audio"
 
     "ops r2 r2 samples"
 
-    "video video video video"
-
-    "videoFetch videoFetch videoTtfb videoTtfb"
+    "videoFetch videoFetch videoFetch videoProbes"
 
     "summary summary summary summary";
 
@@ -326,74 +320,22 @@ body {
 }
 
 
-.overall-divider {
-  grid-area: overall;
-}
-
-
-.audio-divider {
-  grid-area: audio;
-}
-
-
-.video-divider {
-  grid-area: video;
-}
-
-
 .video-fetch-panel {
   grid-area: videoFetch;
 }
 
 
-.video-ttfb-panel {
-  grid-area: videoTtfb;
+.video-probes-panel {
+  grid-area: videoProbes;
 }
 
 
-.section-divider {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  min-width: 0;
-
-  padding:
-    10px
-    3px
-    2px;
-
-  color: var(--muted);
-
-  font-size: 0.68rem;
-
-  font-weight: 750;
-
-  letter-spacing: 0.13em;
-
-  text-transform: uppercase;
-
-}
-
-
-.section-divider::after {
-
-  content: "";
-
-  flex: 1;
-
-  height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--border),
-      transparent
-    );
-
+.r2-operations-panel,
+.r2-history-panel,
+.samples-panel,
+.video-fetch-panel,
+.video-probes-panel {
+  margin-top: 6px;
 }
 
 
@@ -556,55 +498,6 @@ body {
   margin-top: 6px;
 
 }
-
-
-.video-chart-legend {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 12px;
-
-  margin-top: 4px;
-
-  color: var(--muted);
-
-  font-size: 0.68rem;
-
-}
-
-
-.video-chart-legend span {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 6px;
-
-}
-
-
-.legend-dot.video-average {
-  background: var(--cyan);
-}
-
-
-.legend-dot.video-sample-1 {
-  background: var(--blue);
-}
-
-
-.legend-dot.video-sample-2 {
-  background: var(--purple);
-}
-
-
-.legend-dot.video-sample-3 {
-  background: var(--green);
-}
-
 
 
 /* ============================================================
@@ -1002,6 +895,23 @@ body {
 }
 
 
+.video-probes-panel {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+.sample-bars.video-sample-bars {
+
+  grid-template-rows:
+    repeat(3, 1fr);
+
+}
+
+
 .sample-bars {
 
   flex: 1;
@@ -1239,21 +1149,15 @@ body {
 
     grid-template-areas:
 
-      "overall overall"
-
       "visits page"
 
       "health health"
-
-      "audio audio"
 
       "ops r2"
 
       "samples samples"
 
-      "video video"
-
-      "videoFetch videoTtfb"
+      "videoFetch videoProbes"
 
       "summary summary";
 
@@ -1327,15 +1231,11 @@ body {
 
     grid-template-areas:
 
-      "overall"
-
       "visits"
 
       "page"
 
       "health"
-
-      "audio"
 
       "ops"
 
@@ -1343,11 +1243,9 @@ body {
 
       "samples"
 
-      "video"
-
       "videoFetch"
 
-      "videoTtfb"
+      "videoProbes"
 
       "summary";
 

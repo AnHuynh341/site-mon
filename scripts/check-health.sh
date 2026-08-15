@@ -261,11 +261,10 @@ PY
 
 check_video_media() {
     local urls=()
-    local total success sum_fetch sum_ttfb average_fetch average_ttfb
-    local result code fetch_seconds ttfb_seconds fetch_ms ttfb_ms status
-    local fetch_csv ttfb_csv url
+    local total success sum_fetch average_fetch
+    local result code fetch_seconds fetch_ms status
+    local sample_csv url
     local fetch_samples=()
-    local ttfb_samples=()
 
     while IFS= read -r url; do
         [[ -n "$url" ]] && urls+=("$url")
@@ -274,7 +273,6 @@ check_video_media() {
     total="${#urls[@]}"
     success=0
     sum_fetch=0
-    sum_ttfb=0
 
     for url in "${urls[@]}"; do
         result=$(
@@ -286,15 +284,14 @@ check_video_media() {
                 --range 0-131071 \
                 --max-filesize 262144 \
                 --max-time 20 \
-                --write-out '%{http_code} %{time_total} %{time_starttransfer}' \
+                --write-out '%{http_code} %{time_total}' \
                 "$url" \
                 2>/dev/null
-        ) || result="000 0 0"
+        ) || result="000 0"
 
-        read -r code fetch_seconds ttfb_seconds <<< "$result"
+        read -r code fetch_seconds <<< "$result"
 
         fetch_ms=$(to_ms "$fetch_seconds")
-        ttfb_ms=$(to_ms "$ttfb_seconds")
 
         # A proper video endpoint must honor byte ranges. Strictly
         # requiring 206 also prevents a broken server from making the
@@ -302,21 +299,16 @@ check_video_media() {
         if [[ "$code" == "206" ]]; then
             success=$((success + 1))
             sum_fetch=$((sum_fetch + fetch_ms))
-            sum_ttfb=$((sum_ttfb + ttfb_ms))
             fetch_samples+=("$fetch_ms")
-            ttfb_samples+=("$ttfb_ms")
         else
             fetch_samples+=("FAIL")
-            ttfb_samples+=("FAIL")
         fi
     done
 
     if (( success > 0 )); then
         average_fetch=$((sum_fetch / success))
-        average_ttfb=$((sum_ttfb / success))
     else
         average_fetch=0
-        average_ttfb=0
     fi
 
     if (( total == 0 || success == 0 )); then
@@ -327,18 +319,15 @@ check_video_media() {
         status="UP"
     fi
 
-    fetch_csv=$(IFS=,; echo "${fetch_samples[*]}")
-    ttfb_csv=$(IFS=,; echo "${ttfb_samples[*]}")
+    sample_csv=$(IFS=,; echo "${fetch_samples[*]}")
 
-    printf '%s | video-media | %s | %d/%d | %dms | ttfb=%dms | fetch=%s | ttfbSamples=%s\n' \
+    printf '%s | video-media | %s | %d/%d | %dms | samples=%s\n' \
         "$(timestamp)" \
         "$status" \
         "$success" \
         "$total" \
         "$average_fetch" \
-        "$average_ttfb" \
-        "$fetch_csv" \
-        "$ttfb_csv" \
+        "$sample_csv" \
         >> "$LOG_FILE"
 }
 

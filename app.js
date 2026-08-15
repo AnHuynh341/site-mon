@@ -13,7 +13,6 @@ let pageLoadChart;
 let r2Chart;
 let r2OperationsChart;
 let videoFetchChart;
-let videoTtfbChart;
 let lastGoodData = null;
 
 
@@ -502,13 +501,10 @@ function buildR2Chart() {
 
 
 /* ============================================================
-   VIDEO DELIVERY CHARTS
+   VIDEO DELIVERY CHART
 ============================================================ */
 
-function buildVideoLineChart(
-  canvasId,
-  averageLabel
-) {
+function buildVideoChart() {
   const options =
     chartOptions();
 
@@ -516,9 +512,10 @@ function buildVideoLineChart(
     value =>
       `${value}ms`;
 
-  return new Chart(
+  videoFetchChart =
+    new Chart(
     document.getElementById(
-      canvasId
+      "video-fetch-chart"
     ),
 
     {
@@ -529,44 +526,14 @@ function buildVideoLineChart(
 
         datasets: [
           {
-            label: averageLabel,
+            label: "Average fetch",
             data: [],
             borderColor: cssVar("--cyan"),
-            backgroundColor: "rgba(42,221,255,.09)",
-            borderWidth: 3,
+            backgroundColor: "rgba(42,221,255,.14)",
+            borderWidth: 2,
             fill: true,
-            pointRadius: 0,
+            pointRadius: 2,
             pointHoverRadius: 5,
-            tension: 0.25,
-            spanGaps: true
-          },
-          {
-            label: "Sample 1",
-            data: [],
-            borderColor: cssVar("--blue"),
-            borderWidth: 1.5,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            tension: 0.25,
-            spanGaps: true
-          },
-          {
-            label: "Sample 2",
-            data: [],
-            borderColor: cssVar("--purple"),
-            borderWidth: 1.5,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            tension: 0.25,
-            spanGaps: true
-          },
-          {
-            label: "Sample 3",
-            data: [],
-            borderColor: cssVar("--green"),
-            borderWidth: 1.5,
-            pointRadius: 0,
-            pointHoverRadius: 4,
             tension: 0.25,
             spanGaps: true
           }
@@ -576,45 +543,6 @@ function buildVideoLineChart(
       options
     }
   );
-}
-
-
-function buildVideoCharts() {
-  videoFetchChart =
-    buildVideoLineChart(
-      "video-fetch-chart",
-      "Average fetch"
-    );
-
-  videoTtfbChart =
-    buildVideoLineChart(
-      "video-ttfb-chart",
-      "Average TTFB"
-    );
-}
-
-
-function applyVideoHistory(
-  chart,
-  labels,
-  average,
-  samples
-) {
-  chart.data.labels = labels;
-
-  chart.data.datasets[0].data =
-    Array.isArray(average)
-      ? average
-      : [];
-
-  for (let index = 0; index < 3; index += 1) {
-    chart.data.datasets[index + 1].data =
-      Array.isArray(samples?.[index])
-        ? samples[index]
-        : [];
-  }
-
-  chart.update();
 }
 
 
@@ -830,15 +758,16 @@ function applyHealth(
 
 
 /* ============================================================
-   LIVE R2 SAMPLE BARS
+   LIVE SAMPLE BARS
 ============================================================ */
 
 function updateSampleBars(
-  samples
+  samples,
+  containerId = "sample-bars"
 ) {
   const container =
     document.getElementById(
-      "sample-bars"
+      containerId
     );
 
   if (!container) {
@@ -1271,19 +1200,20 @@ function updateCharts(
       ? videoHistory.labels
       : [];
 
-  applyVideoHistory(
-    videoFetchChart,
-    videoLabels,
-    videoHistory.fetchAverage,
-    videoHistory.fetchSamples
-  );
+  videoFetchChart.data.labels =
+    videoLabels;
 
-  applyVideoHistory(
-    videoTtfbChart,
-    videoLabels,
-    videoHistory.ttfbAverage,
-    videoHistory.ttfbSamples
-  );
+  videoFetchChart
+    .data
+    .datasets[0]
+    .data =
+      Array.isArray(
+        videoHistory.average
+      )
+        ? videoHistory.average
+        : [];
+
+  videoFetchChart.update();
 }
 
 
@@ -1322,10 +1252,6 @@ function updateNumbers(
   const videoFetch =
     latest.video?.ms;
 
-  const videoTtfb =
-    latest.video?.ttfbMs;
-
-
   /* ---------------- Main panels ---------------- */
 
   setText(
@@ -1355,15 +1281,6 @@ function updateNumbers(
 
     Number.isFinite(videoFetch)
       ? Math.round(videoFetch)
-      : "—"
-  );
-
-
-  setText(
-    "video-ttfb-now",
-
-    Number.isFinite(videoTtfb)
-      ? Math.round(videoTtfb)
       : "—"
   );
 
@@ -1528,6 +1445,17 @@ function applyDashboard(
   );
 
 
+  updateSampleBars(
+    Array.isArray(
+      data.videoSamples
+    )
+      ? data.videoSamples
+      : [],
+
+    "video-sample-bars"
+  );
+
+
   updateFreshness(
     data
   );
@@ -1611,7 +1539,7 @@ function init() {
 
   buildR2OperationsChart();
 
-  buildVideoCharts();
+  buildVideoChart();
 
 
   /*

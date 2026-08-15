@@ -200,7 +200,6 @@ def parse_health():
 
     latest_samples = []
     latest_video_fetch_samples = []
-    latest_video_ttfb_samples = []
     history = []
     video_history = []
     now = datetime.now(TZ)
@@ -278,7 +277,7 @@ def parse_health():
                     }
                 )
 
-        elif service == "video-media" and len(parts) >= 6:
+        elif service == "video-media" and len(parts) >= 5:
             try:
                 ok, total = (
                     int(x)
@@ -289,41 +288,32 @@ def parse_health():
                 total = 3
 
             average_fetch = parse_ms(parts[4]) if ok else None
-            average_ttfb = parse_ms(parts[5]) if ok else None
             fetch_samples = []
-            ttfb_samples = []
 
-            for extra in parts[6:]:
-                if extra.startswith("fetch="):
+            for extra in parts[5:]:
+                if extra.startswith("samples="):
+                    fetch_samples = parse_sample_values(extra)
+                elif extra.startswith("fetch="):
+                    # Backward-compatible with the first draft format.
                     fetch_samples = parse_sample_values(
                         extra,
                         "fetch=",
-                    )
-                elif extra.startswith("ttfbSamples="):
-                    ttfb_samples = parse_sample_values(
-                        extra,
-                        "ttfbSamples=",
                     )
 
             latest["video"] = {
                 "status": parts[2],
                 "ms": average_fetch,
-                "ttfbMs": average_ttfb,
                 "successfulSamples": ok,
                 "totalSamples": total,
             }
             latest_time["video"] = stamp
             latest_video_fetch_samples = fetch_samples
-            latest_video_ttfb_samples = ttfb_samples
 
             if stamp >= cutoff:
                 video_history.append(
                     {
                         "stamp": stamp,
-                        "averageFetch": average_fetch,
-                        "averageTtfb": average_ttfb,
-                        "fetchSamples": fetch_samples,
-                        "ttfbSamples": ttfb_samples,
+                        "average": average_fetch,
                     }
                 )
 
@@ -352,7 +342,6 @@ def parse_health():
         latest["video"] = {
             "status": "UNKNOWN",
             "ms": None,
-            "ttfbMs": None,
             "successfulSamples": 0,
             "totalSamples": 3,
         }
@@ -380,24 +369,17 @@ def parse_health():
         for i in range(5)
     ]
 
-    video_samples = {
-        "fetch": [
-            (
+    video_samples = [
+        {
+            "name": f"Sample {i + 1}",
+            "ms": (
                 latest_video_fetch_samples[i]
                 if i < len(latest_video_fetch_samples)
                 else None
-            )
-            for i in range(3)
-        ],
-        "ttfb": [
-            (
-                latest_video_ttfb_samples[i]
-                if i < len(latest_video_ttfb_samples)
-                else None
-            )
-            for i in range(3)
-        ],
-    }
+            ),
+        }
+        for i in range(3)
+    ]
 
     return (
         latest,
@@ -772,35 +754,9 @@ def main():
                 item["stamp"].strftime("%H:%M")
                 for item in video_history
             ],
-            "fetchAverage": [
-                item["averageFetch"]
+            "average": [
+                item["average"]
                 for item in video_history
-            ],
-            "ttfbAverage": [
-                item["averageTtfb"]
-                for item in video_history
-            ],
-            "fetchSamples": [
-                [
-                    (
-                        item["fetchSamples"][index]
-                        if index < len(item["fetchSamples"])
-                        else None
-                    )
-                    for item in video_history
-                ]
-                for index in range(3)
-            ],
-            "ttfbSamples": [
-                [
-                    (
-                        item["ttfbSamples"][index]
-                        if index < len(item["ttfbSamples"])
-                        else None
-                    )
-                    for item in video_history
-                ]
-                for index in range(3)
             ],
         },
         "videoSamples": video_samples,
