@@ -1,30 +1,30 @@
 {
-  "generated": "2026-08-16T05:55:01+07:00",
-  "published": "2026-08-16T05:55:05.998089+07:00",
-  "analyticsGenerated": "2026-08-16T05:55:02.447607+07:00",
+  "generated": "2026-08-16T05:56:59+07:00",
+  "published": "2026-08-16T05:57:02.729746+07:00",
+  "analyticsGenerated": "2026-08-16T05:57:00.375116+07:00",
   "sourceFallback": {
     "analytics": false
   },
   "latest": {
     "frontend": {
       "status": "UP",
-      "ms": 265
+      "ms": 149
     },
     "database": {
       "status": "UP",
-      "ms": 176
+      "ms": 177
     },
     "storage": {
       "status": "UP",
-      "ms": 91,
-      "worst": 206,
+      "ms": 61,
+      "worst": 77,
       "successfulSamples": 5,
       "totalSamples": 5
     },
     "video": {
       "status": "UP",
-      "ms": 47,
-      "worst": 65,
+      "ms": 38,
+      "worst": 58,
       "successfulSamples": 5,
       "totalSamples": 5
     },
@@ -472,7 +472,8 @@
       "05:45",
       "05:50",
       "05:53",
-      "05:55"
+      "05:55",
+      "05:56"
     ],
     "average": [
       77,
@@ -769,7 +770,8 @@
       75,
       93,
       58,
-      91
+      91,
+      61
     ],
     "worst": [
       93,
@@ -1066,48 +1068,49 @@
       97,
       151,
       64,
-      206
+      206,
+      77
     ]
   },
   "samples": [
     {
       "name": "Sample 1",
-      "ms": 206
+      "ms": 58
     },
     {
       "name": "Sample 2",
-      "ms": 68
+      "ms": 77
     },
     {
       "name": "Sample 3",
-      "ms": 57
+      "ms": 58
     },
     {
       "name": "Sample 4",
-      "ms": 71
+      "ms": 56
     },
     {
       "name": "Sample 5",
-      "ms": 57
+      "ms": 56
     }
   ],
   "audioProbeHealth": {
-    "good": 1289,
-    "slow": 32,
-    "unstable": 154,
-    "total": 1475,
-    "averageMs": 484,
-    "goodThroughMs": 604,
-    "unstableAboveMs": 846
+    "good": 1274,
+    "slow": 91,
+    "unstable": 115,
+    "total": 1480,
+    "averageMs": 482,
+    "goodThroughMs": 500,
+    "unstableAboveMs": 1500
   },
   "videoProbeHealth": {
-    "good": 906,
-    "slow": 16,
-    "unstable": 113,
-    "total": 1035,
-    "averageMs": 408,
-    "goodThroughMs": 510,
-    "unstableAboveMs": 714
+    "good": 911,
+    "slow": 49,
+    "unstable": 80,
+    "total": 1040,
+    "averageMs": 406,
+    "goodThroughMs": 500,
+    "unstableAboveMs": 1500
   },
   "videoHistory": {
     "labels": [
@@ -1319,7 +1322,8 @@
       "05:45",
       "05:50",
       "05:53",
-      "05:55"
+      "05:55",
+      "05:56"
     ],
     "average": [
       812,
@@ -1530,7 +1534,8 @@
       45,
       85,
       41,
-      47
+      47,
+      38
     ],
     "worst": [
       1567,
@@ -1741,17 +1746,18 @@
       51,
       190,
       64,
-      65
+      65,
+      58
     ]
   },
   "videoSamples": [
     {
       "name": "Sample 1",
-      "ms": 63
+      "ms": 33
     },
     {
       "name": "Sample 2",
-      "ms": 46
+      "ms": 33
     },
     {
       "name": "Sample 3",
@@ -1759,11 +1765,11 @@
     },
     {
       "name": "Sample 4",
-      "ms": 32
+      "ms": 36
     },
     {
       "name": "Sample 5",
-      "ms": 65
+      "ms": 58
     }
   ]
 }
