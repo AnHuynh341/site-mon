@@ -761,6 +761,8 @@ body {
 
   position: relative;
 
+  isolation: isolate;
+
   width: min(150px, 100%);
 
   height: 150px;
@@ -772,11 +774,22 @@ body {
 }
 
 
+.probe-health-chart-box canvas {
+
+  position: relative;
+
+  z-index: 1;
+
+}
+
+
 .probe-health-center {
 
   position: absolute;
 
   inset: 0;
+
+  z-index: 0;
 
   display: flex;
 
