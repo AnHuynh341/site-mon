@@ -22,7 +22,7 @@
 
   --green: #2be47b;
   --yellow: #ffd04f;
-  --red: #ff5e70;
+  --red: hsl(0, 78%, 50%);
 
   --radius: 8px;
 
