@@ -22,7 +22,7 @@ WEB_ANALYTICS = BASE / "scripts" / "web-analytics.py"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 TIME_FMT = "%Y-%m-%d %H:%M:%S"
 FALLBACK_MAX_AGE = timedelta(hours=2)
-PROBE_GOOD_LIMIT_MS = 2500
+PROBE_GOOD_LIMIT_MS = 1500
 PROBE_UNSTABLE_LIMIT_MS = 4000
 
 
@@ -209,7 +209,6 @@ def parse_health():
     history = []
     video_history = []
     audio_probe_health = empty_probe_health()
-    video_probe_health = empty_probe_health()
     now = datetime.now(TZ)
     cutoff = now - timedelta(hours=24)
 
@@ -325,11 +324,6 @@ def parse_health():
             latest_video_fetch_samples = fetch_samples
 
             if stamp >= cutoff:
-                add_probe_samples(
-                    video_probe_health,
-                    fetch_samples,
-                )
-
                 video_history.append(
                     {
                         "stamp": stamp,
@@ -407,7 +401,6 @@ def parse_health():
         history,
         video_history,
         audio_probe_health,
-        video_probe_health,
         video_samples,
         generated,
     )
@@ -538,7 +531,6 @@ def main():
         history,
         video_history,
         audio_probe_health,
-        video_probe_health,
         video_samples,
         generated,
     ) = parse_health()
@@ -711,7 +703,6 @@ def main():
                 for item in video_history
             ],
         },
-        "videoProbeHealth": video_probe_health,
         "videoSamples": video_samples,
     }
 

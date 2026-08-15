@@ -274,9 +274,9 @@ body {
 
     "page page visits health"
 
-    "r2 r2 audioHealth samples"
+    "ops r2 r2 samples"
 
-    "videoFetch videoFetch videoHealth videoProbes"
+    "videoFetch videoFetch videoFetch videoProbes"
 
     "summary summary summary summary";
 
@@ -311,12 +311,7 @@ body {
 
 
 .audio-health-panel {
-  grid-area: audioHealth;
-}
-
-
-.video-health-panel {
-  grid-area: videoHealth;
+  grid-area: ops;
 }
 
 
@@ -750,9 +745,7 @@ body {
 
   flex-direction: column;
 
-  justify-content: center;
-
-  min-height: 245px;
+  justify-content: flex-start;
 
 }
 
@@ -761,11 +754,11 @@ body {
 
   position: relative;
 
-  width: min(155px, 100%);
+  width: min(150px, 100%);
 
-  aspect-ratio: 1;
+  height: 150px;
 
-  margin: 4px auto 8px;
+  margin: 12px auto 10px;
 
 }
 
@@ -1239,13 +1232,11 @@ body {
 
       "health health"
 
-      "r2 r2"
+      "ops r2"
 
-      "audioHealth samples"
+      "samples samples"
 
-      "videoFetch videoFetch"
-
-      "videoHealth videoProbes"
+      "videoFetch videoProbes"
 
       "summary summary";
 
@@ -1325,15 +1316,13 @@ body {
 
       "health"
 
-      "r2"
+      "ops"
 
-      "audioHealth"
+      "r2"
 
       "samples"
 
       "videoFetch"
-
-      "videoHealth"
 
       "videoProbes"
 

@@ -13,7 +13,6 @@ let pageLoadChart;
 let r2Chart;
 let videoFetchChart;
 let audioProbeHealthChart;
-let videoProbeHealthChart;
 let lastGoodData = null;
 let excludeBots = false;
 
@@ -534,8 +533,8 @@ function buildProbeHealthChart(
       type: "doughnut",
       data: {
         labels: [
-          "Good (<2.5s)",
-          "Slow (2.5–4s)",
+          "Good (<1.5s)",
+          "Slow (1.5–4s)",
           "Unstable / failed (≥4s)"
         ],
         datasets: [
@@ -999,9 +998,6 @@ function updateCharts(
   const audioProbeHealth =
     data.audioProbeHealth ?? {};
 
-  const videoProbeHealth =
-    data.videoProbeHealth ?? {};
-
 
   /* ---------------- Visits ---------------- */
 
@@ -1130,11 +1126,6 @@ function updateCharts(
     "audio"
   );
 
-  updateProbeHealth(
-    videoProbeHealthChart,
-    videoProbeHealth,
-    "video"
-  );
 }
 
 
@@ -1425,12 +1416,6 @@ function init() {
     buildProbeHealthChart(
       "audio-health-chart"
     );
-
-  videoProbeHealthChart =
-    buildProbeHealthChart(
-      "video-health-chart"
-    );
-
 
   const botFilterToggle =
     document.getElementById(
