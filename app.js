@@ -12,7 +12,9 @@ let visitsChart;
 let pageLoadChart;
 let r2Chart;
 let r2OperationsChart;
+let videoFetchChart;
 let lastGoodData = null;
+let excludeBots = false;
 
 
 /* ============================================================
@@ -166,6 +168,54 @@ function statusColor(status) {
         "--muted"
       );
   }
+}
+
+
+function selectedVisitValues(visits) {
+  const values =
+    excludeBots
+      ? visits?.withoutBots
+      : visits?.values;
+
+  return Array.isArray(values)
+    ? values
+    : (
+        Array.isArray(visits?.values)
+          ? visits.values
+          : []
+      );
+}
+
+
+function selectedVisitsToday(analytics) {
+  const value =
+    excludeBots
+      ? analytics?.visitsWithoutBots
+      : analytics?.visits;
+
+  return Number.isFinite(value)
+    ? value
+    : analytics?.visits;
+}
+
+
+function updateBotFilterControl() {
+  const button =
+    document.getElementById(
+      "bot-filter-toggle"
+    );
+
+  if (!button) {
+    return;
+  }
+
+  button.textContent =
+    `Exclude bots: ${excludeBots ? "Yes" : "No"}`;
+
+  button.setAttribute(
+    "aria-pressed",
+    String(excludeBots)
+  );
 }
 
 
@@ -500,6 +550,52 @@ function buildR2Chart() {
 
 
 /* ============================================================
+   VIDEO DELIVERY CHART
+============================================================ */
+
+function buildVideoChart() {
+  const options =
+    chartOptions();
+
+  options.scales.y.ticks.callback =
+    value =>
+      `${value}ms`;
+
+  videoFetchChart =
+    new Chart(
+    document.getElementById(
+      "video-fetch-chart"
+    ),
+
+    {
+      type: "line",
+
+      data: {
+        labels: [],
+
+        datasets: [
+          {
+            label: "Average fetch",
+            data: [],
+            borderColor: cssVar("--cyan"),
+            backgroundColor: "rgba(42,221,255,.14)",
+            borderWidth: 2,
+            fill: true,
+            pointRadius: 2,
+            pointHoverRadius: 5,
+            tension: 0.25,
+            spanGaps: true
+          }
+        ]
+      },
+
+      options
+    }
+  );
+}
+
+
+/* ============================================================
    R2 OPERATIONS CHART
 ============================================================ */
 
@@ -711,15 +807,16 @@ function applyHealth(
 
 
 /* ============================================================
-   LIVE R2 SAMPLE BARS
+   LIVE SAMPLE BARS
 ============================================================ */
 
 function updateSampleBars(
-  samples
+  samples,
+  containerId = "sample-bars"
 ) {
   const container =
     document.getElementById(
-      "sample-bars"
+      containerId
     );
 
   if (!container) {
@@ -1007,6 +1104,9 @@ function updateCharts(
   const r2Usage =
     data.r2Usage ?? {};
 
+  const videoHistory =
+    data.videoHistory ?? {};
+
 
   /* ---------------- Visits ---------------- */
 
@@ -1022,11 +1122,18 @@ function updateCharts(
     .data
     .datasets[0]
     .data =
-      Array.isArray(
-        visits.values
-      )
-        ? visits.values
-        : [];
+      selectedVisitValues(
+        visits
+      );
+
+
+  visitsChart
+    .data
+    .datasets[0]
+    .label =
+      excludeBots
+        ? "Visits (bots excluded)"
+        : "Visits (bots included)";
 
 
   visitsChart.update();
@@ -1138,6 +1245,31 @@ function updateCharts(
 
 
   r2OperationsChart.update();
+
+
+  /* ---------------- Video delivery ---------------- */
+
+  const videoLabels =
+    Array.isArray(
+      videoHistory.labels
+    )
+      ? videoHistory.labels
+      : [];
+
+  videoFetchChart.data.labels =
+    videoLabels;
+
+  videoFetchChart
+    .data
+    .datasets[0]
+    .data =
+      Array.isArray(
+        videoHistory.average
+      )
+        ? videoHistory.average
+        : [];
+
+  videoFetchChart.update();
 }
 
 
@@ -1157,12 +1289,17 @@ function updateNumbers(
   const storageInfo =
     latest.storageInfo ?? {};
 
+  const videoInfo =
+    latest.videoInfo ?? {};
+
   const r2Usage =
     data.r2Usage ?? {};
 
 
   const visitsToday =
-    analytics.visits;
+    selectedVisitsToday(
+      analytics
+    );
 
   const pageLoad =
     analytics.pageLoad;
@@ -1170,6 +1307,8 @@ function updateNumbers(
   const r2Average =
     latest.storage?.ms;
 
+  const videoFetch =
+    latest.video?.ms;
 
   /* ---------------- Main panels ---------------- */
 
@@ -1191,6 +1330,15 @@ function updateNumbers(
       ? Math.round(
           pageLoad
         )
+      : "—"
+  );
+
+
+  setText(
+    "video-fetch-now",
+
+    Number.isFinite(videoFetch)
+      ? Math.round(videoFetch)
       : "—"
   );
 
@@ -1251,6 +1399,26 @@ function updateNumbers(
 
     formatNumber(
       storageInfo.objects
+    )
+  );
+
+
+  setText(
+    "video-stored-data",
+
+    Number.isFinite(
+      videoInfo.gb
+    )
+      ? `${videoInfo.gb.toFixed(2)} GB`
+      : "—"
+  );
+
+
+  setText(
+    "video-object-count",
+
+    formatNumber(
+      videoInfo.objects
     )
   );
 
@@ -1332,6 +1500,17 @@ function applyDashboard(
     )
       ? data.samples
       : []
+  );
+
+
+  updateSampleBars(
+    Array.isArray(
+      data.videoSamples
+    )
+      ? data.videoSamples
+      : [],
+
+    "video-sample-bars"
   );
 
 
@@ -1417,6 +1596,36 @@ function init() {
   buildR2Chart();
 
   buildR2OperationsChart();
+
+  buildVideoChart();
+
+
+  const botFilterToggle =
+    document.getElementById(
+      "bot-filter-toggle"
+    );
+
+  botFilterToggle?.addEventListener(
+    "click",
+    () => {
+      excludeBots =
+        !excludeBots;
+
+      updateBotFilterControl();
+
+      if (lastGoodData) {
+        updateNumbers(
+          lastGoodData
+        );
+
+        updateCharts(
+          lastGoodData
+        );
+      }
+    }
+  );
+
+  updateBotFilterControl();
 
 
   /*

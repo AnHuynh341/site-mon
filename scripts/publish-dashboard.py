@@ -162,13 +162,13 @@ def parse_ms(value):
     return round(float(match.group(1)))
 
 
-def parse_sample_values(value):
-    if not value.startswith("samples="):
+def parse_sample_values(value, prefix="samples="):
+    if not value.startswith(prefix):
         return []
 
     result = []
 
-    for item in value.split("=", 1)[1].split(","):
+    for item in value[len(prefix):].split(","):
         item = item.strip()
 
         if not item or item.upper() == "FAIL":
@@ -188,16 +188,20 @@ def parse_health():
         "frontend": None,
         "database": None,
         "storage": None,
+        "video": None,
     }
 
     latest_time = {
         "frontend": None,
         "database": None,
         "storage": None,
+        "video": None,
     }
 
     latest_samples = []
+    latest_video_fetch_samples = []
     history = []
+    video_history = []
     now = datetime.now(TZ)
     cutoff = now - timedelta(hours=24)
 
@@ -273,6 +277,46 @@ def parse_health():
                     }
                 )
 
+        elif service == "video-media" and len(parts) >= 5:
+            try:
+                ok, total = (
+                    int(x)
+                    for x in parts[3].split("/", 1)
+                )
+            except ValueError:
+                ok = 0
+                total = 3
+
+            average_fetch = parse_ms(parts[4]) if ok else None
+            fetch_samples = []
+
+            for extra in parts[5:]:
+                if extra.startswith("samples="):
+                    fetch_samples = parse_sample_values(extra)
+                elif extra.startswith("fetch="):
+                    # Backward-compatible with the first draft format.
+                    fetch_samples = parse_sample_values(
+                        extra,
+                        "fetch=",
+                    )
+
+            latest["video"] = {
+                "status": parts[2],
+                "ms": average_fetch,
+                "successfulSamples": ok,
+                "totalSamples": total,
+            }
+            latest_time["video"] = stamp
+            latest_video_fetch_samples = fetch_samples
+
+            if stamp >= cutoff:
+                video_history.append(
+                    {
+                        "stamp": stamp,
+                        "average": average_fetch,
+                    }
+                )
+
     if latest["frontend"] is None:
         latest["frontend"] = {
             "status": "UNKNOWN",
@@ -294,6 +338,14 @@ def parse_health():
             "totalSamples": 5,
         }
 
+    if latest["video"] is None:
+        latest["video"] = {
+            "status": "UNKNOWN",
+            "ms": None,
+            "successfulSamples": 0,
+            "totalSamples": 3,
+        }
+
     times = [
         value
         for value in latest_time.values()
@@ -303,6 +355,7 @@ def parse_health():
     generated = max(times).isoformat() if times else None
 
     history.sort(key=lambda item: item["stamp"])
+    video_history.sort(key=lambda item: item["stamp"])
 
     samples = [
         {
@@ -316,7 +369,26 @@ def parse_health():
         for i in range(5)
     ]
 
-    return latest, samples, history, generated
+    video_samples = [
+        {
+            "name": f"Sample {i + 1}",
+            "ms": (
+                latest_video_fetch_samples[i]
+                if i < len(latest_video_fetch_samples)
+                else None
+            ),
+        }
+        for i in range(3)
+    ]
+
+    return (
+        latest,
+        samples,
+        history,
+        video_history,
+        video_samples,
+        generated,
+    )
 
 
 # ============================================================
@@ -408,6 +480,29 @@ def storage_info(s3, bucket):
     }
 
 
+def video_storage_info(root):
+    objects = 0
+    total_bytes = 0
+
+    if not root.is_dir():
+        return {
+            "gb": None,
+            "objects": None,
+        }
+
+    for path in root.rglob("video.mp4"):
+        try:
+            total_bytes += path.stat().st_size
+            objects += 1
+        except OSError:
+            continue
+
+    return {
+        "gb": round(total_bytes / 1_000_000_000, 2),
+        "objects": objects,
+    }
+
+
 # ============================================================
 # MAIN
 # ============================================================
@@ -422,7 +517,14 @@ def main():
         "site-monitor/live/dashboard.json",
     )
 
-    latest, samples, history, generated = parse_health()
+    (
+        latest,
+        samples,
+        history,
+        video_history,
+        video_samples,
+        generated,
+    ) = parse_health()
 
     previous_summary = (
         previous.get("latest", {}).get("analytics", {})
@@ -440,11 +542,13 @@ def main():
 
     analytics_summary = {
         "visits": None,
+        "visitsWithoutBots": None,
         "pageLoad": None,
     }
     visits = {
         "labels": [],
         "values": [],
+        "withoutBots": [],
     }
     page_load = {
         "labels": [],
@@ -604,6 +708,14 @@ def main():
 
     s3 = make_s3()
     latest["storageInfo"] = storage_info(s3, bucket)
+    latest["videoInfo"] = video_storage_info(
+        Path(
+            os.environ.get(
+                "VIDEO_MEDIA_DIR",
+                "/srv/media/anime",
+            )
+        )
+    )
 
     # --------------------------------------------------------
     # Final dashboard JSON
@@ -639,6 +751,17 @@ def main():
             ],
         },
         "samples": samples,
+        "videoHistory": {
+            "labels": [
+                item["stamp"].strftime("%H:%M")
+                for item in video_history
+            ],
+            "average": [
+                item["average"]
+                for item in video_history
+            ],
+        },
+        "videoSamples": video_samples,
     }
 
     text = json.dumps(

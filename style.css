@@ -272,9 +272,11 @@ body {
 
   grid-template-areas:
 
-    "visits visits page health"
+    "page page visits health"
 
     "ops r2 r2 samples"
+
+    "videoFetch videoFetch videoFetch videoProbes"
 
     "summary summary summary summary";
 
@@ -315,6 +317,25 @@ body {
 
 .summary-strip {
   grid-area: summary;
+}
+
+
+.video-fetch-panel {
+  grid-area: videoFetch;
+}
+
+
+.video-probes-panel {
+  grid-area: videoProbes;
+}
+
+
+.r2-operations-panel,
+.r2-history-panel,
+.samples-panel,
+.video-fetch-panel,
+.video-probes-panel {
+  margin-top: 6px;
 }
 
 
@@ -447,6 +468,85 @@ body {
 }
 
 
+.visits-controls {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+}
+
+
+.bot-filter-toggle {
+
+  padding:
+    6px
+    9px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 999px;
+
+  background: var(--panel-2);
+
+  color: var(--muted);
+
+  font: inherit;
+
+  font-size: 0.67rem;
+
+  font-weight: 650;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+
+}
+
+
+.bot-filter-toggle:hover {
+
+  border-color:
+    rgba(42, 221, 255, 0.5);
+
+  color: var(--text);
+
+}
+
+
+.bot-filter-toggle[aria-pressed="true"] {
+
+  border-color:
+    rgba(42, 221, 255, 0.55);
+
+  background:
+    rgba(42, 221, 255, 0.1);
+
+  color: var(--cyan);
+
+}
+
+
+.bot-filter-toggle:focus-visible {
+
+  outline:
+    2px solid var(--cyan);
+
+  outline-offset: 2px;
+
+}
+
+
 
 /* ============================================================
    CHARTS
@@ -469,6 +569,14 @@ body {
 
 }
 
+
+.video-chart-box {
+
+  height: 245px;
+
+  margin-top: 6px;
+
+}
 
 
 /* ============================================================
@@ -866,6 +974,23 @@ body {
 }
 
 
+.video-probes-panel {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+.sample-bars.video-sample-bars {
+
+  grid-template-rows:
+    repeat(3, 1fr);
+
+}
+
+
 .sample-bars {
 
   flex: 1;
@@ -989,10 +1114,55 @@ body {
 .summary-item {
 
   padding:
-    11px
+    7px
     14px;
 
   border-right:
+    1px solid var(--border);
+
+}
+
+
+.summary-item:not(.summary-split) {
+
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+}
+
+
+.summary-item.summary-split {
+  padding: 0;
+}
+
+
+.summary-metric {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  min-height: 32px;
+
+  padding: 6px 14px;
+
+}
+
+
+.summary-metric + .summary-metric {
+
+  border-top:
     1px solid var(--border);
 
 }
@@ -1022,7 +1192,7 @@ body {
 
   display: block;
 
-  margin-top: 3px;
+  margin-top: 0;
 
   color: var(--text);
 
@@ -1074,11 +1244,15 @@ body {
 
     grid-template-areas:
 
-      "visits page"
+      "page visits"
 
-      "health samples"
+      "health health"
 
       "ops r2"
+
+      "samples samples"
+
+      "videoFetch videoProbes"
 
       "summary summary";
 
@@ -1090,6 +1264,11 @@ body {
 
     min-height: 285px;
 
+  }
+
+
+  .samples-panel {
+    min-height: 300px;
   }
 
 }
@@ -1147,9 +1326,9 @@ body {
 
     grid-template-areas:
 
-      "visits"
-
       "page"
+
+      "visits"
 
       "health"
 
@@ -1158,6 +1337,10 @@ body {
       "r2"
 
       "samples"
+
+      "videoFetch"
+
+      "videoProbes"
 
       "summary";
 
@@ -1169,6 +1352,11 @@ body {
 
     height: 235px;
 
+  }
+
+
+  .video-chart-box {
+    height: 235px;
   }
 
 
@@ -1239,6 +1427,24 @@ body {
   .panel-header {
 
     gap: 8px;
+
+  }
+
+
+  .visits-panel .panel-header {
+
+    flex-wrap: wrap;
+
+  }
+
+
+  .visits-controls {
+
+    width: 100%;
+
+    justify-content: space-between;
+
+    align-items: center;
 
   }
 

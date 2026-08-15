@@ -120,15 +120,30 @@
           </div>
 
 
-          <div class="big-number">
+          <div class="visits-controls">
 
-            <strong id="visits-today">
-              0
-            </strong>
+            <button
+              id="bot-filter-toggle"
+              class="bot-filter-toggle"
+              type="button"
+              aria-pressed="false"
+              aria-label="Exclude bot traffic from visit counts"
+            >
+              Exclude bots: No
+            </button>
 
-            <span>
-              today
-            </span>
+
+            <div class="big-number">
+
+              <strong id="visits-today">
+                0
+              </strong>
+
+              <span>
+                today
+              </span>
+
+            </div>
 
           </div>
 
@@ -470,11 +485,11 @@
           <div>
 
             <span class="panel-kicker">
-              STORAGE DELIVERY
+              AUDIO DELIVERY
             </span>
 
             <h2>
-              R2 response time — last 24 hours
+              Average response time — last 24 hours
             </h2>
 
           </div>
@@ -532,7 +547,7 @@
             </span>
 
             <h2>
-              R2 sample latency
+              Current audio sample latency
             </h2>
 
           </div>
@@ -547,35 +562,90 @@
 
       </section>
 
-<!-- ===================================================
+
+      <!-- ===================================================
+           VIDEO FETCH TIME
+      ==================================================== -->
+
+      <section class="panel video-fetch-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <span class="panel-kicker">VIDEO DELIVERY</span>
+            <h2>Average response time — last 24 hours</h2>
+          </div>
+
+          <div class="big-number">
+            <strong id="video-fetch-now">—</strong>
+            <span>ms average</span>
+          </div>
+
+        </div>
+
+        <div class="chart-box video-chart-box">
+          <canvas id="video-fetch-chart"></canvas>
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           VIDEO LIVE PROBE
+      ==================================================== -->
+
+      <section class="panel video-probes-panel">
+
+        <div class="panel-header compact-header">
+
+          <div>
+            <span class="panel-kicker">LIVE PROBE</span>
+            <h2>Current video sample latency</h2>
+          </div>
+
+        </div>
+
+        <div
+          class="sample-bars video-sample-bars"
+          id="video-sample-bars"
+        ></div>
+
+      </section>
+
+
+      <!-- ===================================================
            SUMMARY
       ==================================================== -->
 
       <section class="summary-strip">
 
 
-        <div class="summary-item">
+        <div class="summary-item summary-split">
 
-          <span>
-            Data stored
-          </span>
+          <div class="summary-metric">
+            <span>Audio stored</span>
+            <strong id="stored-data">12.83 GB</strong>
+          </div>
 
-          <strong id="stored-data">
-            12.83 GB
-          </strong>
+          <div class="summary-metric">
+            <span>Video stored</span>
+            <strong id="video-stored-data">—</strong>
+          </div>
 
         </div>
 
 
-        <div class="summary-item">
+        <div class="summary-item summary-split">
 
-          <span>
-            Objects
-          </span>
+          <div class="summary-metric">
+            <span>Audio file count</span>
+            <strong id="object-count">399</strong>
+          </div>
 
-          <strong id="object-count">
-            399
-          </strong>
+          <div class="summary-metric">
+            <span>Video file count</span>
+            <strong id="video-object-count">—</strong>
+          </div>
 
         </div>
 
