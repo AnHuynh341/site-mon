@@ -22,8 +22,8 @@ WEB_ANALYTICS = BASE / "scripts" / "web-analytics.py"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 TIME_FMT = "%Y-%m-%d %H:%M:%S"
 FALLBACK_MAX_AGE = timedelta(hours=2)
-PROBE_GOOD_FACTOR = 1.25
-PROBE_UNSTABLE_FACTOR = 1.75
+PROBE_GOOD_LIMIT_MS = 500
+PROBE_UNSTABLE_LIMIT_MS = 1500
 
 
 # ============================================================
@@ -175,36 +175,20 @@ def build_probe_health(samples):
         if successful
         else None
     )
-    good_limit_ms = (
-        average_ms * PROBE_GOOD_FACTOR
-        if average_ms is not None
-        else None
-    )
-    unstable_limit_ms = (
-        average_ms * PROBE_UNSTABLE_FACTOR
-        if average_ms is not None
-        else None
-    )
+    good_limit_ms = PROBE_GOOD_LIMIT_MS
+    unstable_limit_ms = PROBE_UNSTABLE_LIMIT_MS
     health = {
         "good": 0,
         "slow": 0,
         "unstable": 0,
         "total": len(samples),
         "averageMs": round(average_ms) if average_ms is not None else None,
-        "goodThroughMs": (
-            round(good_limit_ms)
-            if good_limit_ms is not None
-            else None
-        ),
-        "unstableAboveMs": (
-            round(unstable_limit_ms)
-            if unstable_limit_ms is not None
-            else None
-        ),
+        "goodThroughMs": good_limit_ms,
+        "unstableAboveMs": unstable_limit_ms,
     }
 
     for value in samples:
-        if value is None or good_limit_ms is None:
+        if value is None:
             health["unstable"] += 1
         elif value <= good_limit_ms:
             health["good"] += 1
