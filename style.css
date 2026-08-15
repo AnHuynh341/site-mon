@@ -272,9 +272,17 @@ body {
 
   grid-template-areas:
 
+    "overall overall overall overall"
+
     "visits visits page health"
 
+    "audio audio audio audio"
+
     "ops r2 r2 samples"
+
+    "video video video video"
+
+    "videoFetch videoFetch videoTtfb videoTtfb"
 
     "summary summary summary summary";
 
@@ -315,6 +323,77 @@ body {
 
 .summary-strip {
   grid-area: summary;
+}
+
+
+.overall-divider {
+  grid-area: overall;
+}
+
+
+.audio-divider {
+  grid-area: audio;
+}
+
+
+.video-divider {
+  grid-area: video;
+}
+
+
+.video-fetch-panel {
+  grid-area: videoFetch;
+}
+
+
+.video-ttfb-panel {
+  grid-area: videoTtfb;
+}
+
+
+.section-divider {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+
+  padding:
+    10px
+    3px
+    2px;
+
+  color: var(--muted);
+
+  font-size: 0.68rem;
+
+  font-weight: 750;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+
+}
+
+
+.section-divider::after {
+
+  content: "";
+
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--border),
+      transparent
+    );
+
 }
 
 
@@ -467,6 +546,63 @@ body {
 
   height: 245px;
 
+}
+
+
+.video-chart-box {
+
+  height: 275px;
+
+  margin-top: 6px;
+
+}
+
+
+.video-chart-legend {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 0.68rem;
+
+}
+
+
+.video-chart-legend span {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+}
+
+
+.legend-dot.video-average {
+  background: var(--cyan);
+}
+
+
+.legend-dot.video-sample-1 {
+  background: var(--blue);
+}
+
+
+.legend-dot.video-sample-2 {
+  background: var(--purple);
+}
+
+
+.legend-dot.video-sample-3 {
+  background: var(--green);
 }
 
 
@@ -998,6 +1134,35 @@ body {
 }
 
 
+.summary-item:not(.summary-split) {
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+}
+
+
+.summary-item.summary-split {
+  padding: 0;
+}
+
+
+.summary-metric {
+  padding: 9px 14px;
+}
+
+
+.summary-metric + .summary-metric {
+
+  border-top:
+    1px solid var(--border);
+
+}
+
+
 .summary-item:last-child {
 
   border-right: 0;
@@ -1074,11 +1239,21 @@ body {
 
     grid-template-areas:
 
+      "overall overall"
+
       "visits page"
 
-      "health samples"
+      "health health"
+
+      "audio audio"
 
       "ops r2"
+
+      "samples samples"
+
+      "video video"
+
+      "videoFetch videoTtfb"
 
       "summary summary";
 
@@ -1090,6 +1265,11 @@ body {
 
     min-height: 285px;
 
+  }
+
+
+  .samples-panel {
+    min-height: 300px;
   }
 
 }
@@ -1147,17 +1327,27 @@ body {
 
     grid-template-areas:
 
+      "overall"
+
       "visits"
 
       "page"
 
       "health"
 
+      "audio"
+
       "ops"
 
       "r2"
 
       "samples"
+
+      "video"
+
+      "videoFetch"
+
+      "videoTtfb"
 
       "summary";
 
@@ -1169,6 +1359,11 @@ body {
 
     height: 235px;
 
+  }
+
+
+  .video-chart-box {
+    height: 250px;
   }
 
 

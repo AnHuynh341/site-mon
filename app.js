@@ -12,6 +12,8 @@ let visitsChart;
 let pageLoadChart;
 let r2Chart;
 let r2OperationsChart;
+let videoFetchChart;
+let videoTtfbChart;
 let lastGoodData = null;
 
 
@@ -496,6 +498,123 @@ function buildR2Chart() {
         options
       }
     );
+}
+
+
+/* ============================================================
+   VIDEO DELIVERY CHARTS
+============================================================ */
+
+function buildVideoLineChart(
+  canvasId,
+  averageLabel
+) {
+  const options =
+    chartOptions();
+
+  options.scales.y.ticks.callback =
+    value =>
+      `${value}ms`;
+
+  return new Chart(
+    document.getElementById(
+      canvasId
+    ),
+
+    {
+      type: "line",
+
+      data: {
+        labels: [],
+
+        datasets: [
+          {
+            label: averageLabel,
+            data: [],
+            borderColor: cssVar("--cyan"),
+            backgroundColor: "rgba(42,221,255,.09)",
+            borderWidth: 3,
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            tension: 0.25,
+            spanGaps: true
+          },
+          {
+            label: "Sample 1",
+            data: [],
+            borderColor: cssVar("--blue"),
+            borderWidth: 1.5,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.25,
+            spanGaps: true
+          },
+          {
+            label: "Sample 2",
+            data: [],
+            borderColor: cssVar("--purple"),
+            borderWidth: 1.5,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.25,
+            spanGaps: true
+          },
+          {
+            label: "Sample 3",
+            data: [],
+            borderColor: cssVar("--green"),
+            borderWidth: 1.5,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.25,
+            spanGaps: true
+          }
+        ]
+      },
+
+      options
+    }
+  );
+}
+
+
+function buildVideoCharts() {
+  videoFetchChart =
+    buildVideoLineChart(
+      "video-fetch-chart",
+      "Average fetch"
+    );
+
+  videoTtfbChart =
+    buildVideoLineChart(
+      "video-ttfb-chart",
+      "Average TTFB"
+    );
+}
+
+
+function applyVideoHistory(
+  chart,
+  labels,
+  average,
+  samples
+) {
+  chart.data.labels = labels;
+
+  chart.data.datasets[0].data =
+    Array.isArray(average)
+      ? average
+      : [];
+
+  for (let index = 0; index < 3; index += 1) {
+    chart.data.datasets[index + 1].data =
+      Array.isArray(samples?.[index])
+        ? samples[index]
+        : [];
+  }
+
+  chart.update();
 }
 
 
@@ -1007,6 +1126,9 @@ function updateCharts(
   const r2Usage =
     data.r2Usage ?? {};
 
+  const videoHistory =
+    data.videoHistory ?? {};
+
 
   /* ---------------- Visits ---------------- */
 
@@ -1138,6 +1260,30 @@ function updateCharts(
 
 
   r2OperationsChart.update();
+
+
+  /* ---------------- Video delivery ---------------- */
+
+  const videoLabels =
+    Array.isArray(
+      videoHistory.labels
+    )
+      ? videoHistory.labels
+      : [];
+
+  applyVideoHistory(
+    videoFetchChart,
+    videoLabels,
+    videoHistory.fetchAverage,
+    videoHistory.fetchSamples
+  );
+
+  applyVideoHistory(
+    videoTtfbChart,
+    videoLabels,
+    videoHistory.ttfbAverage,
+    videoHistory.ttfbSamples
+  );
 }
 
 
@@ -1157,6 +1303,9 @@ function updateNumbers(
   const storageInfo =
     latest.storageInfo ?? {};
 
+  const videoInfo =
+    latest.videoInfo ?? {};
+
   const r2Usage =
     data.r2Usage ?? {};
 
@@ -1169,6 +1318,12 @@ function updateNumbers(
 
   const r2Average =
     latest.storage?.ms;
+
+  const videoFetch =
+    latest.video?.ms;
+
+  const videoTtfb =
+    latest.video?.ttfbMs;
 
 
   /* ---------------- Main panels ---------------- */
@@ -1191,6 +1346,24 @@ function updateNumbers(
       ? Math.round(
           pageLoad
         )
+      : "—"
+  );
+
+
+  setText(
+    "video-fetch-now",
+
+    Number.isFinite(videoFetch)
+      ? Math.round(videoFetch)
+      : "—"
+  );
+
+
+  setText(
+    "video-ttfb-now",
+
+    Number.isFinite(videoTtfb)
+      ? Math.round(videoTtfb)
       : "—"
   );
 
@@ -1251,6 +1424,26 @@ function updateNumbers(
 
     formatNumber(
       storageInfo.objects
+    )
+  );
+
+
+  setText(
+    "video-stored-data",
+
+    Number.isFinite(
+      videoInfo.gb
+    )
+      ? `${videoInfo.gb.toFixed(2)} GB`
+      : "—"
+  );
+
+
+  setText(
+    "video-object-count",
+
+    formatNumber(
+      videoInfo.objects
     )
   );
 
@@ -1417,6 +1610,8 @@ function init() {
   buildR2Chart();
 
   buildR2OperationsChart();
+
+  buildVideoCharts();
 
 
   /*

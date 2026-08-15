@@ -99,6 +99,11 @@
     <div class="dashboard-grid">
 
 
+      <div class="section-divider overall-divider">
+        <span>Overall</span>
+      </div>
+
+
       <!-- ===================================================
            VISITS
       ==================================================== -->
@@ -375,6 +380,11 @@
 
 
 
+      <div class="section-divider audio-divider">
+        <span>Audio</span>
+      </div>
+
+
       <!-- ===================================================
            R2 OPERATIONS
       ==================================================== -->
@@ -547,35 +557,113 @@
 
       </section>
 
-<!-- ===================================================
+
+      <div class="section-divider video-divider">
+        <span>Video</span>
+      </div>
+
+
+      <!-- ===================================================
+           VIDEO FETCH TIME
+      ==================================================== -->
+
+      <section class="panel video-fetch-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <span class="panel-kicker">PUBLIC VIDEO DELIVERY</span>
+            <h2>Video fetch time — last 24 hours</h2>
+          </div>
+
+          <div class="big-number">
+            <strong id="video-fetch-now">—</strong>
+            <span>ms average</span>
+          </div>
+
+        </div>
+
+        <div class="video-chart-legend">
+          <span><i class="legend-dot video-average"></i>Average</span>
+          <span><i class="legend-dot video-sample-1"></i>Sample 1</span>
+          <span><i class="legend-dot video-sample-2"></i>Sample 2</span>
+          <span><i class="legend-dot video-sample-3"></i>Sample 3</span>
+        </div>
+
+        <div class="chart-box video-chart-box">
+          <canvas id="video-fetch-chart"></canvas>
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           VIDEO TTFB
+      ==================================================== -->
+
+      <section class="panel video-ttfb-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <span class="panel-kicker">CLOUDFLARE PATH</span>
+            <h2>Public TTFB — last 24 hours</h2>
+          </div>
+
+          <div class="big-number">
+            <strong id="video-ttfb-now">—</strong>
+            <span>ms average</span>
+          </div>
+
+        </div>
+
+        <div class="video-chart-legend">
+          <span><i class="legend-dot video-average"></i>Average</span>
+          <span><i class="legend-dot video-sample-1"></i>Sample 1</span>
+          <span><i class="legend-dot video-sample-2"></i>Sample 2</span>
+          <span><i class="legend-dot video-sample-3"></i>Sample 3</span>
+        </div>
+
+        <div class="chart-box video-chart-box">
+          <canvas id="video-ttfb-chart"></canvas>
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
            SUMMARY
       ==================================================== -->
 
       <section class="summary-strip">
 
 
-        <div class="summary-item">
+        <div class="summary-item summary-split">
 
-          <span>
-            Data stored
-          </span>
+          <div class="summary-metric">
+            <span>Audio stored</span>
+            <strong id="stored-data">12.83 GB</strong>
+          </div>
 
-          <strong id="stored-data">
-            12.83 GB
-          </strong>
+          <div class="summary-metric">
+            <span>Video stored</span>
+            <strong id="video-stored-data">—</strong>
+          </div>
 
         </div>
 
 
-        <div class="summary-item">
+        <div class="summary-item summary-split">
 
-          <span>
-            Objects
-          </span>
+          <div class="summary-metric">
+            <span>Audio objects</span>
+            <strong id="object-count">399</strong>
+          </div>
 
-          <strong id="object-count">
-            399
-          </strong>
+          <div class="summary-metric">
+            <span>Video objects</span>
+            <strong id="video-object-count">—</strong>
+          </div>
 
         </div>
 
