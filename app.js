@@ -182,6 +182,29 @@ function updateBotFilterControl() {
    CHART OPTIONS
 ============================================================ */
 
+function tooltipOptions() {
+  return {
+    backgroundColor:
+      "#080b13",
+
+    borderColor:
+      "rgba(255,255,255,.72)",
+
+    borderWidth: 1,
+
+    titleColor:
+      "#ffffff",
+
+    bodyColor:
+      "#e0e4ef",
+
+    padding: 10,
+
+    displayColors: true
+  };
+}
+
+
 function chartOptions() {
   return {
     responsive: true,
@@ -202,25 +225,7 @@ function chartOptions() {
         display: false
       },
 
-      tooltip: {
-        backgroundColor:
-          "#080b13",
-
-        borderColor:
-          "rgba(255,255,255,.72)",
-
-        borderWidth: 1,
-
-        titleColor:
-          "#ffffff",
-
-        bodyColor:
-          "#e0e4ef",
-
-        padding: 10,
-
-        displayColors: true
-      }
+      tooltip: tooltipOptions()
     },
 
     scales: {
@@ -532,28 +537,28 @@ function buildVideoChart() {
 function buildProbeHealthChart(
   canvasId
 ) {
-  const opaqueTooltipBackdrop = {
-    id: `opaque-tooltip-backdrop-${canvasId}`,
-    beforeTooltipDraw(chart) {
-      const tooltip = chart.tooltip;
+  const tooltip =
+    tooltipOptions();
 
-      if (!tooltip || tooltip.opacity <= 0) {
-        return;
-      }
+  tooltip.callbacks = {
+    label(context) {
+      const value =
+        Number(context.raw || 0);
+      const total =
+        context.dataset.data.reduce(
+          (sum, current) =>
+            sum + Number(current || 0),
+          0
+        );
+      const percent =
+        total > 0
+          ? ((value / total) * 100).toFixed(1)
+          : "0.0";
 
-      const padding = 1;
-      const { ctx } = chart;
-
-      ctx.save();
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(
-        tooltip.x - padding,
-        tooltip.y - padding,
-        tooltip.width + (padding * 2),
-        tooltip.height + (padding * 2)
+      return (
+        `${context.label}: ` +
+        `${formatNumber(value)} (${percent}%)`
       );
-      ctx.restore();
     }
   };
 
@@ -595,40 +600,9 @@ function buildProbeHealthChart(
           legend: {
             display: false
           },
-          tooltip: {
-            backgroundColor: "rgba(0, 0, 0, 1)",
-            borderColor: "rgba(255,255,255,.72)",
-            borderWidth: 1,
-            cornerRadius: 0,
-            caretSize: 0,
-            titleColor: "#ffffff",
-            bodyColor: "#e0e4ef",
-            padding: 10,
-            callbacks: {
-              label(context) {
-                const value =
-                  Number(context.raw || 0);
-                const total =
-                  context.dataset.data.reduce(
-                    (sum, current) =>
-                      sum + Number(current || 0),
-                    0
-                  );
-                const percent =
-                  total > 0
-                    ? ((value / total) * 100).toFixed(1)
-                    : "0.0";
-
-                return (
-                  `${context.label}: ` +
-                  `${formatNumber(value)} (${percent}%)`
-                );
-              }
-            }
-          }
+          tooltip
         }
-      },
-      plugins: [opaqueTooltipBackdrop]
+      }
     }
   );
 }
