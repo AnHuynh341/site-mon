@@ -526,6 +526,31 @@ function buildVideoChart() {
 function buildProbeHealthChart(
   canvasId
 ) {
+  const opaqueTooltipBackdrop = {
+    id: `opaque-tooltip-backdrop-${canvasId}`,
+    beforeTooltipDraw(chart) {
+      const tooltip = chart.tooltip;
+
+      if (!tooltip || tooltip.opacity <= 0) {
+        return;
+      }
+
+      const padding = 1;
+      const { ctx } = chart;
+
+      ctx.save();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(
+        tooltip.x - padding,
+        tooltip.y - padding,
+        tooltip.width + (padding * 2),
+        tooltip.height + (padding * 2)
+      );
+      ctx.restore();
+    }
+  };
+
   return new Chart(
     document.getElementById(
       canvasId
@@ -565,9 +590,11 @@ function buildProbeHealthChart(
             display: false
           },
           tooltip: {
-            backgroundColor: "#000000",
+            backgroundColor: "rgba(0, 0, 0, 1)",
             borderColor: "rgba(255,255,255,.15)",
             borderWidth: 1,
+            cornerRadius: 0,
+            caretSize: 0,
             titleColor: "#ffffff",
             bodyColor: "#e0e4ef",
             padding: 10,
@@ -594,7 +621,8 @@ function buildProbeHealthChart(
             }
           }
         }
-      }
+      },
+      plugins: [opaqueTooltipBackdrop]
     }
   );
 }
