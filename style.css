@@ -272,7 +272,7 @@ body {
 
   grid-template-areas:
 
-    "visits visits page health"
+    "visits page page health"
 
     "ops r2 r2 samples"
 
@@ -493,7 +493,7 @@ body {
 
 .video-chart-box {
 
-  height: 275px;
+  height: 245px;
 
   margin-top: 6px;
 
@@ -1277,7 +1277,7 @@ body {
 
 
   .video-chart-box {
-    height: 250px;
+    height: 235px;
   }
 
 
