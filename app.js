@@ -541,9 +541,24 @@ function buildProbeHealthChart(
     tooltipOptions();
 
   tooltip.callbacks = {
+    title(items) {
+      const label =
+        items[0]?.label ?? "";
+      const rangeStart =
+        label.lastIndexOf(" (");
+
+      return rangeStart >= 0
+        ? label.slice(0, rangeStart)
+        : label;
+    },
+
     label(context) {
       const value =
         Number(context.raw || 0);
+      const range =
+        context.label.match(
+          /\(([^)]+)\)$/
+        )?.[1];
       const total =
         context.dataset.data.reduce(
           (sum, current) =>
@@ -555,10 +570,13 @@ function buildProbeHealthChart(
           ? ((value / total) * 100).toFixed(1)
           : "0.0";
 
-      return (
-        `${context.label}: ` +
-        `${formatNumber(value)} (${percent}%)`
-      );
+      return [
+        range
+          ? `Range: ${range}`
+          : null,
+        `Samples: ${formatNumber(value)}`,
+        `Share: ${percent}%`
+      ].filter(Boolean);
     }
   };
 
