@@ -11,8 +11,9 @@ const STALE_AFTER_MS = 10 * 60_000;
 let visitsChart;
 let pageLoadChart;
 let r2Chart;
-let r2OperationsChart;
 let videoFetchChart;
+let audioProbeHealthChart;
+let videoProbeHealthChart;
 let lastGoodData = null;
 let excludeBots = false;
 
@@ -49,48 +50,6 @@ function formatNumber(value) {
   return Number.isFinite(value)
     ? value.toLocaleString()
     : "—";
-}
-
-
-function formatMonth(value) {
-  if (
-    typeof value !== "string" ||
-    !/^\d{4}-\d{2}$/.test(value)
-  ) {
-    return "—";
-  }
-
-  const [
-    year,
-    month
-  ] = value
-    .split("-")
-    .map(Number);
-
-  const date =
-    new Date(
-      Date.UTC(
-        year,
-        month - 1,
-        1
-      )
-    );
-
-  return new Intl.DateTimeFormat(
-    "en-US",
-    {
-      month:
-        "short",
-
-      year:
-        "numeric",
-
-      timeZone:
-        "UTC"
-    }
-  )
-    .format(date)
-    .toUpperCase();
 }
 
 
@@ -260,19 +219,7 @@ function chartOptions() {
 
         padding: 10,
 
-        displayColors: true,
-
-        /*
-         * Keep the threshold line,
-         * but don't show it in
-         * the hover popup.
-         */
-        filter(context) {
-          return (
-            context.dataset.label !==
-            "Unstable threshold"
-          );
-        }
+        displayColors: true
       }
     },
 
@@ -516,29 +463,6 @@ function buildR2Chart() {
               pointHoverRadius: 5,
 
               tension: 0.25
-            },
-
-            {
-              label:
-                "Unstable threshold",
-
-              data: [],
-
-              borderColor:
-                cssVar(
-                  "--yellow"
-                ),
-
-              borderWidth: 1,
-
-              borderDash:
-                [7, 6],
-
-              pointRadius: 0,
-
-              pointHoverRadius: 0,
-
-              tension: 0
             }
           ]
         },
@@ -596,154 +520,122 @@ function buildVideoChart() {
 
 
 /* ============================================================
-   R2 OPERATIONS CHART
+   24-HOUR PROBE HEALTH CHARTS
 ============================================================ */
 
-function buildR2OperationsChart() {
-
-  r2OperationsChart =
-    new Chart(
-      document.getElementById(
-        "r2-operations-chart"
-      ),
-
-      {
-        type:
-          "pie",
-
-        data: {
-
-          labels: [
-            "Class A",
-            "Class B"
-          ],
-
-          datasets: [
-            {
-
-              data: [
-                0,
-                0
-              ],
-
-              backgroundColor: [
-                cssVar(
-                  "--red"
-                ),
-
-                cssVar(
-                  "--blue"
-                )
-              ],
-
-              borderColor:
-                cssVar(
-                  "--panel"
-                ),
-
-              borderWidth:
-                3,
-
-              hoverOffset:
-                5
-
-            }
-          ]
-
-        },
-
-        options: {
-
-          responsive:
-            true,
-
-          maintainAspectRatio:
-            false,
-
-          animation: {
-            duration:
-              300
-          },
-
-          plugins: {
-
-            legend: {
-              display:
-                false
-            },
-
-            tooltip: {
-
-              backgroundColor:
-                "#080b13",
-
-              borderColor:
-                "rgba(255,255,255,.15)",
-
-              borderWidth:
-                1,
-
-              titleColor:
-                "#ffffff",
-
-              bodyColor:
-                "#e0e4ef",
-
-              padding:
-                10,
-
-              callbacks: {
-
-                label(context) {
-
-                  const value =
-                    Number(
-                      context.raw
-                    );
-
-                  const values =
-                    context.dataset.data;
-
-                  const total =
-                    values.reduce(
-                      (
-                        sum,
-                        current
-                      ) =>
-                        sum +
-                        Number(
-                          current || 0
-                        ),
-                      0
-                    );
-
-                  const percent =
-                    total > 0
-                      ? (
-                          (
-                            value /
-                            total
-                          ) * 100
-                        ).toFixed(1)
-                      : "0.0";
-
-                  return (
-                    `${context.label}: ` +
-                    `${formatNumber(value)} ` +
-                    `(${percent}%)`
-                  );
-                }
-
-              }
-
-            }
-
+function buildProbeHealthChart(
+  canvasId
+) {
+  return new Chart(
+    document.getElementById(
+      canvasId
+    ),
+    {
+      type: "doughnut",
+      data: {
+        labels: [
+          "Good (<2.5s)",
+          "Slow (2.5–4s)",
+          "Unstable / failed (≥4s)"
+        ],
+        datasets: [
+          {
+            data: [0, 0, 0],
+            backgroundColor: [
+              cssVar("--green"),
+              cssVar("--yellow"),
+              cssVar("--red")
+            ],
+            borderColor:
+              cssVar("--panel"),
+            borderWidth: 3,
+            hoverOffset: 4
           }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "70%",
+        animation: {
+          duration: 300
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: "#080b13",
+            borderColor: "rgba(255,255,255,.15)",
+            borderWidth: 1,
+            titleColor: "#ffffff",
+            bodyColor: "#e0e4ef",
+            padding: 10,
+            callbacks: {
+              label(context) {
+                const value =
+                  Number(context.raw || 0);
+                const total =
+                  context.dataset.data.reduce(
+                    (sum, current) =>
+                      sum + Number(current || 0),
+                    0
+                  );
+                const percent =
+                  total > 0
+                    ? ((value / total) * 100).toFixed(1)
+                    : "0.0";
 
+                return (
+                  `${context.label}: ` +
+                  `${formatNumber(value)} (${percent}%)`
+                );
+              }
+            }
+          }
         }
-
       }
-    );
+    }
+  );
+}
+
+
+function updateProbeHealth(
+  chart,
+  health,
+  prefix
+) {
+  const good =
+    Number.isFinite(health?.good)
+      ? health.good
+      : 0;
+  const slow =
+    Number.isFinite(health?.slow)
+      ? health.slow
+      : 0;
+  const unstable =
+    Number.isFinite(health?.unstable)
+      ? health.unstable
+      : 0;
+  const total =
+    good + slow + unstable;
+
+  chart.data.datasets[0].data = [
+    good,
+    slow,
+    unstable
+  ];
+  chart.update();
+
+  setText(
+    `${prefix}-health-percent`,
+    total > 0
+      ? `${((good / total) * 100).toFixed(1)}%`
+      : "—"
+  );
+  setText(`${prefix}-health-good`, formatNumber(good));
+  setText(`${prefix}-health-slow`, formatNumber(slow));
+  setText(`${prefix}-health-unstable`, formatNumber(unstable));
 }
 
 
@@ -1101,11 +993,14 @@ function updateCharts(
   const r2History =
     data.r2History ?? {};
 
-  const r2Usage =
-    data.r2Usage ?? {};
-
   const videoHistory =
     data.videoHistory ?? {};
+
+  const audioProbeHealth =
+    data.audioProbeHealth ?? {};
+
+  const videoProbeHealth =
+    data.videoProbeHealth ?? {};
 
 
   /* ---------------- Visits ---------------- */
@@ -1199,52 +1094,7 @@ function updateCharts(
         : [];
 
 
-  /*
-   * Generate the threshold
-   * dynamically so it always has
-   * the same number of points as
-   * the history.
-   */
-
-  r2Chart
-    .data
-    .datasets[2]
-    .data =
-      r2Labels.map(
-        () => 1500
-      );
-
-
   r2Chart.update();
-
-
-  /* ---------------- R2 operations ---------------- */
-
-  const classA =
-    Number.isFinite(
-      r2Usage.classA
-    )
-      ? r2Usage.classA
-      : 0;
-
-  const classB =
-    Number.isFinite(
-      r2Usage.classB
-    )
-      ? r2Usage.classB
-      : 0;
-
-
-  r2OperationsChart
-    .data
-    .datasets[0]
-    .data = [
-      classA,
-      classB
-    ];
-
-
-  r2OperationsChart.update();
 
 
   /* ---------------- Video delivery ---------------- */
@@ -1270,6 +1120,21 @@ function updateCharts(
         : [];
 
   videoFetchChart.update();
+
+
+  /* ---------------- Probe health ---------------- */
+
+  updateProbeHealth(
+    audioProbeHealthChart,
+    audioProbeHealth,
+    "audio"
+  );
+
+  updateProbeHealth(
+    videoProbeHealthChart,
+    videoProbeHealth,
+    "video"
+  );
 }
 
 
@@ -1291,9 +1156,6 @@ function updateNumbers(
 
   const videoInfo =
     latest.videoInfo ?? {};
-
-  const r2Usage =
-    data.r2Usage ?? {};
 
 
   const visitsToday =
@@ -1340,44 +1202,6 @@ function updateNumbers(
     Number.isFinite(videoFetch)
       ? Math.round(videoFetch)
       : "—"
-  );
-
-
-  /* ---------------- R2 operation usage ---------------- */
-
-  setText(
-    "r2-usage-month",
-
-    formatMonth(
-      r2Usage.month
-    )
-  );
-
-
-  setText(
-    "r2-class-a",
-
-    formatNumber(
-      r2Usage.classA
-    )
-  );
-
-
-  setText(
-    "r2-class-b",
-
-    formatNumber(
-      r2Usage.classB
-    )
-  );
-
-
-  setText(
-    "r2-other-operations",
-
-    formatNumber(
-      r2Usage.other
-    )
   );
 
 
@@ -1595,9 +1419,17 @@ function init() {
 
   buildR2Chart();
 
-  buildR2OperationsChart();
-
   buildVideoChart();
+
+  audioProbeHealthChart =
+    buildProbeHealthChart(
+      "audio-health-chart"
+    );
+
+  videoProbeHealthChart =
+    buildProbeHealthChart(
+      "video-health-chart"
+    );
 
 
   const botFilterToggle =

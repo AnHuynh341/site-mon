@@ -9,7 +9,7 @@ PUBLISHER="$BASE_DIR/scripts/publish-dashboard.py"
 
 source "$CONFIG"
 
-R2_SLOW_MS="${R2_SLOW_MS:-1500}"
+R2_SLOW_MS="${R2_SLOW_MS:-2500}"
 VIDEO_SLOW_MS="${VIDEO_SLOW_MS:-2500}"
 VIDEO_MEDIA_DIR="${VIDEO_MEDIA_DIR:-/srv/media/anime}"
 VIDEO_MEDIA_BASE_URL="${VIDEO_MEDIA_BASE_URL:-https://media.anhuynh341.online/anime}"

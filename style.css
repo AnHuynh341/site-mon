@@ -274,9 +274,9 @@ body {
 
     "page page visits health"
 
-    "ops r2 r2 samples"
+    "r2 r2 audioHealth samples"
 
-    "videoFetch videoFetch videoFetch videoProbes"
+    "videoFetch videoFetch videoHealth videoProbes"
 
     "summary summary summary summary";
 
@@ -310,8 +310,13 @@ body {
 }
 
 
-.r2-operations-panel {
-  grid-area: ops;
+.audio-health-panel {
+  grid-area: audioHealth;
+}
+
+
+.video-health-panel {
+  grid-area: videoHealth;
 }
 
 
@@ -330,8 +335,8 @@ body {
 }
 
 
-.r2-operations-panel,
 .r2-history-panel,
+.probe-health-panel,
 .samples-panel,
 .video-fetch-panel,
 .video-probes-panel {
@@ -725,10 +730,10 @@ body {
 
 
 /* ============================================================
-   R2 OPERATIONS PIE
+   PROBE HEALTH DOUGHNUTS
 ============================================================ */
 
-.r2-operations-panel {
+.probe-health-panel {
 
   display: flex;
 
@@ -737,78 +742,95 @@ body {
 }
 
 
-.usage-month {
+.probe-health-content {
 
-  padding:
-    4px
-    7px;
+  flex: 1;
 
-  border:
-    1px solid var(--border);
+  display: flex;
 
-  border-radius:
-    999px;
+  flex-direction: column;
 
-  background:
-    var(--panel-2);
+  justify-content: center;
 
-  color:
-    var(--muted);
-
-  font-size:
-    0.65rem;
-
-  font-weight:
-    650;
-
-  letter-spacing:
-    0.05em;
+  min-height: 245px;
 
 }
 
 
-.r2-operations-chart-box {
+.probe-health-chart-box {
 
   position: relative;
 
-  width: 100%;
+  width: min(155px, 100%);
 
-  height: 150px;
+  aspect-ratio: 1;
 
-  margin-top: 18px;
-
-}
-
-
-.r2-operation-legend {
-
-  display: grid;
-
-  gap: 8px;
-
-  margin-top: 30px;
+  margin: 4px auto 8px;
 
 }
 
 
-.r2-operation-line {
+.probe-health-center {
+
+  position: absolute;
+
+  inset: 0;
 
   display: flex;
 
-  justify-content: space-between;
+  flex-direction: column;
 
   align-items: center;
 
-  gap: 8px;
+  justify-content: center;
 
-  font-size: 0.76rem;
+  pointer-events: none;
 
 }
 
 
-.r2-operation-name {
+.probe-health-center strong {
 
-  display: flex;
+  color: var(--text);
+
+  font-size: 1.35rem;
+
+  font-weight: 700;
+
+  font-variant-numeric: tabular-nums;
+
+}
+
+
+.probe-health-center span {
+
+  margin-top: 2px;
+
+  color: var(--muted);
+
+  font-size: 0.65rem;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+
+}
+
+
+.probe-health-legend {
+
+  display: grid;
+
+  gap: 5px;
+
+}
+
+
+.probe-health-legend span {
+
+  display: grid;
+
+  grid-template-columns: auto 1fr auto;
 
   align-items: center;
 
@@ -816,76 +838,45 @@ body {
 
   color: var(--muted);
 
+  font-size: 0.7rem;
+
 }
 
 
-.r2-operation-line strong {
+.probe-health-legend strong {
 
   color: var(--text);
 
-  font-size: 0.8rem;
-
   font-weight: 650;
 
-  font-variant-numeric:
-    tabular-nums;
+  font-variant-numeric: tabular-nums;
 
 }
 
 
-.r2-operation-dot {
+.probe-health-dot {
 
   width: 8px;
 
   height: 8px;
-
-  display: inline-block;
 
   border-radius: 50%;
 
 }
 
 
-.r2-operation-dot.class-a {
-
-  background:
-    var(--red);
-
+.probe-health-dot.good {
+  background: var(--green);
 }
 
 
-.r2-operation-dot.class-b {
-
-  background:
-    var(--blue);
-
+.probe-health-dot.slow {
+  background: var(--yellow);
 }
 
 
-.r2-operations-other {
-
-  margin-top: auto;
-
-  padding-top: 7px;
-
-  color: var(--muted);
-
-  text-align: right;
-
-  font-size: 0.65rem;
-
-}
-
-
-.r2-operations-other strong {
-
-  margin-left: 4px;
-
-  color: var(--text);
-
-  font-variant-numeric:
-    tabular-nums;
-
+.probe-health-dot.unstable {
+  background: var(--red);
 }
 
 
@@ -1248,11 +1239,13 @@ body {
 
       "health health"
 
-      "ops r2"
+      "r2 r2"
 
-      "samples samples"
+      "audioHealth samples"
 
-      "videoFetch videoProbes"
+      "videoFetch videoFetch"
+
+      "videoHealth videoProbes"
 
       "summary summary";
 
@@ -1332,13 +1325,15 @@ body {
 
       "health"
 
-      "ops"
-
       "r2"
+
+      "audioHealth"
 
       "samples"
 
       "videoFetch"
+
+      "videoHealth"
 
       "videoProbes"
 
@@ -1482,38 +1477,6 @@ body {
       column;
 
     gap: 3px;
-
-  }
-
-}
-
-/* ============================================================
-   R2 OPERATIONS PIE — RESPONSIVE
-============================================================ */
-
-@media (max-width: 760px) {
-
-  .r2-operations-chart-box {
-
-    height: 190px;
-
-  }
-
-}
-
-
-@media (max-width: 480px) {
-
-  .r2-operations-chart-box {
-
-    height: 175px;
-
-  }
-
-
-  .r2-operations-other {
-
-    text-align: left;
 
   }
 
