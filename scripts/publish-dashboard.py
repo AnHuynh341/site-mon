@@ -19,10 +19,11 @@ LOG = BASE / "logs" / "health.log"
 OUT = BASE / "data" / "dashboard.json"
 CONFIG = Path.home() / ".config" / "mediser-monitor" / "config.env"
 WEB_ANALYTICS = BASE / "scripts" / "web-analytics.py"
-R2_USAGE = BASE / "scripts" / "r2-usage.py"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 TIME_FMT = "%Y-%m-%d %H:%M:%S"
 FALLBACK_MAX_AGE = timedelta(hours=2)
+PROBE_GOOD_FACTOR = 1.25
+PROBE_UNSTABLE_FACTOR = 1.75
 
 
 # ============================================================
@@ -129,26 +130,6 @@ def has_useful_analytics_history(visits, page_load):
     )
 
 
-def r2_operation_total(payload):
-    if not isinstance(payload, dict):
-        return 0
-
-    total = 0
-
-    for key in (
-        "classA",
-        "classB",
-        "freeOperations",
-        "other",
-    ):
-        value = payload.get(key)
-
-        if finite_number(value):
-            total += value
-
-    return total
-
-
 # ============================================================
 # HEALTH LOG PARSING
 # ============================================================
@@ -183,6 +164,58 @@ def parse_sample_values(value, prefix="samples="):
     return result
 
 
+def build_probe_health(samples):
+    successful = [
+        value
+        for value in samples
+        if isinstance(value, (int, float))
+    ]
+    average_ms = (
+        sum(successful) / len(successful)
+        if successful
+        else None
+    )
+    good_limit_ms = (
+        average_ms * PROBE_GOOD_FACTOR
+        if average_ms is not None
+        else None
+    )
+    unstable_limit_ms = (
+        average_ms * PROBE_UNSTABLE_FACTOR
+        if average_ms is not None
+        else None
+    )
+    health = {
+        "good": 0,
+        "slow": 0,
+        "unstable": 0,
+        "total": len(samples),
+        "averageMs": round(average_ms) if average_ms is not None else None,
+        "goodThroughMs": (
+            round(good_limit_ms)
+            if good_limit_ms is not None
+            else None
+        ),
+        "unstableAboveMs": (
+            round(unstable_limit_ms)
+            if unstable_limit_ms is not None
+            else None
+        ),
+    }
+
+    for value in samples:
+        if value is None or good_limit_ms is None:
+            health["unstable"] += 1
+        elif value <= good_limit_ms:
+            health["good"] += 1
+        elif value <= unstable_limit_ms:
+            health["slow"] += 1
+        else:
+            health["unstable"] += 1
+
+    return health
+
+
 def parse_health():
     latest = {
         "frontend": None,
@@ -202,6 +235,8 @@ def parse_health():
     latest_video_fetch_samples = []
     history = []
     video_history = []
+    audio_probe_samples = []
+    video_probe_samples = []
     now = datetime.now(TZ)
     cutoff = now - timedelta(hours=24)
 
@@ -262,13 +297,17 @@ def parse_health():
                 "totalSamples": total,
             }
             latest_time["storage"] = stamp
+            r2_samples = []
 
             for extra in parts[6:]:
                 if extra.startswith("samples="):
-                    latest_samples = parse_sample_values(extra)
+                    r2_samples = parse_sample_values(extra)
+                    latest_samples = r2_samples
                     break
 
             if stamp >= cutoff:
+                audio_probe_samples.extend(r2_samples)
+
                 history.append(
                     {
                         "stamp": stamp,
@@ -310,6 +349,8 @@ def parse_health():
             latest_video_fetch_samples = fetch_samples
 
             if stamp >= cutoff:
+                video_probe_samples.extend(fetch_samples)
+
                 video_history.append(
                     {
                         "stamp": stamp,
@@ -381,11 +422,20 @@ def parse_health():
         for i in range(5)
     ]
 
+    audio_probe_health = build_probe_health(
+        audio_probe_samples
+    )
+    video_probe_health = build_probe_health(
+        video_probe_samples
+    )
+
     return (
         latest,
         samples,
         history,
         video_history,
+        audio_probe_health,
+        video_probe_health,
         video_samples,
         generated,
     )
@@ -439,13 +489,6 @@ def get_web_analytics():
     return run_json_script(
         [str(WEB_ANALYTICS), "--dashboard-json"],
         "web-analytics.py",
-    )
-
-
-def get_r2_usage():
-    return run_json_script(
-        [str(R2_USAGE)],
-        "r2-usage.py",
     )
 
 
@@ -522,6 +565,8 @@ def main():
         samples,
         history,
         video_history,
+        audio_probe_health,
+        video_probe_health,
         video_samples,
         generated,
     ) = parse_health()
@@ -534,8 +579,6 @@ def main():
     previous_analytics_generated = previous.get(
         "analyticsGenerated"
     )
-    previous_r2_usage = previous.get("r2Usage", {})
-
     # --------------------------------------------------------
     # Web Analytics / Site Performance
     # --------------------------------------------------------
@@ -639,70 +682,6 @@ def main():
             )
 
     # --------------------------------------------------------
-    # R2 operation usage
-    # --------------------------------------------------------
-
-    r2_usage = {
-        "generated": None,
-        "month": None,
-        "classA": None,
-        "classB": None,
-        "freeOperations": None,
-        "other": None,
-        "breakdown": {},
-    }
-    r2_usage_fallback = False
-    previous_r2_recent = recent_enough(
-        previous_r2_usage.get("generated")
-    )
-
-    try:
-        r2_usage = get_r2_usage()
-
-        current_total = r2_operation_total(r2_usage)
-        previous_total = r2_operation_total(previous_r2_usage)
-        same_month = (
-            r2_usage.get("month")
-            == previous_r2_usage.get("month")
-        )
-
-        if (
-            current_total == 0
-            and previous_total > 0
-            and same_month
-            and previous_r2_recent
-        ):
-            r2_usage = previous_r2_usage
-            r2_usage_fallback = True
-
-            print(
-                "WARNING: R2 usage returned zero mid-month; "
-                "keeping recent last-known-good operation totals",
-                file=sys.stderr,
-            )
-
-    except Exception as exc:
-        if (
-            previous_r2_recent
-            and r2_operation_total(previous_r2_usage) > 0
-        ):
-            r2_usage = previous_r2_usage
-            r2_usage_fallback = True
-
-            print(
-                "WARNING: R2 usage unavailable; keeping recent "
-                f"last-known-good data: {exc}",
-                file=sys.stderr,
-            )
-        else:
-            print(
-                "WARNING: R2 usage unavailable and no recent "
-                "fallback is available; publishing dashboard "
-                f"anyway: {exc}",
-                file=sys.stderr,
-            )
-
-    # --------------------------------------------------------
     # R2 storage information
     # --------------------------------------------------------
 
@@ -727,7 +706,6 @@ def main():
         "analyticsGenerated": analytics_generated,
         "sourceFallback": {
             "analytics": analytics_fallback,
-            "r2Usage": r2_usage_fallback,
         },
         "latest": {
             **latest,
@@ -735,7 +713,6 @@ def main():
         },
         "visits": visits,
         "pageLoad": page_load,
-        "r2Usage": r2_usage,
         "r2History": {
             "labels": [
                 item["stamp"].strftime("%H:%M")
@@ -751,6 +728,8 @@ def main():
             ],
         },
         "samples": samples,
+        "audioProbeHealth": audio_probe_health,
+        "videoProbeHealth": video_probe_health,
         "videoHistory": {
             "labels": [
                 item["stamp"].strftime("%H:%M")

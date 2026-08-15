@@ -391,90 +391,6 @@
 
 
       <!-- ===================================================
-           R2 OPERATIONS
-      ==================================================== -->
-
-      <section class="panel r2-operations-panel">
-
-        <div class="panel-header compact-header">
-
-          <div>
-
-            <span class="panel-kicker">
-              ACCOUNT USAGE
-            </span>
-
-            <h2>
-              R2 operations
-            </h2>
-
-          </div>
-
-
-          <span
-            class="usage-month"
-            id="r2-usage-month"
-          >
-            —
-          </span>
-
-        </div>
-
-
-        <div class="r2-operations-chart-box">
-
-          <canvas
-            id="r2-operations-chart"
-          ></canvas>
-
-        </div>
-
-
-        <div class="r2-operation-legend">
-
-          <div class="r2-operation-line">
-
-            <span class="r2-operation-name">
-
-              <i class="r2-operation-dot class-a"></i>
-
-              Class A
-
-            </span>
-
-            <strong id="r2-class-a">
-              —
-            </strong>
-
-          </div>
-
-
-          <div class="r2-operation-line">
-
-            <span class="r2-operation-name">
-
-              <i class="r2-operation-dot class-b"></i>
-
-              Class B
-
-            </span>
-
-            <strong id="r2-class-b">
-              —
-            </strong>
-
-          </div>
-
-        </div>
-
-
- 
-
-      </section>
-
-
-
-      <!-- ===================================================
            R2 HISTORY
       ==================================================== -->
 
@@ -533,6 +449,42 @@
 
 
       <!-- ===================================================
+           AUDIO PROBE HEALTH
+      ==================================================== -->
+
+      <section class="panel probe-health-panel audio-health-panel">
+
+        <div class="panel-header compact-header">
+
+          <div>
+            <span class="panel-kicker">AUDIO RELIABILITY</span>
+            <h2>Probe health — last 24 hours</h2>
+          </div>
+
+        </div>
+
+        <div class="probe-health-content">
+
+          <div class="probe-health-chart-box">
+            <canvas id="audio-health-chart"></canvas>
+            <div class="probe-health-center">
+              <strong id="audio-health-percent">—</strong>
+              <span>good</span>
+            </div>
+          </div>
+
+          <div class="probe-health-legend">
+            <span><i class="probe-health-dot good"></i>Good <strong id="audio-health-good">0</strong></span>
+            <span><i class="probe-health-dot slow"></i>Slow <strong id="audio-health-slow">0</strong></span>
+            <span><i class="probe-health-dot unstable"></i>Unstable <strong id="audio-health-unstable">0</strong></span>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
            R2 LIVE PROBE
       ==================================================== -->
 
@@ -559,6 +511,42 @@
           class="sample-bars"
           id="sample-bars"
         ></div>
+
+      </section>
+
+
+      <!-- ===================================================
+           VIDEO PROBE HEALTH
+      ==================================================== -->
+
+      <section class="panel probe-health-panel video-health-panel">
+
+        <div class="panel-header compact-header">
+
+          <div>
+            <span class="panel-kicker">VIDEO RELIABILITY</span>
+            <h2>Probe health — last 24 hours</h2>
+          </div>
+
+        </div>
+
+        <div class="probe-health-content">
+
+          <div class="probe-health-chart-box">
+            <canvas id="video-health-chart"></canvas>
+            <div class="probe-health-center">
+              <strong id="video-health-percent">—</strong>
+              <span>good</span>
+            </div>
+          </div>
+
+          <div class="probe-health-legend">
+            <span><i class="probe-health-dot good"></i>Good <strong id="video-health-good">0</strong></span>
+            <span><i class="probe-health-dot slow"></i>Slow <strong id="video-health-slow">0</strong></span>
+            <span><i class="probe-health-dot unstable"></i>Unstable <strong id="video-health-unstable">0</strong></span>
+          </div>
+
+        </div>
 
       </section>
 
