@@ -272,7 +272,7 @@ body {
 
   grid-template-areas:
 
-    "visits page page health"
+    "page page visits health"
 
     "ops r2 r2 samples"
 
@@ -1165,7 +1165,7 @@ body {
 
     grid-template-areas:
 
-      "visits page"
+      "page visits"
 
       "health health"
 
@@ -1247,9 +1247,9 @@ body {
 
     grid-template-areas:
 
-      "visits"
-
       "page"
+
+      "visits"
 
       "health"
 
