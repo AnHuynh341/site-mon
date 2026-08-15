@@ -537,22 +537,36 @@ def storage_info(s3, bucket):
     }
 
 
-def video_storage_info(root):
+def video_storage_info(roots):
     objects = 0
     total_bytes = 0
+    existing_roots = 0
+    seen = set()
 
-    if not root.is_dir():
+    for root in roots:
+        if not root.is_dir():
+            continue
+
+        existing_roots += 1
+
+        for path in root.rglob("video.mp4"):
+            try:
+                identity = path.resolve()
+
+                if identity in seen:
+                    continue
+
+                seen.add(identity)
+                total_bytes += path.stat().st_size
+                objects += 1
+            except OSError:
+                continue
+
+    if existing_roots == 0:
         return {
             "gb": None,
             "objects": None,
         }
-
-    for path in root.rglob("video.mp4"):
-        try:
-            total_bytes += path.stat().st_size
-            objects += 1
-        except OSError:
-            continue
 
     return {
         "gb": round(total_bytes / 1_000_000_000, 2),
@@ -701,14 +715,20 @@ def main():
 
     s3 = make_s3()
     latest["storageInfo"] = storage_info(s3, bucket)
-    latest["videoInfo"] = video_storage_info(
+    latest["videoInfo"] = video_storage_info([
         Path(
             os.environ.get(
                 "VIDEO_MEDIA_DIR",
                 "/srv/media/anime",
             )
-        )
-    )
+        ),
+        Path(
+            os.environ.get(
+                "YOUTUBE_MEDIA_DIR",
+                "/srv/media/youtube",
+            )
+        ),
+    ])
 
     # --------------------------------------------------------
     # Final dashboard JSON
