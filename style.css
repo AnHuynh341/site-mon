@@ -473,6 +473,28 @@ body {
 }
 
 
+.delivery-panel-meta {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: flex-end;
+
+  gap: 18px;
+
+  flex-shrink: 0;
+
+}
+
+
+.delivery-panel-meta .legend {
+
+  padding-top: 2px;
+
+}
+
+
 .visits-controls {
 
   display: flex;
@@ -1399,6 +1421,24 @@ body {
 
     justify-content:
       flex-start;
+
+  }
+
+
+  .delivery-panel-header {
+
+    flex-wrap: wrap;
+
+  }
+
+
+  .delivery-panel-meta {
+
+    width: 100%;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
 
   }
 

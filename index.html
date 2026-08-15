@@ -396,7 +396,7 @@
 
       <section class="panel r2-history-panel">
 
-        <div class="panel-header">
+        <div class="panel-header delivery-panel-header">
 
           <div>
 
@@ -411,7 +411,9 @@
           </div>
 
 
-          <div class="legend">
+          <div class="delivery-panel-meta">
+
+            <div class="legend">
 
             <span>
 
@@ -432,6 +434,14 @@
 
 
    
+
+            </div>
+
+
+            <div class="big-number delivery-average">
+              <strong id="audio-response-now">—</strong>
+              <span>ms average</span>
+            </div>
 
           </div>
 
@@ -557,16 +567,25 @@
 
       <section class="panel video-fetch-panel">
 
-        <div class="panel-header">
+        <div class="panel-header delivery-panel-header">
 
           <div>
             <span class="panel-kicker">VIDEO DELIVERY</span>
             <h2>Average response time — last 24 hours</h2>
           </div>
 
-          <div class="big-number">
-            <strong id="video-fetch-now">—</strong>
-            <span>ms average</span>
+          <div class="delivery-panel-meta">
+
+            <div class="legend">
+              <span><i class="legend-dot average"></i>Average</span>
+              <span><i class="legend-dot worst"></i>Worst</span>
+            </div>
+
+            <div class="big-number delivery-average">
+              <strong id="video-fetch-now">—</strong>
+              <span>ms average</span>
+            </div>
+
           </div>
 
         </div>
