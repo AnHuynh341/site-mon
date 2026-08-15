@@ -207,7 +207,7 @@ function chartOptions() {
           "#080b13",
 
         borderColor:
-          "rgba(255,255,255,.15)",
+          "rgba(255,255,255,.72)",
 
         borderWidth: 1,
 
@@ -499,16 +499,22 @@ function buildVideoChart() {
 
         datasets: [
           {
-            label: "Average fetch",
+            label: "Average",
             data: [],
             borderColor: cssVar("--cyan"),
-            backgroundColor: "rgba(42,221,255,.14)",
             borderWidth: 2,
-            fill: true,
-            pointRadius: 2,
+            pointRadius: 0,
             pointHoverRadius: 5,
-            tension: 0.25,
-            spanGaps: true
+            tension: 0.25
+          },
+          {
+            label: "Worst",
+            data: [],
+            borderColor: cssVar("--purple"),
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            tension: 0.25
           }
         ]
       },
@@ -591,7 +597,7 @@ function buildProbeHealthChart(
           },
           tooltip: {
             backgroundColor: "rgba(0, 0, 0, 1)",
-            borderColor: "rgba(255,255,255,.15)",
+            borderColor: "rgba(255,255,255,.72)",
             borderWidth: 1,
             cornerRadius: 0,
             caretSize: 0,
@@ -1167,6 +1173,16 @@ function updateCharts(
         ? videoHistory.average
         : [];
 
+  videoFetchChart
+    .data
+    .datasets[1]
+    .data =
+      Array.isArray(
+        videoHistory.worst
+      )
+        ? videoHistory.worst
+        : [];
+
   videoFetchChart.update();
 
 
@@ -1241,6 +1257,15 @@ function updateNumbers(
       ? Math.round(
           pageLoad
         )
+      : "—"
+  );
+
+
+  setText(
+    "audio-response-now",
+
+    Number.isFinite(r2Average)
+      ? Math.round(r2Average)
       : "—"
   );
 

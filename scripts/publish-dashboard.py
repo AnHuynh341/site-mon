@@ -339,9 +339,21 @@ def parse_health():
                         "fetch=",
                     )
 
+            successful_fetch_samples = [
+                value
+                for value in fetch_samples
+                if value is not None
+            ]
+            worst_fetch = (
+                max(successful_fetch_samples)
+                if successful_fetch_samples
+                else None
+            )
+
             latest["video"] = {
                 "status": parts[2],
                 "ms": average_fetch,
+                "worst": worst_fetch,
                 "successfulSamples": ok,
                 "totalSamples": total,
             }
@@ -355,6 +367,7 @@ def parse_health():
                     {
                         "stamp": stamp,
                         "average": average_fetch,
+                        "worst": worst_fetch,
                     }
                 )
 
@@ -383,6 +396,7 @@ def parse_health():
         latest["video"] = {
             "status": "UNKNOWN",
             "ms": None,
+            "worst": None,
             "successfulSamples": 0,
             "totalSamples": 5,
         }
@@ -737,6 +751,10 @@ def main():
             ],
             "average": [
                 item["average"]
+                for item in video_history
+            ],
+            "worst": [
+                item["worst"]
                 for item in video_history
             ],
         },
