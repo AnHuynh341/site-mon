@@ -285,7 +285,7 @@ def parse_health():
                 )
             except ValueError:
                 ok = 0
-                total = 3
+                total = 5
 
             average_fetch = parse_ms(parts[4]) if ok else None
             fetch_samples = []
@@ -343,7 +343,7 @@ def parse_health():
             "status": "UNKNOWN",
             "ms": None,
             "successfulSamples": 0,
-            "totalSamples": 3,
+            "totalSamples": 5,
         }
 
     times = [
@@ -378,7 +378,7 @@ def parse_health():
                 else None
             ),
         }
-        for i in range(3)
+        for i in range(5)
     ]
 
     return (

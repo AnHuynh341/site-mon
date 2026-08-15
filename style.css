@@ -986,7 +986,7 @@ body {
 .sample-bars.video-sample-bars {
 
   grid-template-rows:
-    repeat(3, 1fr);
+    repeat(5, 1fr);
 
 }
 

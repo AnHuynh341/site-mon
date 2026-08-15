@@ -208,7 +208,9 @@ video_sample_urls() {
     for variable in \
         VIDEO_TEST_URL_1 \
         VIDEO_TEST_URL_2 \
-        VIDEO_TEST_URL_3
+        VIDEO_TEST_URL_3 \
+        VIDEO_TEST_URL_4 \
+        VIDEO_TEST_URL_5
     do
         url="${!variable-}"
 
@@ -243,13 +245,13 @@ for path in root.rglob("video.mp4"):
 
 files.sort(key=lambda item: (item[0], str(item[1])))
 
-if len(files) <= 3:
+if len(files) <= 5:
     selected = [item[1] for item in files]
 else:
+    last = len(files) - 1
     selected = [
-        files[0][1],
-        files[len(files) // 2][1],
-        files[-1][1],
+        files[round(index * last / 4)][1]
+        for index in range(5)
     ]
 
 for path in selected:
