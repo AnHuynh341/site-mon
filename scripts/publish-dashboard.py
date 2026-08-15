@@ -542,11 +542,13 @@ def main():
 
     analytics_summary = {
         "visits": None,
+        "visitsWithoutBots": None,
         "pageLoad": None,
     }
     visits = {
         "labels": [],
         "values": [],
+        "withoutBots": [],
     }
     page_load = {
         "labels": [],

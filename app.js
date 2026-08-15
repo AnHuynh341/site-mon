@@ -14,6 +14,7 @@ let r2Chart;
 let r2OperationsChart;
 let videoFetchChart;
 let lastGoodData = null;
+let excludeBots = false;
 
 
 /* ============================================================
@@ -167,6 +168,54 @@ function statusColor(status) {
         "--muted"
       );
   }
+}
+
+
+function selectedVisitValues(visits) {
+  const values =
+    excludeBots
+      ? visits?.withoutBots
+      : visits?.values;
+
+  return Array.isArray(values)
+    ? values
+    : (
+        Array.isArray(visits?.values)
+          ? visits.values
+          : []
+      );
+}
+
+
+function selectedVisitsToday(analytics) {
+  const value =
+    excludeBots
+      ? analytics?.visitsWithoutBots
+      : analytics?.visits;
+
+  return Number.isFinite(value)
+    ? value
+    : analytics?.visits;
+}
+
+
+function updateBotFilterControl() {
+  const button =
+    document.getElementById(
+      "bot-filter-toggle"
+    );
+
+  if (!button) {
+    return;
+  }
+
+  button.textContent =
+    `Exclude bots: ${excludeBots ? "Yes" : "No"}`;
+
+  button.setAttribute(
+    "aria-pressed",
+    String(excludeBots)
+  );
 }
 
 
@@ -1073,11 +1122,18 @@ function updateCharts(
     .data
     .datasets[0]
     .data =
-      Array.isArray(
-        visits.values
-      )
-        ? visits.values
-        : [];
+      selectedVisitValues(
+        visits
+      );
+
+
+  visitsChart
+    .data
+    .datasets[0]
+    .label =
+      excludeBots
+        ? "Visits (bots excluded)"
+        : "Visits (bots included)";
 
 
   visitsChart.update();
@@ -1241,7 +1297,9 @@ function updateNumbers(
 
 
   const visitsToday =
-    analytics.visits;
+    selectedVisitsToday(
+      analytics
+    );
 
   const pageLoad =
     analytics.pageLoad;
@@ -1540,6 +1598,34 @@ function init() {
   buildR2OperationsChart();
 
   buildVideoChart();
+
+
+  const botFilterToggle =
+    document.getElementById(
+      "bot-filter-toggle"
+    );
+
+  botFilterToggle?.addEventListener(
+    "click",
+    () => {
+      excludeBots =
+        !excludeBots;
+
+      updateBotFilterControl();
+
+      if (lastGoodData) {
+        updateNumbers(
+          lastGoodData
+        );
+
+        updateCharts(
+          lastGoodData
+        );
+      }
+    }
+  );
+
+  updateBotFilterControl();
 
 
   /*

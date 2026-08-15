@@ -156,8 +156,8 @@ def graphql(query, variables):
 # ============================================================
 # GRAPHQL QUERIES
 #
-# Visits use bot: 0, matching Cloudflare Web Analytics with
-# "Exclude bots = Yes".
+# Visits are queried both with and without bot filtering so the
+# dashboard can switch between them without another API call.
 #
 # Page-load performance intentionally has NO bot filter so the
 # headless Chromium probes can still contribute performance
@@ -178,7 +178,21 @@ query W41ITSummary(
       }
     ) {
 
-      pageload:
+      pageloadAll:
+        rumPageloadEventsAdaptiveGroups(
+          limit: 100
+          filter: {
+            datetime_geq: $start
+            datetime_lt: $end
+            requestHost: $host
+          }
+        ) {
+          sum {
+            visits
+          }
+        }
+
+      pageloadWithoutBots:
         rumPageloadEventsAdaptiveGroups(
           limit: 100
           filter: {
@@ -227,7 +241,26 @@ query W41ITHourly(
       }
     ) {
 
-      pageload:
+      pageloadAll:
+        rumPageloadEventsAdaptiveGroups(
+          limit: 1000
+          orderBy: [datetimeHour_ASC]
+          filter: {
+            datetime_geq: $start
+            datetime_lt: $end
+            requestHost: $host
+          }
+        ) {
+          dimensions {
+            datetimeHour
+          }
+
+          sum {
+            visits
+          }
+        }
+
+      pageloadWithoutBots:
         rumPageloadEventsAdaptiveGroups(
           limit: 1000
           orderBy: [datetimeHour_ASC]
@@ -302,6 +335,70 @@ def page_load_ms(raw):
     )
 
 
+def sum_visits(groups):
+    return sum(
+        int(
+            group
+            .get("sum", {})
+            .get("visits")
+            or 0
+        )
+        for group in groups
+    )
+
+
+def hourly_visits(groups):
+    visits_by_hour = {}
+
+    for group in groups:
+        stamp = (
+            group
+            .get(
+                "dimensions",
+                {},
+            )
+            .get(
+                "datetimeHour"
+            )
+        )
+
+        if not stamp:
+            continue
+
+        dt = (
+            datetime
+            .fromisoformat(
+                stamp.replace(
+                    "Z",
+                    "+00:00",
+                )
+            )
+            .astimezone(
+                LOCAL_TZ
+            )
+        )
+
+        key = dt.strftime(
+            "%Y-%m-%dT%H"
+        )
+
+        visits_by_hour[key] = (
+            visits_by_hour.get(
+                key,
+                0,
+            )
+            +
+            int(
+                group
+                .get("sum", {})
+                .get("visits")
+                or 0
+            )
+        )
+
+    return visits_by_hour
+
+
 # ============================================================
 # TODAY'S SUMMARY
 # ============================================================
@@ -346,16 +443,16 @@ def get_today_summary(
         result
     )
 
-    visits = sum(
-        int(
-            group
-            .get("sum", {})
-            .get("visits")
-            or 0
+    visits = sum_visits(
+        account.get(
+            "pageloadAll",
+            [],
         )
-        for group
-        in account.get(
-            "pageload",
+    )
+
+    visits_without_bots = sum_visits(
+        account.get(
+            "pageloadWithoutBots",
             [],
         )
     )
@@ -400,6 +497,9 @@ def get_today_summary(
     return {
         "visits":
             visits,
+
+        "visitsWithoutBots":
+            visits_without_bots,
 
         "pageLoad":
             load_ms,
@@ -467,58 +567,21 @@ def get_hourly(
         result
     )
 
-    visits_by_hour = {}
+    visits_by_hour = hourly_visits(
+        account.get(
+            "pageloadAll",
+            [],
+        )
+    )
+
+    visits_without_bots_by_hour = hourly_visits(
+        account.get(
+            "pageloadWithoutBots",
+            [],
+        )
+    )
+
     load_by_hour = {}
-
-    for group in account.get(
-        "pageload",
-        [],
-    ):
-
-        stamp = (
-            group
-            .get(
-                "dimensions",
-                {},
-            )
-            .get(
-                "datetimeHour"
-            )
-        )
-
-        if not stamp:
-            continue
-
-        dt = (
-            datetime
-            .fromisoformat(
-                stamp.replace(
-                    "Z",
-                    "+00:00",
-                )
-            )
-            .astimezone(
-                LOCAL_TZ
-            )
-        )
-
-        key = dt.strftime(
-            "%Y-%m-%dT%H"
-        )
-
-        visits_by_hour[key] = (
-            visits_by_hour.get(
-                key,
-                0,
-            )
-            +
-            int(
-                group
-                .get("sum", {})
-                .get("visits")
-                or 0
-            )
-        )
 
     for group in account.get(
         "performance",
@@ -592,6 +655,18 @@ def get_hourly(
         in hours
     ]
 
+    visit_values_without_bots = [
+        visits_without_bots_by_hour.get(
+            hour.strftime(
+                "%Y-%m-%dT%H"
+            ),
+            0,
+        )
+
+        for hour
+        in hours
+    ]
+
     page_load_values = [
         load_by_hour.get(
             hour.strftime(
@@ -610,6 +685,9 @@ def get_hourly(
 
             "values":
                 visit_values,
+
+            "withoutBots":
+                visit_values_without_bots,
         },
 
         "pageLoad": {

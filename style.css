@@ -468,6 +468,85 @@ body {
 }
 
 
+.visits-controls {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+}
+
+
+.bot-filter-toggle {
+
+  padding:
+    6px
+    9px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 999px;
+
+  background: var(--panel-2);
+
+  color: var(--muted);
+
+  font: inherit;
+
+  font-size: 0.67rem;
+
+  font-weight: 650;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+
+}
+
+
+.bot-filter-toggle:hover {
+
+  border-color:
+    rgba(42, 221, 255, 0.5);
+
+  color: var(--text);
+
+}
+
+
+.bot-filter-toggle[aria-pressed="true"] {
+
+  border-color:
+    rgba(42, 221, 255, 0.55);
+
+  background:
+    rgba(42, 221, 255, 0.1);
+
+  color: var(--cyan);
+
+}
+
+
+.bot-filter-toggle:focus-visible {
+
+  outline:
+    2px solid var(--cyan);
+
+  outline-offset: 2px;
+
+}
+
+
 
 /* ============================================================
    CHARTS
@@ -1348,6 +1427,24 @@ body {
   .panel-header {
 
     gap: 8px;
+
+  }
+
+
+  .visits-panel .panel-header {
+
+    flex-wrap: wrap;
+
+  }
+
+
+  .visits-controls {
+
+    width: 100%;
+
+    justify-content: space-between;
+
+    align-items: center;
 
   }
 
