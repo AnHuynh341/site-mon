@@ -13,6 +13,7 @@ let pageLoadChart;
 let r2Chart;
 let videoFetchChart;
 let audioProbeHealthChart;
+let videoProbeHealthChart;
 let lastGoodData = null;
 let excludeBots = false;
 
@@ -533,9 +534,9 @@ function buildProbeHealthChart(
       type: "doughnut",
       data: {
         labels: [
-          "Good (<1.5s)",
-          "Slow (1.5–4s)",
-          "Unstable / failed (≥4s)"
+          "Good",
+          "Slow",
+          "Unstable / failed"
         ],
         datasets: [
           {
@@ -618,6 +619,26 @@ function updateProbeHealth(
       : 0;
   const total =
     good + slow + unstable;
+  const goodLimit =
+    Number.isFinite(health?.goodThroughMs)
+      ? health.goodThroughMs
+      : null;
+  const unstableLimit =
+    Number.isFinite(health?.unstableAboveMs)
+      ? health.unstableAboveMs
+      : null;
+
+  chart.data.labels = [
+    goodLimit !== null
+      ? `Good (≤${formatMs(goodLimit)})`
+      : "Good",
+    goodLimit !== null && unstableLimit !== null
+      ? `Slow (${formatMs(goodLimit)}–${formatMs(unstableLimit)})`
+      : "Slow",
+    unstableLimit !== null
+      ? `Unstable / failed (>${formatMs(unstableLimit)})`
+      : "Unstable / failed"
+  ];
 
   chart.data.datasets[0].data = [
     good,
@@ -998,6 +1019,9 @@ function updateCharts(
   const audioProbeHealth =
     data.audioProbeHealth ?? {};
 
+  const videoProbeHealth =
+    data.videoProbeHealth ?? {};
+
 
   /* ---------------- Visits ---------------- */
 
@@ -1124,6 +1148,12 @@ function updateCharts(
     audioProbeHealthChart,
     audioProbeHealth,
     "audio"
+  );
+
+  updateProbeHealth(
+    videoProbeHealthChart,
+    videoProbeHealth,
+    "video"
   );
 
 }
@@ -1415,6 +1445,11 @@ function init() {
   audioProbeHealthChart =
     buildProbeHealthChart(
       "audio-health-chart"
+    );
+
+  videoProbeHealthChart =
+    buildProbeHealthChart(
+      "video-health-chart"
     );
 
   const botFilterToggle =

@@ -22,8 +22,8 @@ WEB_ANALYTICS = BASE / "scripts" / "web-analytics.py"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 TIME_FMT = "%Y-%m-%d %H:%M:%S"
 FALLBACK_MAX_AGE = timedelta(hours=2)
-PROBE_GOOD_LIMIT_MS = 1500
-PROBE_UNSTABLE_LIMIT_MS = 4000
+PROBE_GOOD_FACTOR = 1.25
+PROBE_UNSTABLE_FACTOR = 1.75
 
 
 # ============================================================
@@ -164,29 +164,56 @@ def parse_sample_values(value, prefix="samples="):
     return result
 
 
-def empty_probe_health():
-    return {
+def build_probe_health(samples):
+    successful = [
+        value
+        for value in samples
+        if isinstance(value, (int, float))
+    ]
+    average_ms = (
+        sum(successful) / len(successful)
+        if successful
+        else None
+    )
+    good_limit_ms = (
+        average_ms * PROBE_GOOD_FACTOR
+        if average_ms is not None
+        else None
+    )
+    unstable_limit_ms = (
+        average_ms * PROBE_UNSTABLE_FACTOR
+        if average_ms is not None
+        else None
+    )
+    health = {
         "good": 0,
         "slow": 0,
         "unstable": 0,
-        "total": 0,
-        "goodBelowMs": PROBE_GOOD_LIMIT_MS,
-        "unstableAtMs": PROBE_UNSTABLE_LIMIT_MS,
+        "total": len(samples),
+        "averageMs": round(average_ms) if average_ms is not None else None,
+        "goodThroughMs": (
+            round(good_limit_ms)
+            if good_limit_ms is not None
+            else None
+        ),
+        "unstableAboveMs": (
+            round(unstable_limit_ms)
+            if unstable_limit_ms is not None
+            else None
+        ),
     }
 
-
-def add_probe_samples(health, samples):
     for value in samples:
-        health["total"] += 1
-
-        if value is None:
+        if value is None or good_limit_ms is None:
             health["unstable"] += 1
-        elif value < PROBE_GOOD_LIMIT_MS:
+        elif value <= good_limit_ms:
             health["good"] += 1
-        elif value < PROBE_UNSTABLE_LIMIT_MS:
+        elif value <= unstable_limit_ms:
             health["slow"] += 1
         else:
             health["unstable"] += 1
+
+    return health
 
 
 def parse_health():
@@ -208,7 +235,8 @@ def parse_health():
     latest_video_fetch_samples = []
     history = []
     video_history = []
-    audio_probe_health = empty_probe_health()
+    audio_probe_samples = []
+    video_probe_samples = []
     now = datetime.now(TZ)
     cutoff = now - timedelta(hours=24)
 
@@ -278,10 +306,7 @@ def parse_health():
                     break
 
             if stamp >= cutoff:
-                add_probe_samples(
-                    audio_probe_health,
-                    r2_samples,
-                )
+                audio_probe_samples.extend(r2_samples)
 
                 history.append(
                     {
@@ -324,6 +349,8 @@ def parse_health():
             latest_video_fetch_samples = fetch_samples
 
             if stamp >= cutoff:
+                video_probe_samples.extend(fetch_samples)
+
                 video_history.append(
                     {
                         "stamp": stamp,
@@ -395,12 +422,20 @@ def parse_health():
         for i in range(5)
     ]
 
+    audio_probe_health = build_probe_health(
+        audio_probe_samples
+    )
+    video_probe_health = build_probe_health(
+        video_probe_samples
+    )
+
     return (
         latest,
         samples,
         history,
         video_history,
         audio_probe_health,
+        video_probe_health,
         video_samples,
         generated,
     )
@@ -531,6 +566,7 @@ def main():
         history,
         video_history,
         audio_probe_health,
+        video_probe_health,
         video_samples,
         generated,
     ) = parse_health()
@@ -693,6 +729,7 @@ def main():
         },
         "samples": samples,
         "audioProbeHealth": audio_probe_health,
+        "videoProbeHealth": video_probe_health,
         "videoHistory": {
             "labels": [
                 item["stamp"].strftime("%H:%M")

@@ -276,7 +276,7 @@ body {
 
     "ops r2 r2 samples"
 
-    "videoFetch videoFetch videoFetch videoProbes"
+    "videoHealth videoFetch videoFetch videoProbes"
 
     "summary summary summary summary";
 
@@ -322,6 +322,11 @@ body {
 
 .video-fetch-panel {
   grid-area: videoFetch;
+}
+
+
+.video-health-panel {
+  grid-area: videoHealth;
 }
 
 
@@ -1236,7 +1241,9 @@ body {
 
       "samples samples"
 
-      "videoFetch videoProbes"
+      "videoHealth videoFetch"
+
+      "videoProbes videoProbes"
 
       "summary summary";
 
@@ -1321,6 +1328,8 @@ body {
       "r2"
 
       "samples"
+
+      "videoHealth"
 
       "videoFetch"
 
