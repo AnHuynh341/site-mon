@@ -11,8 +11,13 @@ source "$CONFIG"
 
 R2_SLOW_MS="${R2_SLOW_MS:-1500}"
 VIDEO_SLOW_MS="${VIDEO_SLOW_MS:-2500}"
-VIDEO_MEDIA_DIR="${VIDEO_MEDIA_DIR:-/srv/media/anime}"
-VIDEO_MEDIA_BASE_URL="${VIDEO_MEDIA_BASE_URL:-https://media.anhuynh341.online/anime}"
+
+# Video delivery is now R2-backed. Sample real files from the local mirror,
+# but request them through the same Worker endpoint used by W41IT playback.
+# This makes the VIDEO DELIVERY charts measure Worker -> R2 rather than the
+# retired VPS media origin. Set VIDEO_R2_TEST_URL_1..5 to override samples.
+VIDEO_MEDIA_ROOT="${VIDEO_MEDIA_ROOT:-/srv/media}"
+VIDEO_R2_BASE_URL="${VIDEO_R2_BASE_URL:-https://w41it-video-r2.meochon341.workers.dev}"
 
 mkdir -p "$BASE_DIR/logs"
 
@@ -205,12 +210,14 @@ video_sample_urls() {
     local variable url
     local configured=()
 
+    # Explicit overrides are R2/Worker-specific so stale VIDEO_TEST_URL_n
+    # values from the old VPS setup cannot silently keep monitoring it.
     for variable in \
-        VIDEO_TEST_URL_1 \
-        VIDEO_TEST_URL_2 \
-        VIDEO_TEST_URL_3 \
-        VIDEO_TEST_URL_4 \
-        VIDEO_TEST_URL_5
+        VIDEO_R2_TEST_URL_1 \
+        VIDEO_R2_TEST_URL_2 \
+        VIDEO_R2_TEST_URL_3 \
+        VIDEO_R2_TEST_URL_4 \
+        VIDEO_R2_TEST_URL_5
     do
         url="${!variable-}"
 
@@ -224,7 +231,7 @@ video_sample_urls() {
         return
     fi
 
-    python3 - "$VIDEO_MEDIA_DIR" "$VIDEO_MEDIA_BASE_URL" <<'PY'
+    python3 - "$VIDEO_MEDIA_ROOT" "$VIDEO_R2_BASE_URL" <<'PY'
 import sys
 from pathlib import Path
 from urllib.parse import quote
@@ -237,6 +244,9 @@ if not root.is_dir():
 
 files = []
 
+# /srv/media mirrors the object-key layout in w41it-video, so paths such as
+# anime/.../video.mp4 and youtube/.../video.mp4 can be requested unchanged
+# through the production Worker endpoint.
 for path in root.rglob("video.mp4"):
     try:
         files.append((path.stat().st_mtime_ns, path))
