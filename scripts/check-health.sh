@@ -6,6 +6,7 @@ BASE_DIR="$HOME/repos/site-mon"
 LOG_FILE="$BASE_DIR/logs/health.log"
 CONFIG="$HOME/.config/mediser-monitor/config.env"
 PUBLISHER="$BASE_DIR/scripts/publish-dashboard.py"
+VIDEO_INFO_PATCHER="$BASE_DIR/scripts/video-r2-info.py"
 
 source "$CONFIG"
 
@@ -369,7 +370,20 @@ echo "--------------------------------------------------------------------------
 # will also publish the latest dashboard JSON.
 if [[ -x "$PUBLISHER" ]]; then
 
-    if ! "$PUBLISHER"; then
+    if "$PUBLISHER"; then
+
+        # publish-dashboard.py still computes its legacy local mirror totals.
+        # Immediately replace only videoInfo with the authoritative R2 values
+        # and republish the same small dashboard JSON.
+        if [[ -f "$VIDEO_INFO_PATCHER" ]]; then
+            if ! python3 "$VIDEO_INFO_PATCHER"; then
+                printf '%s | publisher | ERROR | R2 video storage info update failed\n' \
+                    "$(timestamp)" \
+                    >&2
+            fi
+        fi
+
+    else
 
         printf '%s | publisher | ERROR | dashboard publish failed\n' \
             "$(timestamp)" \
