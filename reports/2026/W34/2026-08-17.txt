@@ -1,0 +1,83 @@
+W41IT DAILY REPORT
+Date: 2026-08-17
+Week: 2026-W34
+==========================================
+
+OVERALL STATUS
+  Status             : UNSTABLE
+
+FRONTEND
+  Uptime             : 100.00%
+  Successful checks  : 291 / 291
+  Average response   : 131 ms
+
+DATABASE
+  Uptime             : 100.00%
+  Successful checks  : 291 / 291
+  Average response   : 215 ms
+
+STORAGE
+  Data stored        : 12.83 GB 
+  Object count       : 400
+  Media availability : 100.00%
+  Average response   : 281 ms
+  Worst response     : 97 ms
+
+ANALYTICS
+  Visits             : 89
+  Average load time  : 2312 ms
+
+INCIDENTS
+  00:05:03 - r2-media UNSTABLE (5/5, avg 549ms, worst=1645ms)
+  00:30:07 - r2-media UNSTABLE (5/5, avg 1253ms, worst=5226ms)
+  01:40:02 - video-media UNSTABLE (4/5, avg 62ms, samples=129,39,47,34,FAIL)
+  05:40:01 - video-media UNSTABLE (4/5, avg 36ms, samples=45,38,32,31,FAIL)
+  08:55:02 - video-media UNSTABLE (4/5, avg 66ms, samples=140,56,36,33,FAIL)
+  11:02:08 - video-media UNSTABLE (4/5, avg 280ms, samples=267,FAIL,321,426,107)
+  14:00:04 - r2-media UNSTABLE (5/5, avg 576ms, worst=1755ms)
+  14:30:07 - r2-media UNSTABLE (5/5, avg 1225ms, worst=3099ms)
+  14:35:18 - video-media UNSTABLE (5/5, avg 2960ms, samples=136,2963,11425,161,115)
+  14:40:23 - video-media UNSTABLE (4/5, avg 270ms, samples=692,141,115,133,FAIL)
+  14:50:04 - r2-media UNSTABLE (5/5, avg 645ms, worst=1793ms)
+  15:00:03 - r2-media UNSTABLE (5/5, avg 560ms, worst=1998ms)
+  15:10:04 - r2-media UNSTABLE (5/5, avg 593ms, worst=2272ms)
+  15:20:06 - r2-media UNSTABLE (5/5, avg 1076ms, worst=3320ms)
+  15:35:04 - r2-media UNSTABLE (5/5, avg 686ms, worst=2653ms)
+  19:35:04 - r2-media UNSTABLE (5/5, avg 539ms, worst=1806ms)
+  19:40:04 - r2-media UNSTABLE (5/5, avg 671ms, worst=2581ms)
+  19:45:23 - video-media UNSTABLE (4/5, avg 241ms, samples=238,269,187,FAIL,270)
+  19:50:04 - r2-media UNSTABLE (5/5, avg 778ms, worst=3006ms)
+  20:00:03 - r2-media UNSTABLE (5/5, avg 528ms, worst=1857ms)
+  20:20:04 - r2-media UNSTABLE (5/5, avg 817ms, worst=2779ms)
+  20:25:03 - r2-media UNSTABLE (5/5, avg 579ms, worst=1952ms)
+  20:30:04 - r2-media UNSTABLE (5/5, avg 623ms, worst=1851ms)
+  20:40:03 - r2-media UNSTABLE (5/5, avg 580ms, worst=1882ms)
+  20:50:05 - r2-media UNSTABLE (5/5, avg 823ms, worst=3273ms)
+  20:50:18 - video-media UNSTABLE (5/5, avg 2544ms, samples=342,249,11567,259,307)
+  21:10:11 - r2-media UNSTABLE (5/5, avg 2078ms, worst=6333ms)
+  21:20:05 - r2-media UNSTABLE (5/5, avg 827ms, worst=2657ms)
+  21:30:05 - r2-media UNSTABLE (5/5, avg 899ms, worst=3044ms)
+  21:35:07 - r2-media UNSTABLE (5/5, avg 1241ms, worst=3989ms)
+  21:45:04 - r2-media UNSTABLE (5/5, avg 604ms, worst=1637ms)
+  21:50:03 - r2-media UNSTABLE (5/5, avg 633ms, worst=2345ms)
+  22:05:04 - r2-media UNSTABLE (5/5, avg 678ms, worst=1539ms)
+  22:10:07 - r2-media UNSTABLE (5/5, avg 1265ms, worst=2316ms)
+  22:15:04 - r2-media UNSTABLE (5/5, avg 784ms, worst=2183ms)
+  22:20:11 - r2-media UNSTABLE (5/5, avg 1892ms, worst=6097ms)
+  22:25:07 - r2-media UNSTABLE (5/5, avg 1323ms, worst=6015ms)
+  22:40:08 - r2-media UNSTABLE (5/5, avg 1408ms, worst=3544ms)
+  22:45:07 - r2-media UNSTABLE (5/5, avg 1259ms, worst=4721ms)
+  22:50:15 - r2-media UNSTABLE (5/5, avg 2980ms, worst=13829ms)
+  22:55:07 - r2-media UNSTABLE (5/5, avg 1380ms, worst=4833ms)
+  23:00:11 - r2-media UNSTABLE (5/5, avg 2142ms, worst=8772ms)
+  23:00:28 - video-media UNSTABLE (5/5, avg 3371ms, samples=244,348,233,12551,3480)
+  23:05:25 - r2-media UNSTABLE (4/5, avg 1202ms, worst=2288ms)
+  23:15:08 - r2-media UNSTABLE (5/5, avg 1593ms, worst=7185ms)
+  23:20:11 - r2-media UNSTABLE (5/5, avg 2279ms, worst=4140ms)
+  23:25:04 - r2-media UNSTABLE (5/5, avg 682ms, worst=2610ms)
+  23:30:05 - r2-media UNSTABLE (5/5, avg 957ms, worst=2825ms)
+  23:35:05 - r2-media UNSTABLE (5/5, avg 839ms, worst=2768ms)
+  23:45:03 - r2-media UNSTABLE (5/5, avg 507ms, worst=1738ms)
+
+==========================================
+Generated: 2026-08-17 23:57:03
