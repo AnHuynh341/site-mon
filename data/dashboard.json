@@ -1,30 +1,30 @@
 {
-  "generated": "2026-08-17T11:00:01+07:00",
-  "published": "2026-08-17T11:00:07.815582+07:00",
-  "analyticsGenerated": "2026-08-17T11:00:02.658449+07:00",
+  "generated": "2026-08-17T11:05:01+07:00",
+  "published": "2026-08-17T11:05:06.838964+07:00",
+  "analyticsGenerated": "2026-08-17T11:05:02.209607+07:00",
   "sourceFallback": {
     "analytics": false
   },
   "latest": {
     "frontend": {
       "status": "UP",
-      "ms": 265
+      "ms": 23
     },
     "database": {
       "status": "UP",
-      "ms": 330
+      "ms": 183
     },
     "storage": {
       "status": "UP",
-      "ms": 108,
-      "worst": 196,
+      "ms": 73,
+      "worst": 80,
       "successfulSamples": 5,
       "totalSamples": 5
     },
     "video": {
       "status": "UP",
-      "ms": 78,
-      "worst": 176,
+      "ms": 108,
+      "worst": 151,
       "successfulSamples": 5,
       "totalSamples": 5
     },
@@ -150,29 +150,29 @@
       "11:00"
     ],
     "values": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
+      2004,
+      1620,
+      2476,
+      1202,
+      1272,
+      1170,
+      1039,
+      1539,
+      1784,
+      8291,
+      2571,
+      2341,
+      1352,
+      1161,
+      1196,
+      769,
+      1224,
+      1270,
+      1231,
+      1141,
+      1734,
+      1454,
+      4518,
       null
     ]
   },
@@ -465,7 +465,10 @@
       "10:45",
       "10:50",
       "10:55",
-      "11:00"
+      "11:00",
+      "11:01",
+      "11:03",
+      "11:05"
     ],
     "average": [
       129,
@@ -755,7 +758,10 @@
       130,
       188,
       92,
-      108
+      108,
+      78,
+      149,
+      73
     ],
     "worst": [
       161,
@@ -1045,52 +1051,54 @@
       252,
       444,
       101,
-      196
+      196,
+      84,
+      436,
+      80
     ]
   },
   "samples": [
     {
       "name": "Sample 1",
-      "ms": 196
+      "ms": 80
     },
     {
       "name": "Sample 2",
-      "ms": 96
+      "ms": 64
     },
     {
       "name": "Sample 3",
-      "ms": 74
+      "ms": 78
     },
     {
       "name": "Sample 4",
-      "ms": 94
+      "ms": 73
     },
     {
       "name": "Sample 5",
-      "ms": 83
+      "ms": 70
     }
   ],
   "audioProbeHealth": {
-    "good": 1253,
+    "good": 1268,
     "slow": 124,
     "unstable": 63,
-    "total": 1440,
-    "averageMs": 353,
+    "total": 1455,
+    "averageMs": 350,
     "goodThroughMs": 500,
     "unstableAboveMs": 1500
   },
   "videoProbeHealth": {
-    "good": 1316,
+    "good": 1325,
     "slow": 41,
-    "unstable": 88,
-    "total": 1445,
-    "averageMs": 318,
+    "unstable": 89,
+    "total": 1455,
+    "averageMs": 317,
     "goodThroughMs": 500,
     "unstableAboveMs": 1500
   },
   "videoHistory": {
     "labels": [
-      "11:00",
       "11:05",
       "11:10",
       "11:15",
@@ -1378,10 +1386,12 @@
       "10:45",
       "10:50",
       "10:55",
-      "11:00"
+      "11:00",
+      "11:02",
+      "11:03",
+      "11:05"
     ],
     "average": [
-      83,
       70,
       102,
       75,
@@ -1669,10 +1679,12 @@
       66,
       60,
       53,
-      78
+      78,
+      280,
+      153,
+      108
     ],
     "worst": [
-      200,
       149,
       230,
       147,
@@ -1960,29 +1972,32 @@
       87,
       73,
       70,
-      176
+      176,
+      426,
+      268,
+      151
     ]
   },
   "videoSamples": [
     {
       "name": "Sample 1",
-      "ms": 176
+      "ms": 95
     },
     {
       "name": "Sample 2",
-      "ms": 65
+      "ms": 109
     },
     {
       "name": "Sample 3",
-      "ms": 40
+      "ms": 93
     },
     {
       "name": "Sample 4",
-      "ms": 51
+      "ms": 151
     },
     {
       "name": "Sample 5",
-      "ms": 61
+      "ms": 95
     }
   ]
 }
