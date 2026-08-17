@@ -130,6 +130,164 @@ function statusColor(status) {
 }
 
 
+function combinedStorageHealth(
+  audio,
+  video
+) {
+  const audioHealth =
+    audio && typeof audio === "object"
+      ? audio
+      : {};
+
+  const videoHealth =
+    video && typeof video === "object"
+      ? video
+      : {};
+
+  /*
+   * video-r2-info.py may already have combined the payload.
+   * In that case, use it directly instead of combining twice.
+   */
+  if (audioHealth.combined === true) {
+    return audioHealth;
+  }
+
+  const audioMs =
+    Number.isFinite(audioHealth.ms)
+      ? audioHealth.ms
+      : null;
+
+  const videoMs =
+    Number.isFinite(videoHealth.ms)
+      ? videoHealth.ms
+      : null;
+
+  const audioSuccess =
+    Number.isFinite(audioHealth.successfulSamples)
+      ? audioHealth.successfulSamples
+      : (audioMs !== null ? 1 : 0);
+
+  const videoSuccess =
+    Number.isFinite(videoHealth.successfulSamples)
+      ? videoHealth.successfulSamples
+      : (videoMs !== null ? 1 : 0);
+
+  const audioTotal =
+    Number.isFinite(audioHealth.totalSamples)
+      ? audioHealth.totalSamples
+      : audioSuccess;
+
+  const videoTotal =
+    Number.isFinite(videoHealth.totalSamples)
+      ? videoHealth.totalSamples
+      : videoSuccess;
+
+  let weightedSum = 0;
+  let weightedCount = 0;
+
+  if (
+    audioMs !== null &&
+    audioSuccess > 0
+  ) {
+    weightedSum +=
+      audioMs * audioSuccess;
+    weightedCount +=
+      audioSuccess;
+  }
+
+  if (
+    videoMs !== null &&
+    videoSuccess > 0
+  ) {
+    weightedSum +=
+      videoMs * videoSuccess;
+    weightedCount +=
+      videoSuccess;
+  }
+
+  const combinedMs =
+    weightedCount > 0
+      ? Math.round(
+          weightedSum /
+          weightedCount
+        )
+      : null;
+
+  const totalSuccess =
+    audioSuccess +
+    videoSuccess;
+
+  const totalSamples =
+    audioTotal +
+    videoTotal;
+
+  const audioStatus =
+    String(
+      audioHealth.status ??
+      "UNKNOWN"
+    ).toUpperCase();
+
+  const videoStatus =
+    String(
+      videoHealth.status ??
+      "UNKNOWN"
+    ).toUpperCase();
+
+  let status;
+
+  if (totalSuccess === 0) {
+    status = "DOWN";
+  }
+
+  else if (
+    totalSamples > 0 &&
+    totalSuccess < totalSamples
+  ) {
+    status = "UNSTABLE";
+  }
+
+  else if (
+    audioStatus === "UP" &&
+    videoStatus === "UP"
+  ) {
+    status = "UP";
+  }
+
+  else if (
+    audioStatus === "DOWN" &&
+    videoStatus === "DOWN"
+  ) {
+    status = "DOWN";
+  }
+
+  else {
+    status = "UNSTABLE";
+  }
+
+  const worstValues = [
+    audioHealth.worst,
+    videoHealth.worst
+  ].filter(Number.isFinite);
+
+  return {
+    status,
+    ms: combinedMs,
+    worst:
+      worstValues.length
+        ? Math.max(...worstValues)
+        : null,
+    successfulSamples:
+      totalSuccess,
+    totalSamples,
+    audioMs,
+    videoMs,
+    audioStatus,
+    videoStatus,
+    combined: true
+  };
+}
+
+
 function selectedVisitValues(visits) {
   const values =
     excludeBots
@@ -833,14 +991,6 @@ function updateSampleBars(
 
 
       if (valid) {
-        /*
-         * Fastest sample:
-         * green
-         *
-         * Slowest sample:
-         * red
-         */
-
         const ratio =
           range === 0
             ? 0
@@ -859,12 +1009,6 @@ function updateSampleBars(
         color =
           `hsl(${hue}, 78%, 50%)`;
 
-
-        /*
-         * Bar length is latency
-         * relative to current
-         * slowest sample.
-         */
 
         width =
           Math.max(
@@ -959,13 +1103,6 @@ function updateFreshness(
       : Infinity;
 
 
-  /*
-   * If health data hasn't updated
-   * for ten minutes, something in
-   * the monitoring pipeline is
-   * probably dead.
-   */
-
   if (
     age >
     STALE_AFTER_MS
@@ -1049,8 +1186,6 @@ function updateCharts(
     data.videoProbeHealth ?? {};
 
 
-  /* ---------------- Visits ---------------- */
-
   visitsChart.data.labels =
     Array.isArray(
       visits.labels
@@ -1080,8 +1215,6 @@ function updateCharts(
   visitsChart.update();
 
 
-  /* ---------------- Page load ---------------- */
-
   pageLoadChart.data.labels =
     Array.isArray(
       pageLoad.labels
@@ -1103,8 +1236,6 @@ function updateCharts(
 
   pageLoadChart.update();
 
-
-  /* ---------------- R2 history ---------------- */
 
   const r2Labels =
     Array.isArray(
@@ -1143,8 +1274,6 @@ function updateCharts(
   r2Chart.update();
 
 
-  /* ---------------- Video delivery ---------------- */
-
   const videoLabels =
     Array.isArray(
       videoHistory.labels
@@ -1177,8 +1306,6 @@ function updateCharts(
 
   videoFetchChart.update();
 
-
-  /* ---------------- Probe health ---------------- */
 
   updateProbeHealth(
     audioProbeHealthChart,
@@ -1223,13 +1350,25 @@ function updateNumbers(
   const pageLoad =
     analytics.pageLoad;
 
-  const r2Average =
-    latest.storage?.ms;
+  const storageHealth =
+    combinedStorageHealth(
+      latest.storage,
+      latest.video
+    );
+
+  /*
+   * Keep the Audio Delivery panel strictly audio-only even when
+   * video-r2-info.py has already combined latest.storage.
+   */
+  const audioAverage =
+    Number.isFinite(
+      latest.storage?.audioMs
+    )
+      ? latest.storage.audioMs
+      : latest.storage?.ms;
 
   const videoFetch =
     latest.video?.ms;
-
-  /* ---------------- Main panels ---------------- */
 
   setText(
     "visits-today",
@@ -1256,8 +1395,8 @@ function updateNumbers(
   setText(
     "audio-response-now",
 
-    Number.isFinite(r2Average)
-      ? Math.round(r2Average)
+    Number.isFinite(audioAverage)
+      ? Math.round(audioAverage)
       : "—"
   );
 
@@ -1270,8 +1409,6 @@ function updateNumbers(
       : "—"
   );
 
-
-  /* ---------------- Storage summary ---------------- */
 
   setText(
     "stored-data",
@@ -1313,8 +1450,6 @@ function updateNumbers(
   );
 
 
-  /* ---------------- Bottom summary ---------------- */
-
   setText(
     "summary-visits",
 
@@ -1337,12 +1472,10 @@ function updateNumbers(
     "summary-r2",
 
     formatMs(
-      r2Average
+      storageHealth.ms
     )
   );
 
-
-  /* ---------------- Service health ---------------- */
 
   applyHealth(
     "frontend",
@@ -1358,7 +1491,7 @@ function updateNumbers(
 
   applyHealth(
     "storage",
-    latest.storage
+    storageHealth
   );
 }
 
@@ -1415,12 +1548,6 @@ function applyDashboard(
 ============================================================ */
 
 async function fetchDashboard() {
-  /*
-   * Cache-buster + no-store:
-   * we always want the newest R2
-   * dashboard object.
-   */
-
   const url =
     `${DASHBOARD_URL}?t=${Date.now()}`;
 
@@ -1524,35 +1651,12 @@ function init() {
 
   updateBotFilterControl();
 
-
-  /*
-   * Fetch immediately when the
-   * page opens.
-   */
-
   fetchDashboard();
-
-
-  /*
-   * Backend updates every five
-   * minutes.
-   *
-   * Frontend checks every minute,
-   * so a new backend update should
-   * appear within ~60 seconds.
-   */
 
   setInterval(
     fetchDashboard,
     REFRESH_MS
   );
-
-
-  /*
-   * Refresh the "x minutes ago"
-   * display without downloading
-   * anything.
-   */
 
   setInterval(
     () => {
