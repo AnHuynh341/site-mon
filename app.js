@@ -53,6 +53,28 @@ function formatNumber(value) {
 }
 
 
+function averageFinite(values) {
+  if (!Array.isArray(values)) {
+    return null;
+  }
+
+  const usable =
+    values.filter(Number.isFinite);
+
+  if (!usable.length) {
+    return null;
+  }
+
+  return (
+    usable.reduce(
+      (sum, value) => sum + value,
+      0
+    ) /
+    usable.length
+  );
+}
+
+
 function parseTimestamp(value) {
   if (!value) {
     return null;
@@ -144,10 +166,6 @@ function combinedStorageHealth(
       ? video
       : {};
 
-  /*
-   * video-r2-info.py may already have combined the payload.
-   * In that case, use it directly instead of combining twice.
-   */
   if (audioHealth.combined === true) {
     return audioHealth;
   }
@@ -450,10 +468,6 @@ function buildVisitsChart() {
   const options =
     chartOptions();
 
-  /*
-   * You cannot have
-   * 0.5 of a visit.
-   */
   options.scales.y.ticks.stepSize = 1;
   options.scales.y.ticks.precision = 0;
 
@@ -515,6 +529,17 @@ function buildPageLoadChart() {
     value =>
       `${value}ms`;
 
+  options.plugins.tooltip.callbacks = {
+    label(context) {
+      const value =
+        context.parsed?.y;
+
+      return Number.isFinite(value)
+        ? `Page load: ${formatMs(value)}`
+        : "Page load: —";
+    }
+  };
+
   pageLoadChart =
     new Chart(
       document.getElementById(
@@ -530,7 +555,7 @@ function buildPageLoadChart() {
           datasets: [
             {
               label:
-                "Average page load",
+                "Page load",
 
               data: [],
 
@@ -1347,8 +1372,20 @@ function updateNumbers(
       analytics
     );
 
+  /*
+   * The panel title says "Average page load — 24h", so its
+   * headline value must use the same rolling 24-hour points as
+   * the chart below it. Ignore null/missing hours.
+   */
+  const pageLoad24h =
+    averageFinite(
+      data.pageLoad?.values
+    );
+
   const pageLoad =
-    analytics.pageLoad;
+    Number.isFinite(pageLoad24h)
+      ? pageLoad24h
+      : analytics.pageLoad;
 
   const storageHealth =
     combinedStorageHealth(
@@ -1356,10 +1393,6 @@ function updateNumbers(
       latest.video
     );
 
-  /*
-   * Keep the Audio Delivery panel strictly audio-only even when
-   * video-r2-info.py has already combined latest.storage.
-   */
   const audioAverage =
     Number.isFinite(
       latest.storage?.audioMs
