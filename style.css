@@ -862,6 +862,8 @@ body {
 
   align-self: end;
 
+  min-width: 0;
+
 }
 
 
@@ -869,11 +871,16 @@ body {
 
   display: grid;
 
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    max-content;
 
   align-items: center;
 
   gap: 7px;
+
+  min-width: 0;
 
   color: var(--muted);
 
@@ -889,6 +896,14 @@ body {
   font-weight: 650;
 
   font-variant-numeric: tabular-nums;
+
+  justify-self: end;
+
+  text-align: right;
+
+  white-space: nowrap;
+
+  min-width: 4ch;
 
 }
 
