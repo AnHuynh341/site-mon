@@ -13,8 +13,19 @@ from zoneinfo import ZoneInfo
 import boto3
 
 BASE = Path.home() / "repos" / "site-mon"
-CONFIG = Path.home() / ".config/mediser-monitor/config.env"
+CONFIG = Path.home() / ".config" / "mediser-monitor" / "config.env"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
+
+AUDIO_EXTENSIONS = {
+    ".flac",
+    ".mp3",
+    ".m4a",
+    ".aac",
+    ".ogg",
+    ".opus",
+    ".wav",
+    ".webm",
+}
 
 
 def load_env():
@@ -41,36 +52,113 @@ def int_env(name, default):
         raise RuntimeError(f"Invalid {name}") from exc
 
 
-def env_urls(prefix):
+def first_env_url(prefix):
+    for i in range(1, 6):
+        value = os.environ.get(f"{prefix}_{i}", "").strip()
+        if value:
+            return value
+    return ""
+
+
+def origin_from_url(url):
+    parts = urlsplit(url)
+    if not parts.scheme or not parts.netloc:
+        return ""
+    return f"{parts.scheme}://{parts.netloc}"
+
+
+def rclone_keys(remote):
+    """Return every object key in an R2 bucket through the existing rclone remote."""
+    result = subprocess.run(
+        [
+            "rclone",
+            "lsjson",
+            remote.rstrip("/"),
+            "--recursive",
+            "--files-only",
+        ],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+
+    if result.returncode != 0:
+        error = (
+            result.stderr.strip()
+            or result.stdout.strip()
+            or "rclone lsjson failed"
+        )
+        raise RuntimeError(f"R2 inventory scan failed for {remote}: {error}")
+
+    try:
+        entries = json.loads(result.stdout or "[]")
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"R2 inventory scan returned invalid JSON for {remote}") from exc
+
+    keys = []
+    for entry in entries:
+        key = str(entry.get("Path") or entry.get("Name") or "").strip("/")
+        if key:
+            keys.append(key)
+
+    return sorted(set(keys))
+
+
+def build_public_urls(keys, base_url):
+    base = base_url.rstrip("/")
     return [
-        value
-        for i in range(1, 6)
-        if (value := os.environ.get(f"{prefix}_{i}", "").strip())
+        f"{base}/{quote(key, safe='/')}"
+        for key in keys
     ]
 
 
 def video_urls():
-    configured = env_urls("VIDEO_R2_TEST_URL")
-    if configured:
-        return configured
-
-    root = Path(os.environ.get("VIDEO_MEDIA_ROOT", "/srv/media"))
+    """Build the throughput candidate pool from every real video object in R2."""
+    remote = os.environ.get(
+        "VIDEO_R2_REMOTE",
+        "r2:w41it-video",
+    )
     base_url = os.environ.get(
         "VIDEO_R2_BASE_URL",
         "https://w41it-video-r2.meochon341.workers.dev",
-    ).rstrip("/")
+    )
 
-    if not root.is_dir():
-        return []
+    keys = [
+        key
+        for key in rclone_keys(remote)
+        if key == "video.mp4" or key.endswith("/video.mp4")
+    ]
 
-    return sorted({
-        f"{base_url}/{quote(path.relative_to(root).as_posix(), safe='/')}"
-        for path in root.rglob("video.mp4")
-    })
+    return build_public_urls(keys, base_url)
 
 
 def audio_urls():
-    return env_urls("AUDIO_THROUGHPUT_URL") or env_urls("R2_TEST_URL")
+    """Build the throughput candidate pool from every real audio object in R2."""
+    bucket = required("R2_BUCKET")
+    remote = os.environ.get(
+        "AUDIO_R2_REMOTE",
+        f"r2:{bucket}",
+    )
+
+    base_url = os.environ.get("AUDIO_R2_BASE_URL", "").strip()
+    if not base_url:
+        # The fixed latency probe already contains a known-good public R2 URL.
+        # Reuse only its origin; throughput candidates themselves come from the
+        # full bucket inventory, not from the fixed five-file test pool.
+        base_url = origin_from_url(first_env_url("R2_TEST_URL"))
+
+    if not base_url:
+        raise RuntimeError(
+            "Missing AUDIO_R2_BASE_URL and unable to infer it from R2_TEST_URL_1..5"
+        )
+
+    keys = [
+        key
+        for key in rclone_keys(remote)
+        if Path(key).suffix.lower() in AUDIO_EXTENSIONS
+    ]
+
+    return build_public_urls(keys, base_url)
 
 
 def with_probe_query(url, value):
@@ -224,7 +312,7 @@ def main(kind):
         defaults = (1 * 1024**2, 2, 60, 512 * 1024, 128 * 1024)
 
     if not urls:
-        raise RuntimeError(f"No {kind} URLs available")
+        raise RuntimeError(f"No {kind} media objects available in R2")
 
     prefix = kind.upper()
     range_bytes = int_env(f"{prefix}_THROUGHPUT_RANGE_BYTES", defaults[0])
@@ -236,6 +324,8 @@ def main(kind):
     good_bps = int_env(f"{prefix}_THROUGHPUT_GOOD_BPS", defaults[3])
     slow_bps = int_env(f"{prefix}_THROUGHPUT_SLOW_BPS", defaults[4])
 
+    # Deterministic within each half-hour slot: retries test the same files,
+    # while the next :00/:30 slot gets a new pair from the entire R2 library.
     chosen = random.Random(
         f"{kind}:{slot.isoformat()}"
     ).sample(sorted(set(urls)), count)
@@ -281,6 +371,7 @@ def main(kind):
             sum(sample["durationMs"] for sample in samples) / len(samples)
         ),
         "sampleCount": len(samples),
+        "candidateCount": len(urls),
         "samples": samples,
     }
 
@@ -293,6 +384,8 @@ def main(kind):
         "config": {
             "rangeBytes": range_bytes,
             "sampleCount": count,
+            "candidateCount": len(urls),
+            "source": "full-r2-inventory",
             "maxSeconds": timeout,
             "goodAtOrAboveBps": good_bps,
             "slowAtOrAboveBps": slow_bps,
@@ -305,7 +398,7 @@ def main(kind):
     print(
         f"{kind.capitalize()} throughput: {latest['status']}; "
         f"average {latest['avgMibps']:.3f} MiB/s across "
-        f"{len(samples)} samples"
+        f"{len(samples)} samples chosen from {len(urls)} R2 objects"
     )
     return 0
 
