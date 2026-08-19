@@ -253,20 +253,33 @@ def main(kind):
             enumerate(chosen, 1),
         ))
 
-    rank = {"GOOD": 0, "SLOW": 1, "UNSTABLE": 2}
-    worst_status = max(samples, key=lambda x: rank[x["status"]])["status"]
-    speeds = [sample["mibps"] for sample in samples]
+    average_bps = round(
+        sum(sample["bytesPerSecond"] for sample in samples) / len(samples)
+    )
+    average_mibps = round(average_bps / 1024**2, 3)
+
+    if average_bps >= good_bps:
+        average_status = "GOOD"
+    elif average_bps >= slow_bps:
+        average_status = "SLOW"
+    else:
+        average_status = "UNSTABLE"
+
     latest = {
         "stamp": now.isoformat(),
         "slot": slot.isoformat(),
         "label": slot.strftime("%H:%M"),
         "kind": kind,
-        "status": worst_status,
-        "mibps": round(min(speeds), 3),
-        "avgMibps": round(sum(speeds) / len(speeds), 3),
-        "mbps": round(min(speeds) * 1024**2 * 8 / 1_000_000, 2),
-        "ttfbMs": max(sample["ttfbMs"] for sample in samples),
-        "durationMs": max(sample["durationMs"] for sample in samples),
+        "status": average_status,
+        "mibps": average_mibps,
+        "avgMibps": average_mibps,
+        "mbps": round(average_bps * 8 / 1_000_000, 2),
+        "ttfbMs": round(
+            sum(sample["ttfbMs"] for sample in samples) / len(samples)
+        ),
+        "durationMs": round(
+            sum(sample["durationMs"] for sample in samples) / len(samples)
+        ),
         "sampleCount": len(samples),
         "samples": samples,
     }
@@ -291,8 +304,7 @@ def main(kind):
 
     print(
         f"{kind.capitalize()} throughput: {latest['status']}; "
-        f"worst {latest['mibps']:.3f} MiB/s; "
-        f"average {latest['avgMibps']:.3f} MiB/s; "
+        f"average {latest['avgMibps']:.3f} MiB/s across "
         f"{len(samples)} samples"
     )
     return 0
