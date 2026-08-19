@@ -253,9 +253,44 @@ function fetchAllThroughput() {
 }
 
 
+async function installRepoVersion() {
+  const footerSpans = document.querySelectorAll(".footer > span");
+
+  if (!footerSpans.length) {
+    return;
+  }
+
+  footerSpans[0].textContent = "W41IT Monitor";
+
+  const versionTarget = footerSpans[footerSpans.length - 1];
+  versionTarget.textContent = "Version —";
+
+  try {
+    const response = await fetch("./version.json", {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const version = String(payload?.version ?? "").trim();
+
+    if (version) {
+      versionTarget.textContent = `Version ${version}`;
+    }
+  }
+  catch (error) {
+    console.error("W41IT version metadata refresh failed:", error);
+  }
+}
+
+
 for (const target of THROUGHPUT_TARGETS) {
   installThroughputUi(target);
 }
 
+installRepoVersion();
 setTimeout(fetchAllThroughput, 1500);
 setInterval(fetchAllThroughput, THROUGHPUT_REFRESH_MS);
