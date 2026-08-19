@@ -67,8 +67,18 @@ def origin_from_url(url):
     return f"{parts.scheme}://{parts.netloc}"
 
 
+def make_r2_client():
+    return boto3.client(
+        "s3",
+        endpoint_url=required("R2_ENDPOINT"),
+        aws_access_key_id=required("R2_ACCESS_KEY_ID"),
+        aws_secret_access_key=required("R2_SECRET_ACCESS_KEY"),
+        region_name="auto",
+    )
+
+
 def rclone_keys(remote):
-    """Return every object key in an R2 bucket through the existing rclone remote."""
+    """Return every object key available through an existing rclone remote."""
     result = subprocess.run(
         [
             "rclone",
@@ -104,6 +114,26 @@ def rclone_keys(remote):
     return sorted(set(keys))
 
 
+def bucket_keys(bucket):
+    """Return every object key in the main R2 bucket using its API credentials."""
+    client = make_r2_client()
+    paginator = client.get_paginator("list_objects_v2")
+    keys = []
+
+    try:
+        for page in paginator.paginate(Bucket=bucket):
+            for entry in page.get("Contents", []):
+                key = str(entry.get("Key") or "").strip("/")
+                if key:
+                    keys.append(key)
+    except Exception as exc:
+        raise RuntimeError(
+            f"R2 API inventory scan failed for bucket {bucket}: {exc}"
+        ) from exc
+
+    return sorted(set(keys))
+
+
 def build_public_urls(keys, base_url):
     base = base_url.rstrip("/")
     return [
@@ -135,10 +165,6 @@ def video_urls():
 def audio_urls():
     """Build the throughput candidate pool from every real audio object in R2."""
     bucket = required("R2_BUCKET")
-    remote = os.environ.get(
-        "AUDIO_R2_REMOTE",
-        f"r2:{bucket}",
-    )
 
     base_url = os.environ.get("AUDIO_R2_BASE_URL", "").strip()
     if not base_url:
@@ -152,9 +178,12 @@ def audio_urls():
             "Missing AUDIO_R2_BASE_URL and unable to infer it from R2_TEST_URL_1..5"
         )
 
+    # The main audio bucket is already accessed by site-mon through the boto3
+    # credentials in config.env. Do not assume the separate rclone remote used
+    # for the video bucket also has permission to list this bucket.
     keys = [
         key
-        for key in rclone_keys(remote)
+        for key in bucket_keys(bucket)
         if Path(key).suffix.lower() in AUDIO_EXTENSIONS
     ]
 
@@ -272,13 +301,7 @@ def publish(kind, payload):
     tmp.write_text(text, encoding="utf-8")
     tmp.replace(out)
 
-    client = boto3.client(
-        "s3",
-        endpoint_url=required("R2_ENDPOINT"),
-        aws_access_key_id=required("R2_ACCESS_KEY_ID"),
-        aws_secret_access_key=required("R2_SECRET_ACCESS_KEY"),
-        region_name="auto",
-    )
+    client = make_r2_client()
     key = os.environ.get(
         f"R2_{kind.upper()}_THROUGHPUT_KEY",
         f"site-monitor/live/{kind}-throughput.json",
