@@ -68,10 +68,71 @@ function installThroughputUi(target) {
 }
 
 
+function installSplitTooltipMode() {
+  const modes = Chart?.Interaction?.modes;
+
+  if (!modes || modes.w41itDeliverySplit) {
+    return;
+  }
+
+  modes.w41itDeliverySplit = function(
+    chart,
+    event,
+    options,
+    useFinalPosition
+  ) {
+    // Throughput is intentionally sparse. Only open its tooltip when the
+    // pointer is actually over one of the visible green sample points.
+    const pointHits = modes.point(
+      chart,
+      event,
+      {
+        ...options,
+        axis: "xy",
+        intersect: true
+      },
+      useFinalPosition
+    ).filter(item =>
+      chart.data.datasets[item.datasetIndex]?.w41itThroughput === true
+    );
+
+    if (pointHits.length) {
+      return [pointHits[0]];
+    }
+
+    // Everywhere else preserve the original latency behaviour: one tooltip
+    // at the nearest time index containing Average + Worst together.
+    return modes.index(
+      chart,
+      event,
+      {
+        ...options,
+        axis: "x",
+        intersect: false
+      },
+      useFinalPosition
+    ).filter(item =>
+      chart.data.datasets[item.datasetIndex]?.w41itThroughput !== true
+    );
+  };
+}
+
+
+function tooltipHasThroughput(context) {
+  return Boolean(
+    context?.tooltip?.dataPoints?.some(
+      item => item.dataset?.w41itThroughput === true
+    )
+  );
+}
+
+
 function ensureThroughputDataset(chart) {
   if (!chart) {
     return null;
   }
+
+  installSplitTooltipMode();
 
   chart.options.scales.yThroughput = {
     type: "linear",
@@ -101,6 +162,7 @@ function ensureThroughputDataset(chart) {
       borderWidth: 2,
       pointRadius: 2,
       pointHoverRadius: 6,
+      pointHitRadius: 12,
       tension: 0.25,
       spanGaps: true,
       w41itThroughput: true
@@ -108,7 +170,25 @@ function ensureThroughputDataset(chart) {
     chart.data.datasets.push(dataset);
   }
 
+  // Keep the latency tooltip working exactly as before, but give each green
+  // throughput point its own single-series tooltip instead of mixing units.
+  chart.options.plugins.tooltip.mode = "w41itDeliverySplit";
+  chart.options.plugins.tooltip.intersect = false;
+  chart.options.plugins.tooltip.position = "nearest";
+  chart.options.plugins.tooltip.borderColor = context =>
+    tooltipHasThroughput(context)
+      ? throughputCssVar("--green")
+      : "rgba(255,255,255,.72)";
   chart.options.plugins.tooltip.callbacks = {
+    title(items) {
+      const first = items[0];
+      const label = first?.label ?? "";
+
+      return first?.dataset?.w41itThroughput === true
+        ? `Throughput · ${label}`
+        : label;
+    },
+
     label(context) {
       const value = context.parsed?.y;
 
