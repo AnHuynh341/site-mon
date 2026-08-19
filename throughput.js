@@ -253,7 +253,7 @@ function fetchAllThroughput() {
 }
 
 
-async function installRepoVersion() {
+async function installRepoBuild() {
   const footerSpans = document.querySelectorAll(".footer > span");
 
   if (!footerSpans.length) {
@@ -262,27 +262,55 @@ async function installRepoVersion() {
 
   footerSpans[0].textContent = "W41IT Monitor";
 
-  const versionTarget = footerSpans[footerSpans.length - 1];
-  versionTarget.textContent = "Version —";
+  const buildTarget = footerSpans[footerSpans.length - 1];
+  buildTarget.textContent = "Build —";
 
   try {
-    const response = await fetch("./version.json", {
-      cache: "no-store"
-    });
+    const response = await fetch(
+      "https://api.github.com/repos/AnHuynh341/site-mon/commits/main",
+      {
+        cache: "no-store",
+        headers: {
+          Accept: "application/vnd.github+json"
+        }
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
     const payload = await response.json();
-    const version = String(payload?.version ?? "").trim();
+    const sha = String(payload?.sha ?? "").trim();
+    const committedAt =
+      payload?.commit?.committer?.date ??
+      payload?.commit?.author?.date;
 
-    if (version) {
-      versionTarget.textContent = `Version ${version}`;
+    if (!sha || !committedAt) {
+      throw new Error("Missing commit metadata");
     }
+
+    const date = new Date(committedAt);
+
+    if (Number.isNaN(date.getTime())) {
+      throw new Error("Invalid commit date");
+    }
+
+    const formattedDate = new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        timeZone: "Asia/Ho_Chi_Minh"
+      }
+    ).format(date);
+
+    buildTarget.textContent =
+      `Build ${sha.slice(0, 7)} · ${formattedDate}`;
   }
   catch (error) {
-    console.error("W41IT version metadata refresh failed:", error);
+    console.error("W41IT build metadata refresh failed:", error);
   }
 }
 
@@ -291,6 +319,6 @@ for (const target of THROUGHPUT_TARGETS) {
   installThroughputUi(target);
 }
 
-installRepoVersion();
+installRepoBuild();
 setTimeout(fetchAllThroughput, 1500);
 setInterval(fetchAllThroughput, THROUGHPUT_REFRESH_MS);
