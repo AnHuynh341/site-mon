@@ -61,7 +61,7 @@ function installThroughputUi(target) {
     metric.id = `${target.kind}-throughput-metric`;
     metric.innerHTML = `
       <strong id="${valueId}">—</strong>
-      <span>MiB/s worst sample</span>
+      <span>MiB/s average</span>
     `;
     meta.appendChild(metric);
   }
@@ -117,7 +117,7 @@ function ensureThroughputDataset(chart) {
       }
 
       if (context.dataset.w41itThroughput === true) {
-        return `Throughput: ${value.toFixed(2)} MiB/s`;
+        return `Average throughput: ${value.toFixed(2)} MiB/s`;
       }
 
       return `${context.dataset.label}: ${Math.round(value)} ms`;
@@ -142,6 +142,19 @@ function throughputStatusColor(status) {
 }
 
 
+function throughputAverage(item) {
+  const average = Number(item?.avgMibps);
+
+  if (Number.isFinite(average)) {
+    return average;
+  }
+
+  // Backward compatibility for older one-sample history entries.
+  const legacy = Number(item?.mibps);
+  return Number.isFinite(legacy) ? legacy : null;
+}
+
+
 function updateThroughputMetric(target, latest) {
   const valueElement = document.getElementById(
     `${target.kind}-throughput-now`
@@ -154,27 +167,20 @@ function updateThroughputMetric(target, latest) {
     return;
   }
 
-  const mibps = Number(latest?.mibps);
-  valueElement.textContent = Number.isFinite(mibps)
-    ? mibps.toFixed(mibps < 1 ? 2 : 1)
+  const average = throughputAverage(latest);
+  valueElement.textContent = Number.isFinite(average)
+    ? average.toFixed(average < 1 ? 2 : 1)
     : "—";
   valueElement.style.color =
     throughputStatusColor(latest?.status);
 
-  const avg = Number(latest?.avgMibps);
-  const mbps = Number(latest?.mbps);
-  const ttfb = Number(latest?.ttfbMs);
-  const duration = Number(latest?.durationMs);
   const count = Number(latest?.sampleCount);
 
   metric.title = [
     String(latest?.status ?? "UNKNOWN").toUpperCase(),
     Number.isFinite(count) ? `${count} sampled files` : null,
-    Number.isFinite(avg) ? `average ${avg.toFixed(2)} MiB/s` : null,
-    Number.isFinite(mbps) ? `worst ${mbps.toFixed(2)} Mbps` : null,
-    Number.isFinite(ttfb) ? `worst TTFB ${Math.round(ttfb)} ms` : null,
-    Number.isFinite(duration)
-      ? `slowest sample ${(duration / 1000).toFixed(1)} s`
+    Number.isFinite(average)
+      ? `${average.toFixed(2)} MiB/s average`
       : null
   ].filter(Boolean).join(" · ");
 }
@@ -185,7 +191,7 @@ function alignThroughputHistory(chart, history) {
 
   for (const item of history) {
     const label = item?.label;
-    const value = Number(item?.mibps);
+    const value = throughputAverage(item);
 
     if (typeof label === "string" && Number.isFinite(value)) {
       byLabel.set(label, value);
