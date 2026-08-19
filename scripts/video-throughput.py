@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-
 import json
 import os
+import random
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
@@ -11,302 +12,295 @@ from zoneinfo import ZoneInfo
 
 import boto3
 
-
 BASE = Path.home() / "repos" / "site-mon"
-CONFIG = Path.home() / ".config" / "mediser-monitor" / "config.env"
-OUT = BASE / "data" / "video-throughput.json"
+CONFIG = Path.home() / ".config/mediser-monitor/config.env"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 
 
-def load_env(path):
-    if not path.exists():
-        raise RuntimeError(f"Missing config file: {path}")
-
-    for raw in path.read_text(encoding="utf-8").splitlines():
+def load_env():
+    for raw in CONFIG.read_text(encoding="utf-8").splitlines():
         line = raw.strip()
-
         if not line or line.startswith("#") or "=" not in line:
             continue
-
         key, value = line.split("=", 1)
-        value = value.strip()
-
-        if (
-            len(value) >= 2
-            and value[0] == value[-1]
-            and value[0] in "\"'"
-        ):
-            value = value[1:-1]
-
+        value = value.strip().strip('"').strip("'")
         os.environ.setdefault(key.strip(), value)
 
 
 def required(name):
     value = os.environ.get(name)
-
     if not value:
         raise RuntimeError(f"Missing config value: {name}")
-
     return value
 
 
-def integer_env(name, default):
-    raw = os.environ.get(name)
-
-    if raw is None:
-        return default
-
+def int_env(name, default):
     try:
-        return int(raw)
+        return int(os.environ.get(name, default))
     except ValueError as exc:
-        raise RuntimeError(f"Invalid integer config value: {name}={raw}") from exc
+        raise RuntimeError(f"Invalid {name}") from exc
 
 
-def discover_video_urls(root, base_url):
+def env_urls(prefix):
+    return [
+        value
+        for i in range(1, 6)
+        if (value := os.environ.get(f"{prefix}_{i}", "").strip())
+    ]
+
+
+def video_urls():
+    configured = env_urls("VIDEO_R2_TEST_URL")
+    if configured:
+        return configured
+
+    root = Path(os.environ.get("VIDEO_MEDIA_ROOT", "/srv/media"))
+    base_url = os.environ.get(
+        "VIDEO_R2_BASE_URL",
+        "https://w41it-video-r2.meochon341.workers.dev",
+    ).rstrip("/")
+
     if not root.is_dir():
         return []
 
-    urls = []
-
-    for path in root.rglob("video.mp4"):
-        try:
-            relative = path.relative_to(root).as_posix()
-        except ValueError:
-            continue
-
-        urls.append(
-            f"{base_url.rstrip('/')}/{quote(relative, safe='/')}"
-        )
-
-    return sorted(set(urls))
+    return sorted({
+        f"{base_url}/{quote(path.relative_to(root).as_posix(), safe='/')}"
+        for path in root.rglob("video.mp4")
+    })
 
 
-def add_probe_query(url, stamp):
+def audio_urls():
+    return env_urls("AUDIO_THROUGHPUT_URL") or env_urls("R2_TEST_URL")
+
+
+def with_probe_query(url, value):
     parts = urlsplit(url)
     query = parse_qsl(parts.query, keep_blank_values=True)
-    query.append(("probe", stamp))
+    query.append(("probe", value))
+    return urlunsplit((
+        parts.scheme,
+        parts.netloc,
+        parts.path,
+        urlencode(query),
+        parts.fragment,
+    ))
 
-    return urlunsplit(
-        (
-            parts.scheme,
-            parts.netloc,
-            parts.path,
-            urlencode(query),
-            parts.fragment,
-        )
+
+def curl_sample(url, token, range_bytes, timeout, good_bps, slow_bps):
+    fmt = (
+        "%{http_code}|%{time_starttransfer}|%{time_total}|"
+        "%{speed_download}|%{size_download}"
     )
-
-
-def choose_url(urls, now):
-    if not urls:
-        raise RuntimeError("No local video.mp4 files available for throughput probe")
-
-    # Rotate through the library so one permanently warm object does not
-    # make the whole delivery path look healthier than it really is.
-    index = (now.toordinal() * 24 + now.hour) % len(urls)
-    return urls[index]
-
-
-def parse_curl_metrics(raw):
-    line = raw.strip().splitlines()[-1] if raw.strip() else ""
-    parts = line.split("|")
-
-    if len(parts) != 5:
-        raise RuntimeError(f"Unexpected curl metrics: {line!r}")
-
-    code, ttfb, total, speed, size = parts
-
-    return {
-        "httpCode": int(code or 0),
-        "ttfbMs": round(float(ttfb or 0) * 1000),
-        "durationMs": round(float(total or 0) * 1000),
-        "bytesPerSecond": round(float(speed or 0)),
-        "bytesDownloaded": round(float(size or 0)),
-    }
-
-
-def classify(metrics, returncode, good_bps, slow_bps):
-    if (
-        metrics["httpCode"] != 206
-        or metrics["bytesDownloaded"] <= 0
-    ):
-        return "UNSTABLE"
-
-    # A timeout is useful evidence even if curl managed to download part of
-    # the sample. Do not let a partial transfer be reported as healthy.
-    if returncode != 0:
-        return "UNSTABLE"
-
-    speed = metrics["bytesPerSecond"]
-
-    if speed >= good_bps:
-        return "GOOD"
-
-    if speed >= slow_bps:
-        return "SLOW"
-
-    return "UNSTABLE"
-
-
-def load_history():
-    if not OUT.exists():
-        return []
+    command = [
+        "curl", "-L", "-sS",
+        "-r", f"0-{range_bytes - 1}",
+        "-o", "/dev/null",
+        "--max-filesize", str(range_bytes * 2),
+        "--max-time", str(timeout),
+        "-w", fmt,
+        with_probe_query(url, token),
+    ]
 
     try:
-        payload = json.loads(OUT.read_text(encoding="utf-8"))
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=timeout + 15,
+        )
+        parts = result.stdout.strip().splitlines()[-1].split("|")
+        code, ttfb, total, speed, size = parts
+        metrics = {
+            "httpCode": int(code or 0),
+            "ttfbMs": round(float(ttfb or 0) * 1000),
+            "durationMs": round(float(total or 0) * 1000),
+            "bytesPerSecond": round(float(speed or 0)),
+            "bytesDownloaded": round(float(size or 0)),
+        }
+        bps = metrics["bytesPerSecond"]
+        if result.returncode != 0 or metrics["httpCode"] != 206:
+            status = "UNSTABLE"
+        elif bps >= good_bps:
+            status = "GOOD"
+        elif bps >= slow_bps:
+            status = "SLOW"
+        else:
+            status = "UNSTABLE"
+        sample = {
+            "status": status,
+            "mibps": round(bps / 1024**2, 3),
+            "mbps": round(bps * 8 / 1_000_000, 2),
+            **metrics,
+            "path": urlsplit(url).path,
+            "curlExit": result.returncode,
+        }
+        if result.stderr.strip():
+            sample["curlError"] = result.stderr.strip()
+        return sample
+    except Exception as exc:
+        return {
+            "status": "UNSTABLE",
+            "mibps": 0.0,
+            "mbps": 0.0,
+            "httpCode": 0,
+            "ttfbMs": 0,
+            "durationMs": timeout * 1000,
+            "bytesPerSecond": 0,
+            "bytesDownloaded": 0,
+            "path": urlsplit(url).path,
+            "curlExit": 124,
+            "curlError": str(exc),
+        }
+
+
+def load_history(path, cutoff, slot):
+    try:
+        history = json.loads(path.read_text(encoding="utf-8")).get("history", [])
     except (OSError, json.JSONDecodeError):
-        return []
+        history = []
 
-    history = payload.get("history", [])
-    return history if isinstance(history, list) else []
-
-
-def trim_history(history, cutoff):
     kept = []
-
     for item in history:
+        if item.get("slot") == slot.isoformat():
+            continue
         try:
             stamp = datetime.fromisoformat(
                 str(item.get("stamp", "")).replace("Z", "+00:00")
             )
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=TZ)
+            if stamp.astimezone(TZ) >= cutoff:
+                kept.append(item)
         except ValueError:
-            continue
-
-        if stamp.tzinfo is None:
-            stamp = stamp.replace(tzinfo=TZ)
-
-        if stamp.astimezone(TZ) >= cutoff:
-            kept.append(item)
-
+            pass
     return kept
 
 
-def make_s3():
-    return boto3.client(
+def publish(kind, payload):
+    text = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+    out = BASE / "data" / f"{kind}-throughput.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out.with_suffix(".json.tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(out)
+
+    client = boto3.client(
         "s3",
         endpoint_url=required("R2_ENDPOINT"),
         aws_access_key_id=required("R2_ACCESS_KEY_ID"),
         aws_secret_access_key=required("R2_SECRET_ACCESS_KEY"),
         region_name="auto",
     )
+    key = os.environ.get(
+        f"R2_{kind.upper()}_THROUGHPUT_KEY",
+        f"site-monitor/live/{kind}-throughput.json",
+    )
+    client.put_object(
+        Bucket=required("R2_BUCKET"),
+        Key=key,
+        Body=text.encode(),
+        ContentType="application/json",
+        CacheControl="no-store",
+    )
 
 
-def main():
-    load_env(CONFIG)
+def main(kind):
+    if kind not in {"audio", "video"}:
+        raise RuntimeError("kind must be audio or video")
 
+    load_env()
     now = datetime.now(TZ)
-    range_bytes = integer_env("VIDEO_THROUGHPUT_RANGE_BYTES", 8 * 1024 * 1024)
-    max_seconds = integer_env("VIDEO_THROUGHPUT_MAX_SECONDS", 120)
-    good_bps = integer_env("VIDEO_THROUGHPUT_GOOD_BPS", 1024 * 1024)
-    slow_bps = integer_env("VIDEO_THROUGHPUT_SLOW_BPS", 256 * 1024)
-
-    root = Path(os.environ.get("VIDEO_MEDIA_ROOT", "/srv/media"))
-    base_url = os.environ.get(
-        "VIDEO_R2_BASE_URL",
-        "https://w41it-video-r2.meochon341.workers.dev",
+    slot = now.replace(
+        minute=0 if now.minute < 30 else 30,
+        second=0,
+        microsecond=0,
     )
 
-    urls = discover_video_urls(root, base_url)
-    clean_url = choose_url(urls, now)
-    probe_url = add_probe_query(clean_url, now.strftime("%Y%m%d%H%M%S"))
+    if kind == "video":
+        urls = video_urls()
+        defaults = (4 * 1024**2, 2, 120, 1024**2, 256 * 1024)
+    else:
+        urls = audio_urls()
+        defaults = (1 * 1024**2, 2, 60, 512 * 1024, 128 * 1024)
 
-    write_out = "%{http_code}|%{time_starttransfer}|%{time_total}|%{speed_download}|%{size_download}"
+    if not urls:
+        raise RuntimeError(f"No {kind} URLs available")
 
-    command = [
-        "curl",
-        "-L",
-        "-sS",
-        "-r",
-        f"0-{range_bytes - 1}",
-        "-o",
-        "/dev/null",
-        "--max-time",
-        str(max_seconds),
-        "-w",
-        write_out,
-        probe_url,
-    ]
-
-    result = subprocess.run(
-        command,
-        capture_output=True,
-        text=True,
-        timeout=max_seconds + 15,
+    prefix = kind.upper()
+    range_bytes = int_env(f"{prefix}_THROUGHPUT_RANGE_BYTES", defaults[0])
+    count = min(
+        int_env(f"{prefix}_THROUGHPUT_SAMPLE_COUNT", defaults[1]),
+        len(urls),
     )
+    timeout = int_env(f"{prefix}_THROUGHPUT_MAX_SECONDS", defaults[2])
+    good_bps = int_env(f"{prefix}_THROUGHPUT_GOOD_BPS", defaults[3])
+    slow_bps = int_env(f"{prefix}_THROUGHPUT_SLOW_BPS", defaults[4])
 
-    metrics = parse_curl_metrics(result.stdout)
-    status = classify(metrics, result.returncode, good_bps, slow_bps)
-    speed_bps = metrics["bytesPerSecond"]
+    chosen = random.Random(
+        f"{kind}:{slot.isoformat()}"
+    ).sample(sorted(set(urls)), count)
 
-    sample = {
+    with ThreadPoolExecutor(max_workers=count) as pool:
+        samples = list(pool.map(
+            lambda pair: curl_sample(
+                pair[1],
+                f"{slot:%Y%m%d%H%M}-{pair[0]}",
+                range_bytes,
+                timeout,
+                good_bps,
+                slow_bps,
+            ),
+            enumerate(chosen, 1),
+        ))
+
+    rank = {"GOOD": 0, "SLOW": 1, "UNSTABLE": 2}
+    worst_status = max(samples, key=lambda x: rank[x["status"]])["status"]
+    speeds = [sample["mibps"] for sample in samples]
+    latest = {
         "stamp": now.isoformat(),
-        "label": now.strftime("%H:%M"),
-        "status": status,
-        "mibps": round(speed_bps / (1024 ** 2), 3),
-        "mbps": round(speed_bps * 8 / 1_000_000, 2),
-        **metrics,
-        "sampleBytes": range_bytes,
-        "path": urlsplit(clean_url).path,
-        "curlExit": result.returncode,
+        "slot": slot.isoformat(),
+        "label": slot.strftime("%H:%M"),
+        "kind": kind,
+        "status": worst_status,
+        "mibps": round(min(speeds), 3),
+        "avgMibps": round(sum(speeds) / len(speeds), 3),
+        "mbps": round(min(speeds) * 1024**2 * 8 / 1_000_000, 2),
+        "ttfbMs": max(sample["ttfbMs"] for sample in samples),
+        "durationMs": max(sample["durationMs"] for sample in samples),
+        "sampleCount": len(samples),
+        "samples": samples,
     }
 
-    if result.stderr.strip():
-        sample["curlError"] = result.stderr.strip()
-
-    cutoff = now - timedelta(hours=24)
-    history = trim_history(load_history(), cutoff)
-    history.append(sample)
+    out = BASE / "data" / f"{kind}-throughput.json"
+    history = load_history(out, now - timedelta(hours=24), slot)
+    history.append(latest)
 
     payload = {
         "generated": now.isoformat(),
         "config": {
             "rangeBytes": range_bytes,
-            "maxSeconds": max_seconds,
+            "sampleCount": count,
+            "maxSeconds": timeout,
             "goodAtOrAboveBps": good_bps,
             "slowAtOrAboveBps": slow_bps,
         },
-        "latest": sample,
+        "latest": latest,
         "history": history,
     }
-
-    text = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
-
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    temp = OUT.with_suffix(".json.tmp")
-    temp.write_text(text, encoding="utf-8")
-    temp.replace(OUT)
-
-    bucket = required("R2_BUCKET")
-    key = os.environ.get(
-        "R2_THROUGHPUT_KEY",
-        "site-monitor/live/video-throughput.json",
-    )
-
-    response = make_s3().put_object(
-        Bucket=bucket,
-        Key=key,
-        Body=text.encode("utf-8"),
-        ContentType="application/json",
-        CacheControl="no-store",
-    )
+    publish(kind, payload)
 
     print(
-        "Video throughput probe: "
-        f"{status}; {sample['mibps']:.3f} MiB/s "
-        f"({sample['mbps']:.2f} Mbps); "
-        f"TTFB {sample['ttfbMs']} ms; "
-        f"HTTP {sample['httpCode']}; "
-        f"published {key} {response.get('ETag', '')}"
+        f"{kind.capitalize()} throughput: {latest['status']}; "
+        f"worst {latest['mibps']:.3f} MiB/s; "
+        f"average {latest['avgMibps']:.3f} MiB/s; "
+        f"{len(samples)} samples"
     )
-
-    # An unhealthy transfer is still a successful monitoring run: the probe
-    # measured and published the problem. Only monitoring failures exit 1.
     return 0
 
 
 if __name__ == "__main__":
     try:
-        raise SystemExit(main())
+        raise SystemExit(main(sys.argv[1] if len(sys.argv) > 1 else "video"))
     except Exception as exc:
-        print(f"video throughput probe error: {exc}", file=sys.stderr)
+        print(f"throughput probe error: {exc}", file=sys.stderr)
         raise SystemExit(1)
