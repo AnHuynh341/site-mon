@@ -1,0 +1,153 @@
+W41IT DAILY REPORT
+Date: 2026-08-21
+Week: 2026-W34
+==========================================
+
+OVERALL STATUS
+  Status             : UNSTABLE
+
+FRONTEND
+  Uptime             : 100.00%
+  Successful checks  : 288 / 288
+  Average response   : 136 ms
+
+DATABASE
+  Uptime             : 100.00%
+  Successful checks  : 288 / 288
+  Average response   : 237 ms
+
+STORAGE
+  Data stored        : 13.08 GB 
+  Object count       : 408
+  Media availability : 100.00%
+  Average response   : 133 ms
+  Worst response     : 97 ms
+
+ANALYTICS
+  Visits             : 73
+  Average load time  : 2026 ms
+
+INCIDENTS
+  00:40:02 - video-media UNSTABLE (4/5, avg 157ms, samples=194,149,177,110,FAIL)
+  00:45:02 - video-media UNSTABLE (4/5, avg 152ms, samples=93,221,165,129,FAIL)
+  00:50:02 - video-media UNSTABLE (4/5, avg 87ms, samples=72,79,93,106,FAIL)
+  00:55:02 - video-media UNSTABLE (4/5, avg 114ms, samples=171,97,99,90,FAIL)
+  01:00:02 - video-media UNSTABLE (4/5, avg 137ms, samples=194,145,108,103,FAIL)
+  01:05:02 - video-media UNSTABLE (4/5, avg 98ms, samples=98,90,93,112,FAIL)
+  01:10:02 - video-media UNSTABLE (4/5, avg 102ms, samples=118,101,81,111,FAIL)
+  01:15:02 - video-media UNSTABLE (4/5, avg 137ms, samples=260,76,128,86,FAIL)
+  01:20:02 - video-media UNSTABLE (4/5, avg 107ms, samples=99,134,94,103,FAIL)
+  10:25:02 - video-media UNSTABLE (4/5, avg 116ms, samples=139,90,97,140,FAIL)
+  10:30:02 - video-media UNSTABLE (4/5, avg 137ms, samples=107,139,208,94,FAIL)
+  10:35:02 - video-media UNSTABLE (4/5, avg 91ms, samples=93,100,91,81,FAIL)
+  10:40:02 - video-media UNSTABLE (4/5, avg 124ms, samples=168,133,83,114,FAIL)
+  10:45:02 - video-media UNSTABLE (4/5, avg 118ms, samples=95,101,108,169,FAIL)
+  10:50:02 - video-media UNSTABLE (4/5, avg 111ms, samples=94,101,131,121,FAIL)
+  10:55:03 - video-media UNSTABLE (4/5, avg 95ms, samples=105,104,87,87,FAIL)
+  11:00:01 - video-media UNSTABLE (4/5, avg 105ms, samples=104,96,121,101,FAIL)
+  11:05:02 - video-media UNSTABLE (4/5, avg 110ms, samples=102,111,111,118,FAIL)
+  11:10:02 - video-media UNSTABLE (4/5, avg 171ms, samples=83,110,97,394,FAIL)
+  11:15:03 - video-media UNSTABLE (4/5, avg 196ms, samples=126,466,92,100,FAIL)
+  11:20:03 - video-media UNSTABLE (4/5, avg 95ms, samples=90,91,91,108,FAIL)
+  11:25:03 - video-media UNSTABLE (4/5, avg 195ms, samples=139,453,93,97,FAIL)
+  11:30:02 - video-media UNSTABLE (4/5, avg 123ms, samples=109,112,139,133,FAIL)
+  11:35:02 - video-media UNSTABLE (4/5, avg 117ms, samples=182,100,88,100,FAIL)
+  11:40:02 - video-media UNSTABLE (4/5, avg 111ms, samples=84,90,167,103,FAIL)
+  11:45:02 - video-media UNSTABLE (4/5, avg 210ms, samples=95,163,117,465,FAIL)
+  11:50:03 - video-media UNSTABLE (4/5, avg 95ms, samples=114,92,81,94,FAIL)
+  11:55:02 - video-media UNSTABLE (4/5, avg 103ms, samples=146,84,84,99,FAIL)
+  12:00:02 - video-media UNSTABLE (4/5, avg 119ms, samples=90,120,121,145,FAIL)
+  12:05:02 - video-media UNSTABLE (4/5, avg 123ms, samples=154,105,124,111,FAIL)
+  12:10:02 - video-media UNSTABLE (4/5, avg 116ms, samples=90,112,127,138,FAIL)
+  12:15:03 - video-media UNSTABLE (4/5, avg 104ms, samples=107,113,108,89,FAIL)
+  12:20:02 - video-media UNSTABLE (4/5, avg 131ms, samples=142,103,177,104,FAIL)
+  12:25:01 - video-media UNSTABLE (4/5, avg 110ms, samples=123,103,104,112,FAIL)
+  12:30:02 - video-media UNSTABLE (4/5, avg 103ms, samples=125,108,90,91,FAIL)
+  12:35:02 - video-media UNSTABLE (4/5, avg 138ms, samples=187,134,110,123,FAIL)
+  12:40:02 - video-media UNSTABLE (4/5, avg 138ms, samples=204,120,95,133,FAIL)
+  12:45:02 - video-media UNSTABLE (4/5, avg 129ms, samples=131,138,117,131,FAIL)
+  12:50:02 - video-media UNSTABLE (4/5, avg 113ms, samples=105,113,136,101,FAIL)
+  12:55:04 - video-media UNSTABLE (4/5, avg 115ms, samples=173,115,90,83,FAIL)
+  13:00:02 - video-media UNSTABLE (4/5, avg 111ms, samples=103,130,79,134,FAIL)
+  13:05:02 - video-media UNSTABLE (4/5, avg 111ms, samples=107,125,103,112,FAIL)
+  13:10:03 - video-media UNSTABLE (4/5, avg 99ms, samples=94,98,107,100,FAIL)
+  13:15:06 - video-media UNSTABLE (4/5, avg 905ms, samples=2255,1175,96,94,FAIL)
+  13:20:09 - video-media UNSTABLE (4/5, avg 1178ms, samples=2846,218,1049,602,FAIL)
+  13:25:03 - video-media UNSTABLE (4/5, avg 229ms, samples=265,171,323,159,FAIL)
+  13:30:03 - video-media UNSTABLE (4/5, avg 188ms, samples=191,217,172,173,FAIL)
+  13:35:03 - video-media UNSTABLE (4/5, avg 207ms, samples=260,173,173,225,FAIL)
+  13:40:03 - video-media UNSTABLE (4/5, avg 266ms, samples=222,288,271,285,FAIL)
+  13:45:03 - video-media UNSTABLE (4/5, avg 183ms, samples=183,169,213,169,FAIL)
+  13:50:03 - video-media UNSTABLE (4/5, avg 188ms, samples=213,176,189,175,FAIL)
+  13:55:02 - video-media UNSTABLE (4/5, avg 152ms, samples=137,149,155,167,FAIL)
+  14:00:03 - video-media UNSTABLE (4/5, avg 142ms, samples=131,121,146,171,FAIL)
+  14:05:03 - video-media UNSTABLE (4/5, avg 130ms, samples=206,104,117,96,FAIL)
+  14:10:03 - video-media UNSTABLE (4/5, avg 157ms, samples=134,110,161,224,FAIL)
+  14:15:03 - video-media UNSTABLE (4/5, avg 171ms, samples=127,271,112,174,FAIL)
+  14:20:02 - video-media UNSTABLE (4/5, avg 111ms, samples=115,109,107,113,FAIL)
+  14:25:02 - video-media UNSTABLE (4/5, avg 105ms, samples=101,105,113,103,FAIL)
+  14:30:02 - video-media UNSTABLE (4/5, avg 192ms, samples=154,338,161,118,FAIL)
+  14:35:03 - video-media UNSTABLE (4/5, avg 149ms, samples=119,94,189,196,FAIL)
+  14:40:02 - video-media UNSTABLE (4/5, avg 127ms, samples=93,125,115,178,FAIL)
+  14:45:02 - video-media UNSTABLE (4/5, avg 121ms, samples=125,122,129,111,FAIL)
+  14:50:03 - video-media UNSTABLE (4/5, avg 122ms, samples=125,132,128,106,FAIL)
+  14:55:02 - video-media UNSTABLE (4/5, avg 108ms, samples=99,93,124,117,FAIL)
+  15:00:03 - video-media UNSTABLE (4/5, avg 162ms, samples=319,117,118,95,FAIL)
+  15:05:02 - video-media UNSTABLE (4/5, avg 103ms, samples=98,100,107,109,FAIL)
+  15:10:01 - video-media UNSTABLE (4/5, avg 120ms, samples=93,115,103,170,FAIL)
+  15:15:02 - video-media UNSTABLE (4/5, avg 134ms, samples=134,161,118,126,FAIL)
+  15:20:02 - video-media UNSTABLE (4/5, avg 122ms, samples=173,108,100,107,FAIL)
+  15:25:02 - video-media UNSTABLE (4/5, avg 124ms, samples=87,112,188,110,FAIL)
+  15:30:03 - video-media UNSTABLE (4/5, avg 151ms, samples=304,94,119,88,FAIL)
+  15:35:02 - video-media UNSTABLE (4/5, avg 115ms, samples=110,111,98,141,FAIL)
+  15:40:02 - video-media UNSTABLE (4/5, avg 121ms, samples=183,91,108,104,FAIL)
+  15:45:02 - video-media UNSTABLE (4/5, avg 104ms, samples=90,135,96,95,FAIL)
+  15:50:02 - video-media UNSTABLE (4/5, avg 122ms, samples=83,202,105,101,FAIL)
+  15:55:02 - video-media UNSTABLE (4/5, avg 99ms, samples=121,83,82,112,FAIL)
+  16:00:02 - video-media UNSTABLE (4/5, avg 136ms, samples=151,130,123,140,FAIL)
+  16:05:02 - video-media UNSTABLE (4/5, avg 108ms, samples=95,103,131,103,FAIL)
+  16:10:02 - video-media UNSTABLE (4/5, avg 134ms, samples=173,130,104,132,FAIL)
+  16:15:02 - video-media UNSTABLE (4/5, avg 97ms, samples=119,104,93,75,FAIL)
+  16:20:02 - video-media UNSTABLE (4/5, avg 99ms, samples=115,106,86,89,FAIL)
+  16:25:03 - video-media UNSTABLE (4/5, avg 129ms, samples=202,95,113,107,FAIL)
+  16:30:02 - video-media UNSTABLE (4/5, avg 124ms, samples=102,128,134,132,FAIL)
+  16:35:02 - video-media UNSTABLE (4/5, avg 152ms, samples=208,140,126,134,FAIL)
+  16:40:02 - video-media UNSTABLE (4/5, avg 161ms, samples=223,113,153,158,FAIL)
+  16:45:02 - video-media UNSTABLE (4/5, avg 121ms, samples=105,102,165,113,FAIL)
+  16:50:02 - video-media UNSTABLE (4/5, avg 122ms, samples=86,103,190,109,FAIL)
+  16:55:03 - video-media UNSTABLE (4/5, avg 123ms, samples=151,101,126,114,FAIL)
+  17:00:02 - video-media UNSTABLE (4/5, avg 122ms, samples=146,148,83,114,FAIL)
+  17:05:03 - video-media UNSTABLE (4/5, avg 169ms, samples=102,185,245,147,FAIL)
+  17:10:02 - video-media UNSTABLE (4/5, avg 113ms, samples=132,87,106,129,FAIL)
+  17:15:01 - video-media UNSTABLE (4/5, avg 125ms, samples=129,98,129,147,FAIL)
+  17:20:03 - video-media UNSTABLE (4/5, avg 103ms, samples=129,93,90,100,FAIL)
+  17:25:02 - video-media UNSTABLE (4/5, avg 108ms, samples=120,113,93,106,FAIL)
+  17:30:03 - video-media UNSTABLE (4/5, avg 146ms, samples=143,99,203,142,FAIL)
+  17:35:03 - video-media UNSTABLE (4/5, avg 150ms, samples=236,115,156,96,FAIL)
+  17:40:02 - video-media UNSTABLE (4/5, avg 120ms, samples=144,93,124,121,FAIL)
+  17:45:03 - video-media UNSTABLE (4/5, avg 131ms, samples=180,139,107,99,FAIL)
+  17:50:03 - video-media UNSTABLE (4/5, avg 128ms, samples=174,166,97,77,FAIL)
+  17:55:02 - video-media UNSTABLE (4/5, avg 120ms, samples=193,99,91,98,FAIL)
+  18:00:03 - video-media UNSTABLE (4/5, avg 108ms, samples=110,128,93,104,FAIL)
+  18:05:02 - video-media UNSTABLE (4/5, avg 127ms, samples=126,131,113,141,FAIL)
+  18:10:02 - video-media UNSTABLE (4/5, avg 110ms, samples=109,117,126,90,FAIL)
+  18:15:02 - video-media UNSTABLE (4/5, avg 108ms, samples=101,153,96,82,FAIL)
+  18:20:02 - video-media UNSTABLE (4/5, avg 106ms, samples=103,133,98,90,FAIL)
+  18:25:03 - video-media UNSTABLE (4/5, avg 132ms, samples=213,100,122,93,FAIL)
+  18:30:02 - video-media UNSTABLE (4/5, avg 139ms, samples=95,107,195,161,FAIL)
+  18:35:02 - video-media UNSTABLE (4/5, avg 104ms, samples=97,114,105,103,FAIL)
+  18:40:02 - video-media UNSTABLE (4/5, avg 107ms, samples=116,109,109,94,FAIL)
+  18:45:02 - video-media UNSTABLE (4/5, avg 132ms, samples=130,111,147,140,FAIL)
+  18:50:02 - video-media UNSTABLE (4/5, avg 124ms, samples=160,127,103,106,FAIL)
+  18:55:02 - video-media UNSTABLE (4/5, avg 140ms, samples=171,100,105,186,FAIL)
+  19:00:02 - video-media UNSTABLE (4/5, avg 165ms, samples=118,146,130,266,FAIL)
+  19:05:02 - video-media UNSTABLE (4/5, avg 119ms, samples=110,106,111,151,FAIL)
+  19:10:02 - video-media UNSTABLE (4/5, avg 127ms, samples=145,87,121,155,FAIL)
+  20:25:04 - r2-media UNSTABLE (5/5, avg 548ms, worst=1657ms)
+  20:55:04 - r2-media UNSTABLE (5/5, avg 534ms, worst=1641ms)
+  21:50:04 - r2-media UNSTABLE (5/5, avg 680ms, worst=1887ms)
+  22:15:04 - r2-media UNSTABLE (5/5, avg 555ms, worst=2069ms)
+  22:55:04 - r2-media UNSTABLE (5/5, avg 599ms, worst=2554ms)
+
+==========================================
+Generated: 2026-08-21 23:57:03
