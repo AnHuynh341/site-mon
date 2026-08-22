@@ -521,43 +521,6 @@ def storage_info(s3, bucket):
     }
 
 
-def video_storage_info(roots):
-    objects = 0
-    total_bytes = 0
-    existing_roots = 0
-    seen = set()
-
-    for root in roots:
-        if not root.is_dir():
-            continue
-
-        existing_roots += 1
-
-        for path in root.rglob("video.mp4"):
-            try:
-                identity = path.resolve()
-
-                if identity in seen:
-                    continue
-
-                seen.add(identity)
-                total_bytes += path.stat().st_size
-                objects += 1
-            except OSError:
-                continue
-
-    if existing_roots == 0:
-        return {
-            "gb": None,
-            "objects": None,
-        }
-
-    return {
-        "gb": round(total_bytes / 1_000_000_000, 2),
-        "objects": objects,
-    }
-
-
 # ============================================================
 # MAIN
 # ============================================================
@@ -591,6 +554,10 @@ def main():
     previous_analytics_generated = previous.get(
         "analyticsGenerated"
     )
+    previous_video_info = (
+        previous.get("latest", {}).get("videoInfo")
+    )
+
     # --------------------------------------------------------
     # Web Analytics / Site Performance
     # --------------------------------------------------------
@@ -699,20 +666,18 @@ def main():
 
     s3 = make_s3()
     latest["storageInfo"] = storage_info(s3, bucket)
-    latest["videoInfo"] = video_storage_info([
-        Path(
-            os.environ.get(
-                "VIDEO_MEDIA_DIR",
-                "/srv/media/anime",
-            )
-        ),
-        Path(
-            os.environ.get(
-                "YOUTUBE_MEDIA_DIR",
-                "/srv/media/youtube",
-            )
-        ),
-    ])
+
+    # Video inventory is authoritative in the separate video R2 bucket and
+    # refreshed hourly by video-r2-info.py. Preserve the last R2 inventory on
+    # every five-minute publish instead of re-counting the now-empty VPS tree.
+    if isinstance(previous_video_info, dict):
+        latest["videoInfo"] = previous_video_info
+    else:
+        latest["videoInfo"] = {
+            "gb": None,
+            "objects": None,
+            "source": "r2",
+        }
 
     # --------------------------------------------------------
     # Final dashboard JSON
