@@ -1,32 +1,32 @@
 {
-  "generated": "2026-08-22T08:32:34+07:00",
-  "published": "2026-08-22T08:32:38.067874+07:00",
-  "analyticsGenerated": "2026-08-22T08:32:35.450610+07:00",
+  "generated": "2026-08-22T08:35:01+07:00",
+  "published": "2026-08-22T08:35:06.202172+07:00",
+  "analyticsGenerated": "2026-08-22T08:35:02.547349+07:00",
   "sourceFallback": {
     "analytics": false
   },
   "latest": {
     "frontend": {
       "status": "UP",
-      "ms": 28
+      "ms": 25
     },
     "database": {
       "status": "UP",
-      "ms": 260
+      "ms": 179
     },
     "storage": {
       "status": "UP",
-      "ms": 71,
-      "worst": 104,
+      "ms": 72,
+      "worst": 90,
       "successfulSamples": 5,
       "totalSamples": 5
     },
     "video": {
-      "status": "DOWN",
-      "ms": null,
-      "worst": null,
-      "successfulSamples": 0,
-      "totalSamples": 0
+      "status": "UP",
+      "ms": 76,
+      "worst": 86,
+      "successfulSamples": 5,
+      "totalSamples": 5
     },
     "storageInfo": {
       "gb": 13.08,
@@ -178,7 +178,6 @@
   },
   "r2History": {
     "labels": [
-      "08:35",
       "08:40",
       "08:45",
       "08:50",
@@ -467,10 +466,11 @@
       "08:20",
       "08:25",
       "08:30",
-      "08:32"
+      "08:32",
+      "08:33",
+      "08:35"
     ],
     "average": [
-      97,
       102,
       80,
       186,
@@ -759,10 +759,11 @@
       72,
       81,
       85,
-      71
+      71,
+      62,
+      72
     ],
     "worst": [
-      208,
       242,
       141,
       420,
@@ -1051,52 +1052,53 @@
       90,
       148,
       138,
-      104
+      104,
+      72,
+      90
     ]
   },
   "samples": [
     {
       "name": "Sample 1",
-      "ms": 61
+      "ms": 68
     },
     {
       "name": "Sample 2",
-      "ms": 71
+      "ms": 63
     },
     {
       "name": "Sample 3",
-      "ms": 57
+      "ms": 76
     },
     {
       "name": "Sample 4",
-      "ms": 104
+      "ms": 64
     },
     {
       "name": "Sample 5",
-      "ms": 66
+      "ms": 90
     }
   ],
   "audioProbeHealth": {
-    "good": 1419,
+    "good": 1424,
     "slow": 25,
     "unstable": 6,
-    "total": 1450,
+    "total": 1455,
     "averageMs": 134,
     "goodThroughMs": 500,
     "unstableAboveMs": 1500
   },
   "videoProbeHealth": {
-    "good": 957,
+    "good": 962,
     "slow": 12,
     "unstable": 185,
-    "total": 1154,
-    "averageMs": 158,
+    "total": 1159,
+    "averageMs": 157,
     "goodThroughMs": 500,
     "unstableAboveMs": 1500
   },
   "videoHistory": {
     "labels": [
-      "08:35",
       "08:40",
       "08:45",
       "08:50",
@@ -1385,10 +1387,11 @@
       "08:20",
       "08:25",
       "08:30",
-      "08:32"
+      "08:32",
+      "08:33",
+      "08:35"
     ],
     "average": [
-      83,
       87,
       102,
       106,
@@ -1677,10 +1680,11 @@
       null,
       null,
       null,
-      null
+      null,
+      73,
+      76
     ],
     "worst": [
-      114,
       141,
       195,
       189,
@@ -1969,29 +1973,31 @@
       null,
       null,
       null,
-      null
+      null,
+      85,
+      86
     ]
   },
   "videoSamples": [
     {
       "name": "Sample 1",
-      "ms": null
+      "ms": 85
     },
     {
       "name": "Sample 2",
-      "ms": null
+      "ms": 61
     },
     {
       "name": "Sample 3",
-      "ms": null
+      "ms": 77
     },
     {
       "name": "Sample 4",
-      "ms": null
+      "ms": 86
     },
     {
       "name": "Sample 5",
-      "ms": null
+      "ms": 72
     }
   ]
 }
