@@ -8,6 +8,7 @@ CONFIG="$HOME/.config/mediser-monitor/config.env"
 PUBLISHER="$BASE_DIR/scripts/publish-dashboard.py"
 VIDEO_INFO_PATCHER="$BASE_DIR/scripts/video-r2-info.py"
 THROUGHPUT_RUNNER="$BASE_DIR/scripts/run-throughput.sh"
+VIDEO_PROBE_CACHE="$BASE_DIR/data/video-probe-urls.txt"
 
 source "$CONFIG"
 
@@ -19,10 +20,11 @@ VIDEO_SLOW_MS="${VIDEO_SLOW_MS:-2500}"
 LATENCY_RANGE_END="${LATENCY_RANGE_END:-32767}"
 LATENCY_MAX_FILESIZE="${LATENCY_MAX_FILESIZE:-65536}"
 
-VIDEO_MEDIA_ROOT="${VIDEO_MEDIA_ROOT:-/srv/media}"
+VIDEO_R2_REMOTE="${VIDEO_R2_REMOTE:-r2:w41it-video}"
 VIDEO_R2_BASE_URL="${VIDEO_R2_BASE_URL:-https://w41it-video-r2.meochon341.workers.dev}"
+VIDEO_PROBE_CACHE_SECONDS="${VIDEO_PROBE_CACHE_SECONDS:-3600}"
 
-mkdir -p "$BASE_DIR/logs"
+mkdir -p "$BASE_DIR/logs" "$BASE_DIR/data"
 
 
 timestamp() {
@@ -189,6 +191,7 @@ video_sample_urls() {
     local variable url
     local configured=()
 
+    # Explicit fixed URLs still win if the operator configures them.
     for variable in \
         VIDEO_R2_TEST_URL_1 \
         VIDEO_R2_TEST_URL_2 \
@@ -208,39 +211,114 @@ video_sample_urls() {
         return
     fi
 
-    python3 - "$VIDEO_MEDIA_ROOT" "$VIDEO_R2_BASE_URL" <<'PY'
+    # The video bucket is now authoritative. Build five representative probe
+    # URLs from the real R2 inventory and cache them for an hour so the
+    # five-minute latency loop does not list the whole bucket every time.
+    python3 - \
+        "$VIDEO_R2_REMOTE" \
+        "$VIDEO_R2_BASE_URL" \
+        "$VIDEO_PROBE_CACHE" \
+        "$VIDEO_PROBE_CACHE_SECONDS" <<'PY'
+import json
+import os
+import subprocess
 import sys
+import time
 from pathlib import Path
 from urllib.parse import quote
 
-root = Path(sys.argv[1])
+remote = sys.argv[1].rstrip("/")
 base = sys.argv[2].rstrip("/")
+cache = Path(sys.argv[3])
+max_age = int(sys.argv[4])
 
-if not root.is_dir():
+
+def read_cache(require_fresh: bool):
+    try:
+        if not cache.is_file():
+            return []
+        age = time.time() - cache.stat().st_mtime
+        if require_fresh and age > max_age:
+            return []
+        return [
+            line.strip()
+            for line in cache.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    except OSError:
+        return []
+
+
+cached = read_cache(require_fresh=True)
+if cached:
+    print("\n".join(cached))
     raise SystemExit(0)
 
-files = []
+try:
+    result = subprocess.run(
+        [
+            "rclone",
+            "lsjson",
+            remote,
+            "--recursive",
+            "--files-only",
+        ],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
 
-for path in root.rglob("video.mp4"):
-    try:
-        files.append((path.stat().st_mtime_ns, path))
-    except OSError:
-        continue
+    if result.returncode != 0:
+        raise RuntimeError(
+            result.stderr.strip()
+            or result.stdout.strip()
+            or "rclone lsjson failed"
+        )
 
-files.sort(key=lambda item: (item[0], str(item[1])))
-
-if len(files) <= 5:
-    selected = [item[1] for item in files]
-else:
-    last = len(files) - 1
-    selected = [
-        files[round(index * last / 4)][1]
-        for index in range(5)
+    entries = json.loads(result.stdout or "[]")
+    keys = sorted({
+        str(entry.get("Path") or entry.get("Name") or "").strip("/")
+        for entry in entries
+        if str(entry.get("Path") or entry.get("Name") or "").strip("/")
+    })
+    keys = [
+        key
+        for key in keys
+        if key == "video.mp4" or key.endswith("/video.mp4")
     ]
 
-for path in selected:
-    relative = path.relative_to(root).as_posix()
-    print(f"{base}/{quote(relative, safe='/')}")
+    if not keys:
+        raise RuntimeError("R2 video inventory contains no video.mp4 objects")
+
+    if len(keys) <= 5:
+        selected = keys
+    else:
+        last = len(keys) - 1
+        selected = [
+            keys[round(index * last / 4)]
+            for index in range(5)
+        ]
+
+    urls = [
+        f"{base}/{quote(key, safe='/')}"
+        for key in selected
+    ]
+
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    temp = cache.with_suffix(cache.suffix + ".tmp")
+    temp.write_text("\n".join(urls) + "\n", encoding="utf-8")
+    os.replace(temp, cache)
+
+    print("\n".join(urls))
+
+except Exception as exc:
+    # If R2 listing itself has a temporary problem, a stale cache is still
+    # better than turning a healthy service into an artificial 0/0 result.
+    stale = read_cache(require_fresh=False)
+    if stale:
+        print("\n".join(stale))
+    else:
+        print(f"video probe inventory error: {exc}", file=sys.stderr)
 PY
 }
 
