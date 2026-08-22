@@ -1,0 +1,2014 @@
+{
+  "generated": "2026-08-22T08:00:02.734914+07:00",
+  "config": {
+    "rangeBytes": 1048576,
+    "sampleCount": 2,
+    "candidateCount": 405,
+    "source": "full-r2-inventory",
+    "maxSeconds": 60,
+    "goodAtOrAboveBps": 524288,
+    "slowAtOrAboveBps": 131072
+  },
+  "latest": {
+    "stamp": "2026-08-22T08:00:02.734914+07:00",
+    "slot": "2026-08-22T08:00:00+07:00",
+    "label": "08:00",
+    "kind": "audio",
+    "status": "GOOD",
+    "mibps": 7.815,
+    "avgMibps": 7.815,
+    "mbps": 65.56,
+    "ttfbMs": 156,
+    "durationMs": 164,
+    "sampleCount": 2,
+    "candidateCount": 405,
+    "samples": [
+      {
+        "status": "GOOD",
+        "mibps": 11.483,
+        "mbps": 96.33,
+        "httpCode": 206,
+        "ttfbMs": 79,
+        "durationMs": 87,
+        "bytesPerSecond": 12040695,
+        "bytesDownloaded": 1048576,
+        "path": "/1779465498191-track-1779465497094-0.m4a",
+        "curlExit": 0
+      },
+      {
+        "status": "GOOD",
+        "mibps": 4.147,
+        "mbps": 34.79,
+        "httpCode": 206,
+        "ttfbMs": 233,
+        "durationMs": 241,
+        "bytesPerSecond": 4348501,
+        "bytesDownloaded": 1048576,
+        "path": "/1779030660897-track-1779030660868-0.flac",
+        "curlExit": 0
+      }
+    ]
+  },
+  "history": [
+    {
+      "stamp": "2026-08-21T08:00:03.150203+07:00",
+      "slot": "2026-08-21T08:00:00+07:00",
+      "label": "08:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 8.706,
+      "avgMibps": 8.706,
+      "mbps": 73.03,
+      "ttfbMs": 108,
+      "durationMs": 124,
+      "sampleCount": 2,
+      "candidateCount": 404,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.355,
+          "mbps": 53.31,
+          "httpCode": 206,
+          "ttfbMs": 144,
+          "durationMs": 157,
+          "bytesPerSecond": 6664014,
+          "bytesDownloaded": 1048576,
+          "path": "/1782472219748-track-1782472219051-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.057,
+          "mbps": 92.76,
+          "httpCode": 206,
+          "ttfbMs": 73,
+          "durationMs": 90,
+          "bytesPerSecond": 11594418,
+          "bytesDownloaded": 1048576,
+          "path": "/1779037857176-track-1779037856944-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T08:30:02.722930+07:00",
+      "slot": "2026-08-21T08:30:00+07:00",
+      "label": "08:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 12.701,
+      "avgMibps": 12.701,
+      "mbps": 106.54,
+      "ttfbMs": 68,
+      "durationMs": 80,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 11.497,
+          "mbps": 96.44,
+          "httpCode": 206,
+          "ttfbMs": 72,
+          "durationMs": 87,
+          "bytesPerSecond": 12055369,
+          "bytesDownloaded": 1048576,
+          "path": "/1785598845592-track-1785598844170-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 13.905,
+          "mbps": 116.65,
+          "httpCode": 206,
+          "ttfbMs": 63,
+          "durationMs": 72,
+          "bytesPerSecond": 14580768,
+          "bytesDownloaded": 1048576,
+          "path": "/1784691305200-track-1784691303775-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T09:00:03.030427+07:00",
+      "slot": "2026-08-21T09:00:00+07:00",
+      "label": "09:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 10.148,
+      "avgMibps": 10.148,
+      "mbps": 85.13,
+      "ttfbMs": 82,
+      "durationMs": 102,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 12.023,
+          "mbps": 100.85,
+          "httpCode": 206,
+          "ttfbMs": 75,
+          "durationMs": 83,
+          "bytesPerSecond": 12606561,
+          "bytesDownloaded": 1048576,
+          "path": "/1779089303752-track-1779089302616-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.273,
+          "mbps": 69.4,
+          "httpCode": 206,
+          "ttfbMs": 88,
+          "durationMs": 121,
+          "bytesPerSecond": 8675237,
+          "bytesDownloaded": 1048576,
+          "path": "/1779718815003-track-1779718813864-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T09:30:03.351601+07:00",
+      "slot": "2026-08-21T09:30:00+07:00",
+      "label": "09:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 12.733,
+      "avgMibps": 12.733,
+      "mbps": 106.81,
+      "ttfbMs": 72,
+      "durationMs": 81,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 10.517,
+          "mbps": 88.22,
+          "httpCode": 206,
+          "ttfbMs": 86,
+          "durationMs": 95,
+          "bytesPerSecond": 11027775,
+          "bytesDownloaded": 1048576,
+          "path": "/1779805155006-track-1779805153544-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 14.948,
+          "mbps": 125.4,
+          "httpCode": 206,
+          "ttfbMs": 59,
+          "durationMs": 67,
+          "bytesPerSecond": 15674484,
+          "bytesDownloaded": 1048576,
+          "path": "/1779037514325-track-1779037514306-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T10:00:03.826490+07:00",
+      "slot": "2026-08-21T10:00:00+07:00",
+      "label": "10:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 9.785,
+      "avgMibps": 9.785,
+      "mbps": 82.08,
+      "ttfbMs": 92,
+      "durationMs": 105,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 8.198,
+          "mbps": 68.77,
+          "httpCode": 206,
+          "ttfbMs": 105,
+          "durationMs": 122,
+          "bytesPerSecond": 8596083,
+          "bytesDownloaded": 1048576,
+          "path": "/1782472219748-track-1782472219051-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.373,
+          "mbps": 95.4,
+          "httpCode": 206,
+          "ttfbMs": 79,
+          "durationMs": 88,
+          "bytesPerSecond": 11924986,
+          "bytesDownloaded": 1048576,
+          "path": "/1782475390752-track-1782475389342-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T10:30:04.383798+07:00",
+      "slot": "2026-08-21T10:30:00+07:00",
+      "label": "10:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 8.458,
+      "avgMibps": 8.458,
+      "mbps": 70.95,
+      "ttfbMs": 110,
+      "durationMs": 120,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 9.344,
+          "mbps": 78.38,
+          "httpCode": 206,
+          "ttfbMs": 98,
+          "durationMs": 107,
+          "bytesPerSecond": 9797395,
+          "bytesDownloaded": 1048576,
+          "path": "/1785379149855-track-1785379148486-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.573,
+          "mbps": 63.52,
+          "httpCode": 206,
+          "ttfbMs": 121,
+          "durationMs": 132,
+          "bytesPerSecond": 7940388,
+          "bytesDownloaded": 1048576,
+          "path": "/1779653746862-track-1779653746023-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T11:00:03.611953+07:00",
+      "slot": "2026-08-21T11:00:00+07:00",
+      "label": "11:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.467,
+      "avgMibps": 4.467,
+      "mbps": 37.47,
+      "ttfbMs": 208,
+      "durationMs": 224,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 4.325,
+          "mbps": 36.28,
+          "httpCode": 206,
+          "ttfbMs": 210,
+          "durationMs": 231,
+          "bytesPerSecond": 4534598,
+          "bytesDownloaded": 1048576,
+          "path": "/1787022380167-track-1787022378579-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.61,
+          "mbps": 38.67,
+          "httpCode": 206,
+          "ttfbMs": 207,
+          "durationMs": 217,
+          "bytesPerSecond": 4833439,
+          "bytesDownloaded": 1048576,
+          "path": "/1779029387274-track-1779029387243-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T11:30:04.314495+07:00",
+      "slot": "2026-08-21T11:30:00+07:00",
+      "label": "11:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 6.202,
+      "avgMibps": 6.202,
+      "mbps": 52.03,
+      "ttfbMs": 134,
+      "durationMs": 172,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.753,
+          "mbps": 65.04,
+          "httpCode": 206,
+          "ttfbMs": 122,
+          "durationMs": 129,
+          "bytesPerSecond": 8129693,
+          "bytesDownloaded": 1048576,
+          "path": "/1785978208386-track-1785978207204-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.652,
+          "mbps": 39.02,
+          "httpCode": 206,
+          "ttfbMs": 146,
+          "durationMs": 215,
+          "bytesPerSecond": 4877687,
+          "bytesDownloaded": 1048576,
+          "path": "/1785847752749-track-1785847751408-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T12:00:03.977471+07:00",
+      "slot": "2026-08-21T12:00:00+07:00",
+      "label": "12:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 1.781,
+      "avgMibps": 1.781,
+      "mbps": 14.94,
+      "ttfbMs": 370,
+      "durationMs": 2410,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "SLOW",
+          "mibps": 0.221,
+          "mbps": 1.86,
+          "httpCode": 206,
+          "ttfbMs": 449,
+          "durationMs": 4521,
+          "bytesPerSecond": 231955,
+          "bytesDownloaded": 1048576,
+          "path": "/1778958969806-track-1778958969658-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.342,
+          "mbps": 28.03,
+          "httpCode": 206,
+          "ttfbMs": 291,
+          "durationMs": 299,
+          "bytesPerSecond": 3503954,
+          "bytesDownloaded": 1048576,
+          "path": "/1785379149855-track-1785379148486-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T12:30:04.157293+07:00",
+      "slot": "2026-08-21T12:30:00+07:00",
+      "label": "12:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 8.435,
+      "avgMibps": 8.435,
+      "mbps": 70.76,
+      "ttfbMs": 109,
+      "durationMs": 120,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 9.171,
+          "mbps": 76.93,
+          "httpCode": 206,
+          "ttfbMs": 101,
+          "durationMs": 109,
+          "bytesPerSecond": 9615993,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030233428-track-1779030233293-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.7,
+          "mbps": 64.59,
+          "httpCode": 206,
+          "ttfbMs": 117,
+          "durationMs": 130,
+          "bytesPerSecond": 8073856,
+          "bytesDownloaded": 1048576,
+          "path": "/1779037141393-track-1779037141366-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T13:00:04.055540+07:00",
+      "slot": "2026-08-21T13:00:00+07:00",
+      "label": "13:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 2.609,
+      "avgMibps": 2.609,
+      "mbps": 21.89,
+      "ttfbMs": 480,
+      "durationMs": 578,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.093,
+          "mbps": 9.17,
+          "httpCode": 206,
+          "ttfbMs": 727,
+          "durationMs": 915,
+          "bytesPerSecond": 1146132,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036878255-track-1779036878232-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.125,
+          "mbps": 34.6,
+          "httpCode": 206,
+          "ttfbMs": 233,
+          "durationMs": 242,
+          "bytesPerSecond": 4325469,
+          "bytesDownloaded": 1048576,
+          "path": "/1787022380167-track-1787022378579-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T13:30:05.111794+07:00",
+      "slot": "2026-08-21T13:30:00+07:00",
+      "label": "13:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 6.694,
+      "avgMibps": 6.694,
+      "mbps": 56.16,
+      "ttfbMs": 140,
+      "durationMs": 150,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.207,
+          "mbps": 60.46,
+          "httpCode": 206,
+          "ttfbMs": 128,
+          "durationMs": 139,
+          "bytesPerSecond": 7556977,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030137710-track-1779030137681-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.182,
+          "mbps": 51.86,
+          "httpCode": 206,
+          "ttfbMs": 152,
+          "durationMs": 162,
+          "bytesPerSecond": 6482134,
+          "bytesDownloaded": 1048576,
+          "path": "/1779115188553-track-1779115187516-0.m4a",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T14:00:04.403685+07:00",
+      "slot": "2026-08-21T14:00:00+07:00",
+      "label": "14:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 6.699,
+      "avgMibps": 6.699,
+      "mbps": 56.19,
+      "ttfbMs": 136,
+      "durationMs": 151,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.0,
+          "mbps": 50.33,
+          "httpCode": 206,
+          "ttfbMs": 156,
+          "durationMs": 167,
+          "bytesPerSecond": 6291292,
+          "bytesDownloaded": 1048576,
+          "path": "/1779805155006-track-1779805153544-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.398,
+          "mbps": 62.06,
+          "httpCode": 206,
+          "ttfbMs": 116,
+          "durationMs": 135,
+          "bytesPerSecond": 7757288,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030137710-track-1779030137681-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T14:30:03.825535+07:00",
+      "slot": "2026-08-21T14:30:00+07:00",
+      "label": "14:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 3.408,
+      "avgMibps": 3.408,
+      "mbps": 28.59,
+      "ttfbMs": 270,
+      "durationMs": 294,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 3.403,
+          "mbps": 28.55,
+          "httpCode": 206,
+          "ttfbMs": 270,
+          "durationMs": 294,
+          "bytesPerSecond": 3568733,
+          "bytesDownloaded": 1048576,
+          "path": "/1785813206750-track-1785813205893-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.412,
+          "mbps": 28.62,
+          "httpCode": 206,
+          "ttfbMs": 269,
+          "durationMs": 293,
+          "bytesPerSecond": 3577622,
+          "bytesDownloaded": 1048576,
+          "path": "/1779115305919-track-1779115304744-0.m4a",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T15:00:05.061164+07:00",
+      "slot": "2026-08-21T15:00:00+07:00",
+      "label": "15:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 6.658,
+      "avgMibps": 6.658,
+      "mbps": 55.85,
+      "ttfbMs": 139,
+      "durationMs": 150,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.984,
+          "mbps": 58.58,
+          "httpCode": 206,
+          "ttfbMs": 129,
+          "durationMs": 143,
+          "bytesPerSecond": 7322969,
+          "bytesDownloaded": 1048576,
+          "path": "/1779029387274-track-1779029387243-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.333,
+          "mbps": 53.12,
+          "httpCode": 206,
+          "ttfbMs": 149,
+          "durationMs": 158,
+          "bytesPerSecond": 6640381,
+          "bytesDownloaded": 1048576,
+          "path": "/1782216918149-track-1782216916637-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T15:30:04.913009+07:00",
+      "slot": "2026-08-21T15:30:00+07:00",
+      "label": "15:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 7.561,
+      "avgMibps": 7.561,
+      "mbps": 63.42,
+      "ttfbMs": 120,
+      "durationMs": 133,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.954,
+          "mbps": 66.72,
+          "httpCode": 206,
+          "ttfbMs": 116,
+          "durationMs": 126,
+          "bytesPerSecond": 8340168,
+          "bytesDownloaded": 1048576,
+          "path": "/1779362642765-track-1779362642283-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.167,
+          "mbps": 60.13,
+          "httpCode": 206,
+          "ttfbMs": 125,
+          "durationMs": 140,
+          "bytesPerSecond": 7515650,
+          "bytesDownloaded": 1048576,
+          "path": "/1787022380167-track-1787022378579-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T16:00:04.020778+07:00",
+      "slot": "2026-08-21T16:00:00+07:00",
+      "label": "16:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 3.257,
+      "avgMibps": 3.257,
+      "mbps": 27.32,
+      "ttfbMs": 297,
+      "durationMs": 307,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 3.16,
+          "mbps": 26.51,
+          "httpCode": 206,
+          "ttfbMs": 305,
+          "durationMs": 316,
+          "bytesPerSecond": 3313633,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036658962-track-1779036658937-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.354,
+          "mbps": 28.14,
+          "httpCode": 206,
+          "ttfbMs": 289,
+          "durationMs": 298,
+          "bytesPerSecond": 3516941,
+          "bytesDownloaded": 1048576,
+          "path": "/1786156982440-track-1786156980935-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T16:30:04.153919+07:00",
+      "slot": "2026-08-21T16:30:00+07:00",
+      "label": "16:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 5.022,
+      "avgMibps": 5.022,
+      "mbps": 42.13,
+      "ttfbMs": 318,
+      "durationMs": 330,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.854,
+          "mbps": 15.55,
+          "httpCode": 206,
+          "ttfbMs": 527,
+          "durationMs": 539,
+          "bytesPerSecond": 1944371,
+          "bytesDownloaded": 1048576,
+          "path": "/1785994456779-track-1785994455919-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.19,
+          "mbps": 68.71,
+          "httpCode": 206,
+          "ttfbMs": 109,
+          "durationMs": 122,
+          "bytesPerSecond": 8588268,
+          "bytesDownloaded": 1048576,
+          "path": "/1785847532291-track-1785847530793-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T17:00:04.228374+07:00",
+      "slot": "2026-08-21T17:00:00+07:00",
+      "label": "17:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 7.509,
+      "avgMibps": 7.509,
+      "mbps": 62.99,
+      "ttfbMs": 120,
+      "durationMs": 134,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.968,
+          "mbps": 66.84,
+          "httpCode": 206,
+          "ttfbMs": 117,
+          "durationMs": 126,
+          "bytesPerSecond": 8355054,
+          "bytesDownloaded": 1048576,
+          "path": "/1785813311703-track-1785813310331-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.051,
+          "mbps": 59.15,
+          "httpCode": 206,
+          "ttfbMs": 122,
+          "durationMs": 142,
+          "bytesPerSecond": 7393241,
+          "bytesDownloaded": 1048576,
+          "path": "/1779029557525-track-1779029557502-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T17:30:04.399177+07:00",
+      "slot": "2026-08-21T17:30:00+07:00",
+      "label": "17:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 8.507,
+      "avgMibps": 8.507,
+      "mbps": 71.36,
+      "ttfbMs": 110,
+      "durationMs": 120,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.237,
+          "mbps": 60.71,
+          "httpCode": 206,
+          "ttfbMs": 128,
+          "durationMs": 138,
+          "bytesPerSecond": 7588643,
+          "bytesDownloaded": 1048576,
+          "path": "/1786156982440-track-1786156980935-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 9.776,
+          "mbps": 82.01,
+          "httpCode": 206,
+          "ttfbMs": 93,
+          "durationMs": 102,
+          "bytesPerSecond": 10250911,
+          "bytesDownloaded": 1048576,
+          "path": "/1779029597084-track-1779029596939-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T18:00:04.526794+07:00",
+      "slot": "2026-08-21T18:00:00+07:00",
+      "label": "18:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 8.068,
+      "avgMibps": 8.068,
+      "mbps": 67.68,
+      "ttfbMs": 112,
+      "durationMs": 124,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.618,
+          "mbps": 63.91,
+          "httpCode": 206,
+          "ttfbMs": 123,
+          "durationMs": 131,
+          "bytesPerSecond": 7988176,
+          "bytesDownloaded": 1048576,
+          "path": "/1784729452471-track-1784729450807-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.517,
+          "mbps": 71.45,
+          "httpCode": 206,
+          "ttfbMs": 102,
+          "durationMs": 117,
+          "bytesPerSecond": 8930815,
+          "bytesDownloaded": 1048576,
+          "path": "/1785037640853-track-1785037639455-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T18:30:04.110086+07:00",
+      "slot": "2026-08-21T18:30:00+07:00",
+      "label": "18:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.028,
+      "avgMibps": 4.028,
+      "mbps": 33.79,
+      "ttfbMs": 226,
+      "durationMs": 250,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 4.294,
+          "mbps": 36.02,
+          "httpCode": 206,
+          "ttfbMs": 209,
+          "durationMs": 233,
+          "bytesPerSecond": 4502664,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036813120-track-1779036813096-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.762,
+          "mbps": 31.56,
+          "httpCode": 206,
+          "ttfbMs": 244,
+          "durationMs": 266,
+          "bytesPerSecond": 3944550,
+          "bytesDownloaded": 1048576,
+          "path": "/1785813264494-track-1785813263262-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T19:00:04.014057+07:00",
+      "slot": "2026-08-21T19:00:00+07:00",
+      "label": "19:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.429,
+      "avgMibps": 4.429,
+      "mbps": 37.15,
+      "ttfbMs": 209,
+      "durationMs": 226,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 4.241,
+          "mbps": 35.58,
+          "httpCode": 206,
+          "ttfbMs": 212,
+          "durationMs": 236,
+          "bytesPerSecond": 4447113,
+          "bytesDownloaded": 1048576,
+          "path": "/1786244516148-track-1786244514752-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.617,
+          "mbps": 38.73,
+          "httpCode": 206,
+          "ttfbMs": 206,
+          "durationMs": 217,
+          "bytesPerSecond": 4840937,
+          "bytesDownloaded": 1048576,
+          "path": "/1779031879317-track-1779031879290-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T19:30:03.877332+07:00",
+      "slot": "2026-08-21T19:30:00+07:00",
+      "label": "19:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 6.905,
+      "avgMibps": 6.905,
+      "mbps": 57.92,
+      "ttfbMs": 166,
+      "durationMs": 186,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 10.128,
+          "mbps": 84.96,
+          "httpCode": 206,
+          "ttfbMs": 86,
+          "durationMs": 99,
+          "bytesPerSecond": 10620427,
+          "bytesDownloaded": 1048576,
+          "path": "/1779452804310-track-1779452803824-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.682,
+          "mbps": 30.89,
+          "httpCode": 206,
+          "ttfbMs": 247,
+          "durationMs": 272,
+          "bytesPerSecond": 3860636,
+          "bytesDownloaded": 1048576,
+          "path": "/1779031561456-track-1779031561362-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T20:00:03.831407+07:00",
+      "slot": "2026-08-21T20:00:00+07:00",
+      "label": "20:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 7.173,
+      "avgMibps": 7.173,
+      "mbps": 60.17,
+      "ttfbMs": 99,
+      "durationMs": 146,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 5.711,
+          "mbps": 47.91,
+          "httpCode": 206,
+          "ttfbMs": 94,
+          "durationMs": 175,
+          "bytesPerSecond": 5988611,
+          "bytesDownloaded": 1048576,
+          "path": "/1779719228782-track-1779719227328-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.635,
+          "mbps": 72.44,
+          "httpCode": 206,
+          "ttfbMs": 104,
+          "durationMs": 116,
+          "bytesPerSecond": 9054591,
+          "bytesDownloaded": 1048576,
+          "path": "/1779029746611-track-1779029746586-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T20:30:03.963851+07:00",
+      "slot": "2026-08-21T20:30:00+07:00",
+      "label": "20:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 9.524,
+      "avgMibps": 9.524,
+      "mbps": 79.9,
+      "ttfbMs": 97,
+      "durationMs": 106,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 10.668,
+          "mbps": 89.49,
+          "httpCode": 206,
+          "ttfbMs": 83,
+          "durationMs": 94,
+          "bytesPerSecond": 11186361,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030067616-track-1779030067591-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.38,
+          "mbps": 70.3,
+          "httpCode": 206,
+          "ttfbMs": 111,
+          "durationMs": 119,
+          "bytesPerSecond": 8787416,
+          "bytesDownloaded": 1048576,
+          "path": "/1785994541440-track-1785994540029-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T21:00:03.783455+07:00",
+      "slot": "2026-08-21T21:00:00+07:00",
+      "label": "21:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.208,
+      "avgMibps": 4.208,
+      "mbps": 35.3,
+      "ttfbMs": 378,
+      "durationMs": 742,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.678,
+          "mbps": 64.41,
+          "httpCode": 206,
+          "ttfbMs": 117,
+          "durationMs": 130,
+          "bytesPerSecond": 8050982,
+          "bytesDownloaded": 1048576,
+          "path": "/1779031823468-track-1779031823441-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 0.738,
+          "mbps": 6.19,
+          "httpCode": 206,
+          "ttfbMs": 638,
+          "durationMs": 1354,
+          "bytesPerSecond": 774325,
+          "bytesDownloaded": 1048576,
+          "path": "/1779031896027-track-1779031895996-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T21:30:03.844388+07:00",
+      "slot": "2026-08-21T21:30:00+07:00",
+      "label": "21:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.491,
+      "avgMibps": 4.491,
+      "mbps": 37.68,
+      "ttfbMs": 510,
+      "durationMs": 1976,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "SLOW",
+          "mibps": 0.261,
+          "mbps": 2.19,
+          "httpCode": 206,
+          "ttfbMs": 921,
+          "durationMs": 3836,
+          "bytesPerSecond": 273325,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030782594-track-1779030782568-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.722,
+          "mbps": 73.17,
+          "httpCode": 206,
+          "ttfbMs": 100,
+          "durationMs": 115,
+          "bytesPerSecond": 9145967,
+          "bytesDownloaded": 1048576,
+          "path": "/1779465554632-track-1779465553457-0.m4a",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T22:00:05.368151+07:00",
+      "slot": "2026-08-21T22:00:00+07:00",
+      "label": "22:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 0.556,
+      "avgMibps": 0.556,
+      "mbps": 4.67,
+      "ttfbMs": 1002,
+      "durationMs": 1906,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 0.689,
+          "mbps": 5.78,
+          "httpCode": 206,
+          "ttfbMs": 1439,
+          "durationMs": 1452,
+          "bytesPerSecond": 722365,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036767462-track-1779036767441-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "SLOW",
+          "mibps": 0.424,
+          "mbps": 3.55,
+          "httpCode": 206,
+          "ttfbMs": 565,
+          "durationMs": 2360,
+          "bytesPerSecond": 444348,
+          "bytesDownloaded": 1048576,
+          "path": "/1779115090931-track-1779115089571-0.m4a",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T22:30:03.679868+07:00",
+      "slot": "2026-08-21T22:30:00+07:00",
+      "label": "22:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 1.981,
+      "avgMibps": 1.981,
+      "mbps": 16.62,
+      "ttfbMs": 463,
+      "durationMs": 1832,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "SLOW",
+          "mibps": 0.295,
+          "mbps": 2.47,
+          "httpCode": 206,
+          "ttfbMs": 662,
+          "durationMs": 3391,
+          "bytesPerSecond": 309248,
+          "bytesDownloaded": 1048576,
+          "path": "/1779719626974-track-1779719625765-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.667,
+          "mbps": 30.76,
+          "httpCode": 206,
+          "ttfbMs": 264,
+          "durationMs": 273,
+          "bytesPerSecond": 3845459,
+          "bytesDownloaded": 1048576,
+          "path": "/1785813206750-track-1785813205893-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T23:00:07.471568+07:00",
+      "slot": "2026-08-21T23:00:00+07:00",
+      "label": "23:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 6.54,
+      "avgMibps": 6.54,
+      "mbps": 54.86,
+      "ttfbMs": 141,
+      "durationMs": 154,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.05,
+          "mbps": 59.14,
+          "httpCode": 206,
+          "ttfbMs": 133,
+          "durationMs": 142,
+          "bytesPerSecond": 7392042,
+          "bytesDownloaded": 1048576,
+          "path": "/1779037197435-track-1779037197341-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.03,
+          "mbps": 50.58,
+          "httpCode": 206,
+          "ttfbMs": 149,
+          "durationMs": 166,
+          "bytesPerSecond": 6323045,
+          "bytesDownloaded": 1048576,
+          "path": "/1786057775067-track-1786057773448-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T23:30:05.156652+07:00",
+      "slot": "2026-08-21T23:30:00+07:00",
+      "label": "23:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.037,
+      "avgMibps": 4.037,
+      "mbps": 33.86,
+      "ttfbMs": 489,
+      "durationMs": 520,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.116,
+          "mbps": 9.36,
+          "httpCode": 206,
+          "ttfbMs": 843,
+          "durationMs": 896,
+          "bytesPerSecond": 1170563,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036739861-track-1779036739784-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.957,
+          "mbps": 58.36,
+          "httpCode": 206,
+          "ttfbMs": 135,
+          "durationMs": 144,
+          "bytesPerSecond": 7295101,
+          "bytesDownloaded": 1048576,
+          "path": "/1785813143159-track-1785813142303-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T00:00:03.465040+07:00",
+      "slot": "2026-08-22T00:00:00+07:00",
+      "label": "00:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 8.315,
+      "avgMibps": 8.315,
+      "mbps": 69.75,
+      "ttfbMs": 109,
+      "durationMs": 124,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 9.618,
+          "mbps": 80.68,
+          "httpCode": 206,
+          "ttfbMs": 95,
+          "durationMs": 104,
+          "bytesPerSecond": 10084885,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036750264-track-1779036750239-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.012,
+          "mbps": 58.82,
+          "httpCode": 206,
+          "ttfbMs": 123,
+          "durationMs": 143,
+          "bytesPerSecond": 7352597,
+          "bytesDownloaded": 1048576,
+          "path": "/1779038016120-track-1779038016097-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T00:30:03.539742+07:00",
+      "slot": "2026-08-22T00:30:00+07:00",
+      "label": "00:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 10.782,
+      "avgMibps": 10.782,
+      "mbps": 90.45,
+      "ttfbMs": 80,
+      "durationMs": 94,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 9.615,
+          "mbps": 80.66,
+          "httpCode": 206,
+          "ttfbMs": 86,
+          "durationMs": 104,
+          "bytesPerSecond": 10082461,
+          "bytesDownloaded": 1048576,
+          "path": "/1785378697445-track-1785378695971-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.949,
+          "mbps": 100.23,
+          "httpCode": 206,
+          "ttfbMs": 74,
+          "durationMs": 84,
+          "bytesPerSecond": 12529136,
+          "bytesDownloaded": 1048576,
+          "path": "/1786077519895-track-1786077518423-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T01:00:03.951074+07:00",
+      "slot": "2026-08-22T01:00:00+07:00",
+      "label": "01:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 5.513,
+      "avgMibps": 5.513,
+      "mbps": 46.24,
+      "ttfbMs": 278,
+      "durationMs": 288,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 2.164,
+          "mbps": 18.15,
+          "httpCode": 206,
+          "ttfbMs": 450,
+          "durationMs": 462,
+          "bytesPerSecond": 2268643,
+          "bytesDownloaded": 1048576,
+          "path": "/1785178857849-track-1785178856343-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.862,
+          "mbps": 74.34,
+          "httpCode": 206,
+          "ttfbMs": 105,
+          "durationMs": 113,
+          "bytesPerSecond": 9292261,
+          "bytesDownloaded": 1048576,
+          "path": "/1781549187500-track-1781549185860-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T01:30:03.119501+07:00",
+      "slot": "2026-08-22T01:30:00+07:00",
+      "label": "01:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.342,
+      "avgMibps": 4.342,
+      "mbps": 36.42,
+      "ttfbMs": 354,
+      "durationMs": 364,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.716,
+          "mbps": 14.4,
+          "httpCode": 206,
+          "ttfbMs": 574,
+          "durationMs": 583,
+          "bytesPerSecond": 1799620,
+          "bytesDownloaded": 1048576,
+          "path": "/1779115281062-track-1779115280006-0.m4a",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.967,
+          "mbps": 58.45,
+          "httpCode": 206,
+          "ttfbMs": 135,
+          "durationMs": 144,
+          "bytesPerSecond": 7305826,
+          "bytesDownloaded": 1048576,
+          "path": "/1784729832724-track-1784729831302-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T02:00:03.157599+07:00",
+      "slot": "2026-08-22T02:00:00+07:00",
+      "label": "02:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.193,
+      "avgMibps": 4.193,
+      "mbps": 35.17,
+      "ttfbMs": 228,
+      "durationMs": 239,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 4.319,
+          "mbps": 36.23,
+          "httpCode": 206,
+          "ttfbMs": 220,
+          "durationMs": 232,
+          "bytesPerSecond": 4528370,
+          "bytesDownloaded": 1048576,
+          "path": "/1779031930490-track-1779031930418-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.067,
+          "mbps": 34.11,
+          "httpCode": 206,
+          "ttfbMs": 236,
+          "durationMs": 246,
+          "bytesPerSecond": 4264289,
+          "bytesDownloaded": 1048576,
+          "path": "/1785035442767-track-1785035441402-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T02:30:03.605206+07:00",
+      "slot": "2026-08-22T02:30:00+07:00",
+      "label": "02:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 12.072,
+      "avgMibps": 12.072,
+      "mbps": 101.27,
+      "ttfbMs": 72,
+      "durationMs": 84,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 13.004,
+          "mbps": 109.08,
+          "httpCode": 206,
+          "ttfbMs": 69,
+          "durationMs": 77,
+          "bytesPerSecond": 13635224,
+          "bytesDownloaded": 1048576,
+          "path": "/1779460473284-track-1779460471782-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.141,
+          "mbps": 93.46,
+          "httpCode": 206,
+          "ttfbMs": 75,
+          "durationMs": 90,
+          "bytesPerSecond": 11682386,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030613180-track-1779030613154-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T03:00:02.657923+07:00",
+      "slot": "2026-08-22T03:00:00+07:00",
+      "label": "03:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 13.486,
+      "avgMibps": 13.486,
+      "mbps": 113.13,
+      "ttfbMs": 67,
+      "durationMs": 75,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 14.992,
+          "mbps": 125.76,
+          "httpCode": 206,
+          "ttfbMs": 59,
+          "durationMs": 67,
+          "bytesPerSecond": 15720308,
+          "bytesDownloaded": 1048576,
+          "path": "/1779029253950-track-1779029253717-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.981,
+          "mbps": 100.5,
+          "httpCode": 206,
+          "ttfbMs": 75,
+          "durationMs": 83,
+          "bytesPerSecond": 12562911,
+          "bytesDownloaded": 1048576,
+          "path": "/1787022380167-track-1787022378579-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T03:30:01.644352+07:00",
+      "slot": "2026-08-22T03:30:00+07:00",
+      "label": "03:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.004,
+      "avgMibps": 4.004,
+      "mbps": 33.59,
+      "ttfbMs": 314,
+      "durationMs": 328,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 5.958,
+          "mbps": 49.98,
+          "httpCode": 206,
+          "ttfbMs": 160,
+          "durationMs": 168,
+          "bytesPerSecond": 6247064,
+          "bytesDownloaded": 1048576,
+          "path": "/1779037614486-track-1779037614461-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 2.051,
+          "mbps": 17.2,
+          "httpCode": 206,
+          "ttfbMs": 468,
+          "durationMs": 488,
+          "bytesPerSecond": 2150135,
+          "bytesDownloaded": 1048576,
+          "path": "/1779465245370-track-1779465243592-0.m4a",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T04:00:01.765376+07:00",
+      "slot": "2026-08-22T04:00:00+07:00",
+      "label": "04:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 2.609,
+      "avgMibps": 2.609,
+      "mbps": 21.89,
+      "ttfbMs": 414,
+      "durationMs": 423,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.809,
+          "mbps": 15.18,
+          "httpCode": 206,
+          "ttfbMs": 544,
+          "durationMs": 553,
+          "bytesPerSecond": 1897133,
+          "bytesDownloaded": 1048576,
+          "path": "/1784691539949-track-1784691538516-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.409,
+          "mbps": 28.6,
+          "httpCode": 206,
+          "ttfbMs": 285,
+          "durationMs": 293,
+          "bytesPerSecond": 3574963,
+          "bytesDownloaded": 1048576,
+          "path": "/1779032119301-track-1779032119279-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T04:30:02.423483+07:00",
+      "slot": "2026-08-22T04:30:00+07:00",
+      "label": "04:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 4.38,
+      "avgMibps": 4.38,
+      "mbps": 36.74,
+      "ttfbMs": 217,
+      "durationMs": 229,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 4.576,
+          "mbps": 38.38,
+          "httpCode": 206,
+          "ttfbMs": 211,
+          "durationMs": 219,
+          "bytesPerSecond": 4798030,
+          "bytesDownloaded": 1048576,
+          "path": "/1779115305919-track-1779115304744-0.m4a",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.185,
+          "mbps": 35.1,
+          "httpCode": 206,
+          "ttfbMs": 223,
+          "durationMs": 239,
+          "bytesPerSecond": 4388026,
+          "bytesDownloaded": 1048576,
+          "path": "/1779115331116-track-1779115330121-0.m4a",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T05:00:02.649503+07:00",
+      "slot": "2026-08-22T05:00:00+07:00",
+      "label": "05:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 11.099,
+      "avgMibps": 11.099,
+      "mbps": 93.11,
+      "ttfbMs": 70,
+      "durationMs": 90,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 10.553,
+          "mbps": 88.52,
+          "httpCode": 206,
+          "ttfbMs": 69,
+          "durationMs": 95,
+          "bytesPerSecond": 11065597,
+          "bytesDownloaded": 1048576,
+          "path": "/1785994325933-track-1785994325062-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.646,
+          "mbps": 97.69,
+          "httpCode": 206,
+          "ttfbMs": 70,
+          "durationMs": 86,
+          "bytesPerSecond": 12211202,
+          "bytesDownloaded": 1048576,
+          "path": "/1782750711489-track-1782750710017-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T05:30:02.607374+07:00",
+      "slot": "2026-08-22T05:30:00+07:00",
+      "label": "05:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 7.948,
+      "avgMibps": 7.948,
+      "mbps": 66.67,
+      "ttfbMs": 161,
+      "durationMs": 175,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 12.161,
+          "mbps": 102.01,
+          "httpCode": 206,
+          "ttfbMs": 70,
+          "durationMs": 82,
+          "bytesPerSecond": 12751279,
+          "bytesDownloaded": 1048576,
+          "path": "/1782750820306-track-1782750819128-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 3.735,
+          "mbps": 31.33,
+          "httpCode": 206,
+          "ttfbMs": 252,
+          "durationMs": 268,
+          "bytesPerSecond": 3916718,
+          "bytesDownloaded": 1048576,
+          "path": "/1779024929694-track-1779024929557-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T06:00:02.686797+07:00",
+      "slot": "2026-08-22T06:00:00+07:00",
+      "label": "06:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 12.839,
+      "avgMibps": 12.839,
+      "mbps": 107.7,
+      "ttfbMs": 61,
+      "durationMs": 78,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 13.872,
+          "mbps": 116.37,
+          "httpCode": 206,
+          "ttfbMs": 60,
+          "durationMs": 72,
+          "bytesPerSecond": 14546180,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036950502-track-1779036950476-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.806,
+          "mbps": 99.04,
+          "httpCode": 206,
+          "ttfbMs": 62,
+          "durationMs": 85,
+          "bytesPerSecond": 12379589,
+          "bytesDownloaded": 1048576,
+          "path": "/1784691305200-track-1784691303775-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T06:30:01.982096+07:00",
+      "slot": "2026-08-22T06:30:00+07:00",
+      "label": "06:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 7.372,
+      "avgMibps": 7.372,
+      "mbps": 61.84,
+      "ttfbMs": 118,
+      "durationMs": 136,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.006,
+          "mbps": 58.77,
+          "httpCode": 206,
+          "ttfbMs": 119,
+          "durationMs": 143,
+          "bytesPerSecond": 7345901,
+          "bytesDownloaded": 1048576,
+          "path": "/1779465133672-track-1779465132557-0.m4a",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.738,
+          "mbps": 64.91,
+          "httpCode": 206,
+          "ttfbMs": 116,
+          "durationMs": 129,
+          "bytesPerSecond": 8113652,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030589271-track-1779030589141-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T07:00:02.186912+07:00",
+      "slot": "2026-08-22T07:00:00+07:00",
+      "label": "07:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 3.595,
+      "avgMibps": 3.595,
+      "mbps": 30.16,
+      "ttfbMs": 332,
+      "durationMs": 344,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 5.163,
+          "mbps": 43.31,
+          "httpCode": 206,
+          "ttfbMs": 183,
+          "durationMs": 194,
+          "bytesPerSecond": 5413709,
+          "bytesDownloaded": 1048576,
+          "path": "/1779036878255-track-1779036878232-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 2.027,
+          "mbps": 17.01,
+          "httpCode": 206,
+          "ttfbMs": 481,
+          "durationMs": 493,
+          "bytesPerSecond": 2125782,
+          "bytesDownloaded": 1048576,
+          "path": "/1779031509377-track-1779031509235-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T07:30:01.572706+07:00",
+      "slot": "2026-08-22T07:30:00+07:00",
+      "label": "07:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 1.641,
+      "avgMibps": 1.641,
+      "mbps": 13.77,
+      "ttfbMs": 524,
+      "durationMs": 610,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.714,
+          "mbps": 14.37,
+          "httpCode": 206,
+          "ttfbMs": 421,
+          "durationMs": 584,
+          "bytesPerSecond": 1796805,
+          "bytesDownloaded": 1048576,
+          "path": "/1779033128428-track-1779033128236-0.flac",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 1.569,
+          "mbps": 13.16,
+          "httpCode": 206,
+          "ttfbMs": 626,
+          "durationMs": 637,
+          "bytesPerSecond": 1645385,
+          "bytesDownloaded": 1048576,
+          "path": "/1779653896261-track-1779653895354-0.mp3",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T08:00:02.734914+07:00",
+      "slot": "2026-08-22T08:00:00+07:00",
+      "label": "08:00",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 7.815,
+      "avgMibps": 7.815,
+      "mbps": 65.56,
+      "ttfbMs": 156,
+      "durationMs": 164,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 11.483,
+          "mbps": 96.33,
+          "httpCode": 206,
+          "ttfbMs": 79,
+          "durationMs": 87,
+          "bytesPerSecond": 12040695,
+          "bytesDownloaded": 1048576,
+          "path": "/1779465498191-track-1779465497094-0.m4a",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 4.147,
+          "mbps": 34.79,
+          "httpCode": 206,
+          "ttfbMs": 233,
+          "durationMs": 241,
+          "bytesPerSecond": 4348501,
+          "bytesDownloaded": 1048576,
+          "path": "/1779030660897-track-1779030660868-0.flac",
+          "curlExit": 0
+        }
+      ]
+    }
+  ]
+}

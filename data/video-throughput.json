@@ -1,0 +1,2014 @@
+{
+  "generated": "2026-08-22T08:00:02.914508+07:00",
+  "config": {
+    "rangeBytes": 4194304,
+    "sampleCount": 2,
+    "candidateCount": 92,
+    "source": "full-r2-inventory",
+    "maxSeconds": 120,
+    "goodAtOrAboveBps": 1048576,
+    "slowAtOrAboveBps": 262144
+  },
+  "latest": {
+    "stamp": "2026-08-22T08:00:02.914508+07:00",
+    "slot": "2026-08-22T08:00:00+07:00",
+    "label": "08:00",
+    "kind": "video",
+    "status": "GOOD",
+    "mibps": 22.649,
+    "avgMibps": 22.649,
+    "mbps": 189.99,
+    "ttfbMs": 95,
+    "durationMs": 182,
+    "sampleCount": 2,
+    "candidateCount": 92,
+    "samples": [
+      {
+        "status": "GOOD",
+        "mibps": 26.461,
+        "mbps": 221.97,
+        "httpCode": 206,
+        "ttfbMs": 85,
+        "durationMs": 151,
+        "bytesPerSecond": 27746528,
+        "bytesDownloaded": 4194304,
+        "path": "/youtube/kurzgesagt-in-a-nutshell/alcohol-is-amazing/video.mp4",
+        "curlExit": 0
+      },
+      {
+        "status": "GOOD",
+        "mibps": 18.837,
+        "mbps": 158.02,
+        "httpCode": 206,
+        "ttfbMs": 105,
+        "durationMs": 212,
+        "bytesPerSecond": 19751936,
+        "bytesDownloaded": 4194304,
+        "path": "/youtube/kurzgesagt-in-a-nutshell/our-minds-are-weirder-than-you-think/video.mp4",
+        "curlExit": 0
+      }
+    ]
+  },
+  "history": [
+    {
+      "stamp": "2026-08-21T08:00:03.170709+07:00",
+      "slot": "2026-08-21T08:00:00+07:00",
+      "label": "08:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.558,
+      "avgMibps": 19.558,
+      "mbps": 164.06,
+      "ttfbMs": 270,
+      "durationMs": 334,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 31.738,
+          "mbps": 266.24,
+          "httpCode": 206,
+          "ttfbMs": 66,
+          "durationMs": 126,
+          "bytesPerSecond": 33279410,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/this-is-the-scariest-place-in-the-universe/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.377,
+          "mbps": 61.89,
+          "httpCode": 206,
+          "ttfbMs": 474,
+          "durationMs": 542,
+          "bytesPerSecond": 7735642,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-pigeon-man-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T08:30:02.567522+07:00",
+      "slot": "2026-08-21T08:30:00+07:00",
+      "label": "08:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.799,
+      "avgMibps": 16.799,
+      "mbps": 140.92,
+      "ttfbMs": 273,
+      "durationMs": 337,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 7.713,
+          "mbps": 64.7,
+          "httpCode": 206,
+          "ttfbMs": 452,
+          "durationMs": 519,
+          "bytesPerSecond": 8087790,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-the-war/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 25.885,
+          "mbps": 217.14,
+          "httpCode": 206,
+          "ttfbMs": 94,
+          "durationMs": 155,
+          "bytesPerSecond": 27142679,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-first-contact/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T09:00:02.914932+07:00",
+      "slot": "2026-08-21T09:00:00+07:00",
+      "label": "09:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 9.516,
+      "avgMibps": 9.516,
+      "mbps": 79.83,
+      "ttfbMs": 186,
+      "durationMs": 502,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 13.34,
+          "mbps": 111.9,
+          "httpCode": 206,
+          "ttfbMs": 238,
+          "durationMs": 300,
+          "bytesPerSecond": 13988007,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-the-i-t-wizard/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 5.693,
+          "mbps": 47.76,
+          "httpCode": 206,
+          "ttfbMs": 133,
+          "durationMs": 703,
+          "bytesPerSecond": 5969494,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E11/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T09:30:03.152766+07:00",
+      "slot": "2026-08-21T09:30:00+07:00",
+      "label": "09:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 22.511,
+      "avgMibps": 22.511,
+      "mbps": 188.84,
+      "ttfbMs": 74,
+      "durationMs": 180,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 19.702,
+          "mbps": 165.27,
+          "httpCode": 206,
+          "ttfbMs": 78,
+          "durationMs": 203,
+          "bytesPerSecond": 20659051,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-ketchup-crusaders-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 25.32,
+          "mbps": 212.4,
+          "httpCode": 206,
+          "ttfbMs": 71,
+          "durationMs": 158,
+          "bytesPerSecond": 26550428,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-reunion/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T10:00:03.672484+07:00",
+      "slot": "2026-08-21T10:00:00+07:00",
+      "label": "10:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 22.708,
+      "avgMibps": 22.708,
+      "mbps": 190.49,
+      "ttfbMs": 82,
+      "durationMs": 180,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 19.371,
+          "mbps": 162.49,
+          "httpCode": 206,
+          "ttfbMs": 82,
+          "durationMs": 206,
+          "bytesPerSecond": 20311596,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-1/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 26.045,
+          "mbps": 218.48,
+          "httpCode": 206,
+          "ttfbMs": 81,
+          "durationMs": 154,
+          "bytesPerSecond": 27310400,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-hackman/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T10:30:03.980175+07:00",
+      "slot": "2026-08-21T10:30:00+07:00",
+      "label": "10:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.536,
+      "avgMibps": 16.536,
+      "mbps": 138.72,
+      "ttfbMs": 272,
+      "durationMs": 388,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 26.67,
+          "mbps": 223.72,
+          "httpCode": 206,
+          "ttfbMs": 90,
+          "durationMs": 150,
+          "bytesPerSecond": 27965196,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E01/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.403,
+          "mbps": 53.71,
+          "httpCode": 206,
+          "ttfbMs": 455,
+          "durationMs": 625,
+          "bytesPerSecond": 6714281,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E02/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T11:00:03.391009+07:00",
+      "slot": "2026-08-21T11:00:00+07:00",
+      "label": "11:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.717,
+      "avgMibps": 16.717,
+      "mbps": 140.24,
+      "ttfbMs": 126,
+      "durationMs": 242,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 15.113,
+          "mbps": 126.77,
+          "httpCode": 206,
+          "ttfbMs": 111,
+          "durationMs": 265,
+          "bytesPerSecond": 15846757,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-first-contact/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 18.322,
+          "mbps": 153.7,
+          "httpCode": 206,
+          "ttfbMs": 140,
+          "durationMs": 218,
+          "bytesPerSecond": 19212165,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/i-remember/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T11:30:03.933695+07:00",
+      "slot": "2026-08-21T11:30:00+07:00",
+      "label": "11:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 15.008,
+      "avgMibps": 15.008,
+      "mbps": 125.9,
+      "ttfbMs": 103,
+      "durationMs": 356,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 22.508,
+          "mbps": 188.81,
+          "httpCode": 206,
+          "ttfbMs": 111,
+          "durationMs": 178,
+          "bytesPerSecond": 23601825,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E01/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.508,
+          "mbps": 62.98,
+          "httpCode": 206,
+          "ttfbMs": 95,
+          "durationMs": 533,
+          "bytesPerSecond": 7872665,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-motion-detected/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T12:00:03.910316+07:00",
+      "slot": "2026-08-21T12:00:00+07:00",
+      "label": "12:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 18.671,
+      "avgMibps": 18.671,
+      "mbps": 156.62,
+      "ttfbMs": 144,
+      "durationMs": 220,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 21.678,
+          "mbps": 181.85,
+          "httpCode": 206,
+          "ttfbMs": 123,
+          "durationMs": 185,
+          "bytesPerSecond": 22731137,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-1/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 15.664,
+          "mbps": 131.4,
+          "httpCode": 206,
+          "ttfbMs": 165,
+          "durationMs": 255,
+          "bytesPerSecond": 16424869,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-pigeon-man-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T12:30:03.993426+07:00",
+      "slot": "2026-08-21T12:30:00+07:00",
+      "label": "12:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 17.916,
+      "avgMibps": 17.916,
+      "mbps": 150.29,
+      "ttfbMs": 156,
+      "durationMs": 228,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 20.708,
+          "mbps": 173.71,
+          "httpCode": 206,
+          "ttfbMs": 131,
+          "durationMs": 193,
+          "bytesPerSecond": 21713694,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-damage-control/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 15.125,
+          "mbps": 126.88,
+          "httpCode": 206,
+          "ttfbMs": 182,
+          "durationMs": 264,
+          "bytesPerSecond": 15859400,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-chocolate-business-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T13:00:03.886720+07:00",
+      "slot": "2026-08-21T13:00:00+07:00",
+      "label": "13:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 17.653,
+      "avgMibps": 17.653,
+      "mbps": 148.08,
+      "ttfbMs": 152,
+      "durationMs": 232,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 15.016,
+          "mbps": 125.97,
+          "httpCode": 206,
+          "ttfbMs": 170,
+          "durationMs": 266,
+          "bytesPerSecond": 15745684,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E12/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 20.289,
+          "mbps": 170.19,
+          "httpCode": 206,
+          "ttfbMs": 133,
+          "durationMs": 197,
+          "bytesPerSecond": 21274360,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-the-k-arrier/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T13:30:04.829671+07:00",
+      "slot": "2026-08-21T13:30:00+07:00",
+      "label": "13:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 9.127,
+      "avgMibps": 9.127,
+      "mbps": 76.56,
+      "ttfbMs": 188,
+      "durationMs": 744,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 3.273,
+          "mbps": 27.45,
+          "httpCode": 206,
+          "ttfbMs": 180,
+          "durationMs": 1222,
+          "bytesPerSecond": 3431748,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-the-b-doctor/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 14.982,
+          "mbps": 125.67,
+          "httpCode": 206,
+          "ttfbMs": 195,
+          "durationMs": 267,
+          "bytesPerSecond": 15709356,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-3/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T14:00:04.160255+07:00",
+      "slot": "2026-08-21T14:00:00+07:00",
+      "label": "14:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 17.826,
+      "avgMibps": 17.826,
+      "mbps": 149.53,
+      "ttfbMs": 152,
+      "durationMs": 228,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 20.091,
+          "mbps": 168.53,
+          "httpCode": 206,
+          "ttfbMs": 137,
+          "durationMs": 199,
+          "bytesPerSecond": 21066635,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/king-gnu-official-youtube-channel/king-gnu-aizo/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 15.561,
+          "mbps": 130.53,
+          "httpCode": 206,
+          "ttfbMs": 166,
+          "durationMs": 257,
+          "bytesPerSecond": 16316630,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E04/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T14:30:03.844576+07:00",
+      "slot": "2026-08-21T14:30:00+07:00",
+      "label": "14:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 20.053,
+      "avgMibps": 20.053,
+      "mbps": 168.22,
+      "ttfbMs": 123,
+      "durationMs": 204,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 23.174,
+          "mbps": 194.4,
+          "httpCode": 206,
+          "ttfbMs": 109,
+          "durationMs": 173,
+          "bytesPerSecond": 24300155,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/we-found-a-loophole-to-survive-the-end-of-the-universe/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 16.931,
+          "mbps": 142.03,
+          "httpCode": 206,
+          "ttfbMs": 137,
+          "durationMs": 236,
+          "bytesPerSecond": 17753818,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-informational-video/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T15:00:04.793366+07:00",
+      "slot": "2026-08-21T15:00:00+07:00",
+      "label": "15:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 9.0,
+      "avgMibps": 9.0,
+      "mbps": 75.49,
+      "ttfbMs": 342,
+      "durationMs": 446,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 9.535,
+          "mbps": 79.99,
+          "httpCode": 206,
+          "ttfbMs": 277,
+          "durationMs": 420,
+          "bytesPerSecond": 9998150,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E03/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 8.464,
+          "mbps": 71.0,
+          "httpCode": 206,
+          "ttfbMs": 406,
+          "durationMs": 473,
+          "bytesPerSecond": 8875199,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E04/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T15:30:04.703906+07:00",
+      "slot": "2026-08-21T15:30:00+07:00",
+      "label": "15:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 17.518,
+      "avgMibps": 17.518,
+      "mbps": 146.95,
+      "ttfbMs": 153,
+      "durationMs": 255,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 23.155,
+          "mbps": 194.24,
+          "httpCode": 206,
+          "ttfbMs": 111,
+          "durationMs": 173,
+          "bytesPerSecond": 24279477,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-the-war/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 11.882,
+          "mbps": 99.67,
+          "httpCode": 206,
+          "ttfbMs": 195,
+          "durationMs": 337,
+          "bytesPerSecond": 12458723,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-how-anons-family-almost-ruined-christmas/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T16:00:03.742437+07:00",
+      "slot": "2026-08-21T16:00:00+07:00",
+      "label": "16:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 13.133,
+      "avgMibps": 13.133,
+      "mbps": 110.17,
+      "ttfbMs": 150,
+      "durationMs": 404,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.611,
+          "mbps": 55.46,
+          "httpCode": 206,
+          "ttfbMs": 176,
+          "durationMs": 605,
+          "bytesPerSecond": 6932550,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/how-are-memories-stored-inside-your-brain/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 19.655,
+          "mbps": 164.88,
+          "httpCode": 206,
+          "ttfbMs": 125,
+          "durationMs": 204,
+          "bytesPerSecond": 20610121,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/king-gnu-official-youtube-channel/king-gnu-aizo/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T16:30:04.010353+07:00",
+      "slot": "2026-08-21T16:30:00+07:00",
+      "label": "16:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 12.909,
+      "avgMibps": 12.909,
+      "mbps": 108.29,
+      "ttfbMs": 183,
+      "durationMs": 310,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 12.84,
+          "mbps": 107.71,
+          "httpCode": 206,
+          "ttfbMs": 183,
+          "durationMs": 312,
+          "bytesPerSecond": 13463563,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-informational-video/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 12.978,
+          "mbps": 108.87,
+          "httpCode": 206,
+          "ttfbMs": 183,
+          "durationMs": 308,
+          "bytesPerSecond": 13608370,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E09/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T17:00:04.118739+07:00",
+      "slot": "2026-08-21T17:00:00+07:00",
+      "label": "17:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.39,
+      "avgMibps": 19.39,
+      "mbps": 162.66,
+      "ttfbMs": 112,
+      "durationMs": 210,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 22.139,
+          "mbps": 185.72,
+          "httpCode": 206,
+          "ttfbMs": 108,
+          "durationMs": 181,
+          "bytesPerSecond": 23214762,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E03/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 16.641,
+          "mbps": 139.59,
+          "httpCode": 206,
+          "ttfbMs": 116,
+          "durationMs": 240,
+          "bytesPerSecond": 17449365,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-5/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T17:30:04.379720+07:00",
+      "slot": "2026-08-21T17:30:00+07:00",
+      "label": "17:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 15.092,
+      "avgMibps": 15.092,
+      "mbps": 126.6,
+      "ttfbMs": 156,
+      "durationMs": 302,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 20.383,
+          "mbps": 170.98,
+          "httpCode": 206,
+          "ttfbMs": 134,
+          "durationMs": 196,
+          "bytesPerSecond": 21372685,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E02/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 9.802,
+          "mbps": 82.22,
+          "httpCode": 206,
+          "ttfbMs": 178,
+          "durationMs": 408,
+          "bytesPerSecond": 10277688,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-report/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T18:00:04.220625+07:00",
+      "slot": "2026-08-21T18:00:00+07:00",
+      "label": "18:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.501,
+      "avgMibps": 19.501,
+      "mbps": 163.58,
+      "ttfbMs": 126,
+      "durationMs": 211,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 22.717,
+          "mbps": 190.56,
+          "httpCode": 206,
+          "ttfbMs": 113,
+          "durationMs": 176,
+          "bytesPerSecond": 23820174,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-prototype/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 16.284,
+          "mbps": 136.6,
+          "httpCode": 206,
+          "ttfbMs": 140,
+          "durationMs": 246,
+          "bytesPerSecond": 17075490,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Detective%20Conan%20Movie/S01E01/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T18:30:03.602548+07:00",
+      "slot": "2026-08-21T18:30:00+07:00",
+      "label": "18:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 15.586,
+      "avgMibps": 15.586,
+      "mbps": 130.75,
+      "ttfbMs": 130,
+      "durationMs": 256,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 15.316,
+          "mbps": 128.48,
+          "httpCode": 206,
+          "ttfbMs": 131,
+          "durationMs": 261,
+          "bytesPerSecond": 16059485,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-how-anons-family-almost-ruined-christmas/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 15.857,
+          "mbps": 133.01,
+          "httpCode": 206,
+          "ttfbMs": 130,
+          "durationMs": 252,
+          "bytesPerSecond": 16626776,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/king-gnu-official-youtube-channel/king-gnu-specialz/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T19:00:03.869980+07:00",
+      "slot": "2026-08-21T19:00:00+07:00",
+      "label": "19:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 14.837,
+      "avgMibps": 14.837,
+      "mbps": 124.46,
+      "ttfbMs": 164,
+      "durationMs": 272,
+      "sampleCount": 2,
+      "candidateCount": 80,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 16.183,
+          "mbps": 135.75,
+          "httpCode": 206,
+          "ttfbMs": 140,
+          "durationMs": 247,
+          "bytesPerSecond": 16968896,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-pitfalls/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 13.491,
+          "mbps": 113.17,
+          "httpCode": 206,
+          "ttfbMs": 189,
+          "durationMs": 296,
+          "bytesPerSecond": 14146098,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-the-k-arrier/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T19:30:03.787198+07:00",
+      "slot": "2026-08-21T19:30:00+07:00",
+      "label": "19:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 18.523,
+      "avgMibps": 18.523,
+      "mbps": 155.38,
+      "ttfbMs": 163,
+      "durationMs": 282,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 9.551,
+          "mbps": 80.12,
+          "httpCode": 206,
+          "ttfbMs": 242,
+          "durationMs": 419,
+          "bytesPerSecond": 10014574,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E04/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 27.495,
+          "mbps": 230.64,
+          "httpCode": 206,
+          "ttfbMs": 84,
+          "durationMs": 145,
+          "bytesPerSecond": 28830596,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-ghost-puncher/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T20:00:03.749182+07:00",
+      "slot": "2026-08-21T20:00:00+07:00",
+      "label": "20:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.405,
+      "avgMibps": 19.405,
+      "mbps": 162.78,
+      "ttfbMs": 134,
+      "durationMs": 212,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 16.036,
+          "mbps": 134.52,
+          "httpCode": 206,
+          "ttfbMs": 160,
+          "durationMs": 249,
+          "bytesPerSecond": 16815083,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/this-is-the-scariest-place-in-the-universe/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 22.774,
+          "mbps": 191.04,
+          "httpCode": 206,
+          "ttfbMs": 108,
+          "durationMs": 176,
+          "bytesPerSecond": 23880526,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E05/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T20:30:04.032134+07:00",
+      "slot": "2026-08-21T20:30:00+07:00",
+      "label": "20:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 18.124,
+      "avgMibps": 18.124,
+      "mbps": 152.04,
+      "ttfbMs": 122,
+      "durationMs": 224,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 15.986,
+          "mbps": 134.1,
+          "httpCode": 206,
+          "ttfbMs": 124,
+          "durationMs": 250,
+          "bytesPerSecond": 16762532,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-hackman-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 20.263,
+          "mbps": 169.98,
+          "httpCode": 206,
+          "ttfbMs": 119,
+          "durationMs": 197,
+          "bytesPerSecond": 21247094,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/why-humanity-will-never-leave-the-solar-system/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T21:00:03.501443+07:00",
+      "slot": "2026-08-21T21:00:00+07:00",
+      "label": "21:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 9.129,
+      "avgMibps": 9.129,
+      "mbps": 76.58,
+      "ttfbMs": 388,
+      "durationMs": 492,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.123,
+          "mbps": 51.36,
+          "httpCode": 206,
+          "ttfbMs": 581,
+          "durationMs": 653,
+          "bytesPerSecond": 6420151,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E08/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 12.136,
+          "mbps": 101.8,
+          "httpCode": 206,
+          "ttfbMs": 194,
+          "durationMs": 330,
+          "bytesPerSecond": 12725552,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-found-footage-3/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T21:30:03.791157+07:00",
+      "slot": "2026-08-21T21:30:00+07:00",
+      "label": "21:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.583,
+      "avgMibps": 16.583,
+      "mbps": 139.11,
+      "ttfbMs": 120,
+      "durationMs": 254,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 12.88,
+          "mbps": 108.05,
+          "httpCode": 206,
+          "ttfbMs": 120,
+          "durationMs": 311,
+          "bytesPerSecond": 13505876,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-pigeon-man-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 20.285,
+          "mbps": 170.16,
+          "httpCode": 206,
+          "ttfbMs": 120,
+          "durationMs": 197,
+          "bytesPerSecond": 21270476,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/alcohol-is-amazing/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T22:00:05.301609+07:00",
+      "slot": "2026-08-21T22:00:00+07:00",
+      "label": "22:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 21.238,
+      "avgMibps": 21.238,
+      "mbps": 178.16,
+      "ttfbMs": 128,
+      "durationMs": 194,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 17.574,
+          "mbps": 147.42,
+          "httpCode": 206,
+          "ttfbMs": 158,
+          "durationMs": 228,
+          "bytesPerSecond": 18427672,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/this-is-the-scariest-place-in-the-universe/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 24.902,
+          "mbps": 208.89,
+          "httpCode": 206,
+          "ttfbMs": 99,
+          "durationMs": 161,
+          "bytesPerSecond": 26111260,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/alcohol-is-amazing/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T22:30:03.577968+07:00",
+      "slot": "2026-08-21T22:30:00+07:00",
+      "label": "22:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.033,
+      "avgMibps": 16.033,
+      "mbps": 134.49,
+      "ttfbMs": 278,
+      "durationMs": 372,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 25.238,
+          "mbps": 211.71,
+          "httpCode": 206,
+          "ttfbMs": 96,
+          "durationMs": 158,
+          "bytesPerSecond": 26464155,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E11/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.828,
+          "mbps": 57.27,
+          "httpCode": 206,
+          "ttfbMs": 461,
+          "durationMs": 586,
+          "bytesPerSecond": 7159201,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E06/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T23:00:07.219835+07:00",
+      "slot": "2026-08-21T23:00:00+07:00",
+      "label": "23:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 14.508,
+      "avgMibps": 14.508,
+      "mbps": 121.7,
+      "ttfbMs": 626,
+      "durationMs": 1868,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 1.113,
+          "mbps": 9.34,
+          "httpCode": 206,
+          "ttfbMs": 1170,
+          "durationMs": 3593,
+          "bytesPerSecond": 1167443,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/let-s-kill-you-a-billion-times-to-make-you-immortal/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 27.902,
+          "mbps": 234.06,
+          "httpCode": 206,
+          "ttfbMs": 83,
+          "durationMs": 143,
+          "bytesPerSecond": 29257346,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/the-pigeon-man-full-version-4chan-greentext-animations/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-21T23:30:04.966614+07:00",
+      "slot": "2026-08-21T23:30:00+07:00",
+      "label": "23:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.486,
+      "avgMibps": 19.486,
+      "mbps": 163.46,
+      "ttfbMs": 102,
+      "durationMs": 208,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 21.643,
+          "mbps": 181.56,
+          "httpCode": 206,
+          "ttfbMs": 101,
+          "durationMs": 185,
+          "bytesPerSecond": 22694608,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E02/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 17.329,
+          "mbps": 145.37,
+          "httpCode": 206,
+          "ttfbMs": 104,
+          "durationMs": 231,
+          "bytesPerSecond": 18170847,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E06/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T00:00:03.135972+07:00",
+      "slot": "2026-08-22T00:00:00+07:00",
+      "label": "00:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 12.437,
+      "avgMibps": 12.437,
+      "mbps": 104.33,
+      "ttfbMs": 266,
+      "durationMs": 398,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.996,
+          "mbps": 58.69,
+          "httpCode": 206,
+          "ttfbMs": 372,
+          "durationMs": 572,
+          "bytesPerSecond": 7336187,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E07/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 17.878,
+          "mbps": 149.97,
+          "httpCode": 206,
+          "ttfbMs": 161,
+          "durationMs": 224,
+          "bytesPerSecond": 18746665,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-the-b-doctor/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T00:30:03.318031+07:00",
+      "slot": "2026-08-22T00:30:00+07:00",
+      "label": "00:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 15.724,
+      "avgMibps": 15.724,
+      "mbps": 131.91,
+      "ttfbMs": 168,
+      "durationMs": 256,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 16.732,
+          "mbps": 140.36,
+          "httpCode": 206,
+          "ttfbMs": 143,
+          "durationMs": 239,
+          "bytesPerSecond": 17545278,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E12/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 14.716,
+          "mbps": 123.45,
+          "httpCode": 206,
+          "ttfbMs": 192,
+          "durationMs": 272,
+          "bytesPerSecond": 15431241,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E02/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T01:00:03.998065+07:00",
+      "slot": "2026-08-22T01:00:00+07:00",
+      "label": "01:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 12.558,
+      "avgMibps": 12.558,
+      "mbps": 105.34,
+      "ttfbMs": 220,
+      "durationMs": 352,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 8.697,
+          "mbps": 72.96,
+          "httpCode": 206,
+          "ttfbMs": 334,
+          "durationMs": 460,
+          "bytesPerSecond": 9119697,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E05/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 16.418,
+          "mbps": 137.72,
+          "httpCode": 206,
+          "ttfbMs": 105,
+          "durationMs": 244,
+          "bytesPerSecond": 17215523,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-pitfalls/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T01:30:03.091491+07:00",
+      "slot": "2026-08-22T01:30:00+07:00",
+      "label": "01:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 10.006,
+      "avgMibps": 10.006,
+      "mbps": 83.94,
+      "ttfbMs": 308,
+      "durationMs": 464,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.272,
+          "mbps": 52.61,
+          "httpCode": 206,
+          "ttfbMs": 422,
+          "durationMs": 638,
+          "bytesPerSecond": 6576752,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-one-day-with-alex-jones/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 13.74,
+          "mbps": 115.26,
+          "httpCode": 206,
+          "ttfbMs": 194,
+          "durationMs": 291,
+          "bytesPerSecond": 14407128,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-the-pigeon-man/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T02:00:03.015796+07:00",
+      "slot": "2026-08-22T02:00:00+07:00",
+      "label": "02:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 13.919,
+      "avgMibps": 13.919,
+      "mbps": 116.76,
+      "ttfbMs": 172,
+      "durationMs": 288,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 13.294,
+          "mbps": 111.52,
+          "httpCode": 206,
+          "ttfbMs": 170,
+          "durationMs": 301,
+          "bytesPerSecond": 13939427,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/king-gnu-official-youtube-channel/king-hikoutei/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 14.544,
+          "mbps": 122.0,
+          "httpCode": 206,
+          "ttfbMs": 173,
+          "durationMs": 275,
+          "bytesPerSecond": 15250239,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-4/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T02:30:03.457054+07:00",
+      "slot": "2026-08-22T02:30:00+07:00",
+      "label": "02:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.735,
+      "avgMibps": 16.735,
+      "mbps": 140.39,
+      "ttfbMs": 320,
+      "durationMs": 380,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 26.95,
+          "mbps": 226.08,
+          "httpCode": 206,
+          "ttfbMs": 88,
+          "durationMs": 148,
+          "bytesPerSecond": 28259505,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E02/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.52,
+          "mbps": 54.7,
+          "httpCode": 206,
+          "ttfbMs": 553,
+          "durationMs": 613,
+          "bytesPerSecond": 6836959,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-report/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T03:00:02.588966+07:00",
+      "slot": "2026-08-22T03:00:00+07:00",
+      "label": "03:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.072,
+      "avgMibps": 16.072,
+      "mbps": 134.82,
+      "ttfbMs": 174,
+      "durationMs": 254,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 13.937,
+          "mbps": 116.91,
+          "httpCode": 206,
+          "ttfbMs": 191,
+          "durationMs": 287,
+          "bytesPerSecond": 14614299,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E08/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 18.206,
+          "mbps": 152.72,
+          "httpCode": 206,
+          "ttfbMs": 156,
+          "durationMs": 220,
+          "bytesPerSecond": 19090530,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E04/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T03:30:01.578926+07:00",
+      "slot": "2026-08-22T03:30:00+07:00",
+      "label": "03:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 16.616,
+      "avgMibps": 16.616,
+      "mbps": 139.38,
+      "ttfbMs": 126,
+      "durationMs": 244,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 14.927,
+          "mbps": 125.22,
+          "httpCode": 206,
+          "ttfbMs": 182,
+          "durationMs": 268,
+          "bytesPerSecond": 15652023,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-2/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 18.304,
+          "mbps": 153.55,
+          "httpCode": 206,
+          "ttfbMs": 69,
+          "durationMs": 219,
+          "bytesPerSecond": 19193527,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/alcohol-is-amazing/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T04:00:01.537505+07:00",
+      "slot": "2026-08-22T04:00:00+07:00",
+      "label": "04:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 12.007,
+      "avgMibps": 12.007,
+      "mbps": 100.72,
+      "ttfbMs": 168,
+      "durationMs": 398,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 16.842,
+          "mbps": 141.28,
+          "httpCode": 206,
+          "ttfbMs": 165,
+          "durationMs": 238,
+          "bytesPerSecond": 17660004,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-how-anons-family-almost-ruined-christmas/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 7.171,
+          "mbps": 60.16,
+          "httpCode": 206,
+          "ttfbMs": 170,
+          "durationMs": 558,
+          "bytesPerSecond": 7519638,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E12/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T04:30:02.121143+07:00",
+      "slot": "2026-08-22T04:30:00+07:00",
+      "label": "04:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.644,
+      "avgMibps": 19.644,
+      "mbps": 164.79,
+      "ttfbMs": 188,
+      "durationMs": 256,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 28.556,
+          "mbps": 239.54,
+          "httpCode": 206,
+          "ttfbMs": 80,
+          "durationMs": 140,
+          "bytesPerSecond": 29943059,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E01/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 10.733,
+          "mbps": 90.03,
+          "httpCode": 206,
+          "ttfbMs": 297,
+          "durationMs": 373,
+          "bytesPerSecond": 11254136,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E07/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T05:00:02.445699+07:00",
+      "slot": "2026-08-22T05:00:00+07:00",
+      "label": "05:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 6.548,
+      "avgMibps": 6.548,
+      "mbps": 54.93,
+      "ttfbMs": 548,
+      "durationMs": 613,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 6.921,
+          "mbps": 58.06,
+          "httpCode": 206,
+          "ttfbMs": 518,
+          "durationMs": 578,
+          "bytesPerSecond": 7257384,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/this-is-the-scariest-place-in-the-universe/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 6.175,
+          "mbps": 51.8,
+          "httpCode": 206,
+          "ttfbMs": 578,
+          "durationMs": 648,
+          "bytesPerSecond": 6474679,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-report/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T05:30:02.275867+07:00",
+      "slot": "2026-08-22T05:30:00+07:00",
+      "label": "05:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 26.814,
+      "avgMibps": 26.814,
+      "mbps": 224.93,
+      "ttfbMs": 74,
+      "durationMs": 157,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 20.988,
+          "mbps": 176.06,
+          "httpCode": 206,
+          "ttfbMs": 89,
+          "durationMs": 191,
+          "bytesPerSecond": 22007408,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Another/S01E01/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 32.64,
+          "mbps": 273.81,
+          "httpCode": 206,
+          "ttfbMs": 60,
+          "durationMs": 123,
+          "bytesPerSecond": 34225805,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/greentext-animations/4chan-greentext-animations-compilation-4/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T06:00:02.741587+07:00",
+      "slot": "2026-08-22T06:00:00+07:00",
+      "label": "06:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 23.508,
+      "avgMibps": 23.508,
+      "mbps": 197.2,
+      "ttfbMs": 94,
+      "durationMs": 177,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 28.045,
+          "mbps": 235.26,
+          "httpCode": 206,
+          "ttfbMs": 79,
+          "durationMs": 143,
+          "bytesPerSecond": 29407091,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Smoking%20Behind%20the%20Supermarket%20with%20You/S01E04/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 18.971,
+          "mbps": 159.14,
+          "httpCode": 206,
+          "ttfbMs": 110,
+          "durationMs": 211,
+          "bytesPerSecond": 19892548,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/punished-creepswork/4chan-stories-the-i-t-wizard/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T06:30:01.860413+07:00",
+      "slot": "2026-08-22T06:30:00+07:00",
+      "label": "06:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 25.222,
+      "avgMibps": 25.222,
+      "mbps": 211.58,
+      "ttfbMs": 82,
+      "durationMs": 166,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 20.07,
+          "mbps": 168.36,
+          "httpCode": 206,
+          "ttfbMs": 97,
+          "durationMs": 199,
+          "bytesPerSecond": 21044438,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/how-are-memories-stored-inside-your-brain/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 30.374,
+          "mbps": 254.8,
+          "httpCode": 206,
+          "ttfbMs": 68,
+          "durationMs": 132,
+          "bytesPerSecond": 31849587,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-reunion/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T07:00:01.955032+07:00",
+      "slot": "2026-08-22T07:00:00+07:00",
+      "label": "07:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 19.851,
+      "avgMibps": 19.851,
+      "mbps": 166.52,
+      "ttfbMs": 152,
+      "durationMs": 222,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 25.952,
+          "mbps": 217.7,
+          "httpCode": 206,
+          "ttfbMs": 74,
+          "durationMs": 154,
+          "bytesPerSecond": 27212415,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-damage-control/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 13.75,
+          "mbps": 115.34,
+          "httpCode": 206,
+          "ttfbMs": 230,
+          "durationMs": 291,
+          "bytesPerSecond": 14417577,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-missing-persons/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T07:30:01.522235+07:00",
+      "slot": "2026-08-22T07:30:00+07:00",
+      "label": "07:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 25.843,
+      "avgMibps": 25.843,
+      "mbps": 216.79,
+      "ttfbMs": 92,
+      "durationMs": 162,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 31.332,
+          "mbps": 262.83,
+          "httpCode": 206,
+          "ttfbMs": 66,
+          "durationMs": 128,
+          "bytesPerSecond": 32854242,
+          "bytesDownloaded": 4194304,
+          "path": "/anime/Bocchi%20the%20Rock%21/S01E11/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 20.354,
+          "mbps": 170.75,
+          "httpCode": 206,
+          "ttfbMs": 118,
+          "durationMs": 197,
+          "bytesPerSecond": 21343212,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-found-footage-3/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T08:00:02.914508+07:00",
+      "slot": "2026-08-22T08:00:00+07:00",
+      "label": "08:00",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 22.649,
+      "avgMibps": 22.649,
+      "mbps": 189.99,
+      "ttfbMs": 95,
+      "durationMs": 182,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 26.461,
+          "mbps": 221.97,
+          "httpCode": 206,
+          "ttfbMs": 85,
+          "durationMs": 151,
+          "bytesPerSecond": 27746528,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/alcohol-is-amazing/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 18.837,
+          "mbps": 158.02,
+          "httpCode": 206,
+          "ttfbMs": 105,
+          "durationMs": 212,
+          "bytesPerSecond": 19751936,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kurzgesagt-in-a-nutshell/our-minds-are-weirder-than-you-think/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    }
+  ]
+}
