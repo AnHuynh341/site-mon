@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-22T08:00:02.734914+07:00",
+  "generated": "2026-08-22T08:30:02.456847+07:00",
   "config": {
     "rangeBytes": 1048576,
     "sampleCount": 2,
@@ -10,86 +10,46 @@
     "slowAtOrAboveBps": 131072
   },
   "latest": {
-    "stamp": "2026-08-22T08:00:02.734914+07:00",
-    "slot": "2026-08-22T08:00:00+07:00",
-    "label": "08:00",
+    "stamp": "2026-08-22T08:30:02.456847+07:00",
+    "slot": "2026-08-22T08:30:00+07:00",
+    "label": "08:30",
     "kind": "audio",
     "status": "GOOD",
-    "mibps": 7.815,
-    "avgMibps": 7.815,
-    "mbps": 65.56,
-    "ttfbMs": 156,
-    "durationMs": 164,
+    "mibps": 2.592,
+    "avgMibps": 2.592,
+    "mbps": 21.74,
+    "ttfbMs": 376,
+    "durationMs": 392,
     "sampleCount": 2,
     "candidateCount": 405,
     "samples": [
       {
         "status": "GOOD",
-        "mibps": 11.483,
-        "mbps": 96.33,
+        "mibps": 2.256,
+        "mbps": 18.92,
         "httpCode": 206,
-        "ttfbMs": 79,
-        "durationMs": 87,
-        "bytesPerSecond": 12040695,
+        "ttfbMs": 432,
+        "durationMs": 443,
+        "bytesPerSecond": 2365104,
         "bytesDownloaded": 1048576,
-        "path": "/1779465498191-track-1779465497094-0.m4a",
+        "path": "/1779452757315-track-1779452756822-0.mp3",
         "curlExit": 0
       },
       {
         "status": "GOOD",
-        "mibps": 4.147,
-        "mbps": 34.79,
+        "mibps": 2.929,
+        "mbps": 24.57,
         "httpCode": 206,
-        "ttfbMs": 233,
-        "durationMs": 241,
-        "bytesPerSecond": 4348501,
+        "ttfbMs": 319,
+        "durationMs": 341,
+        "bytesPerSecond": 3070770,
         "bytesDownloaded": 1048576,
-        "path": "/1779030660897-track-1779030660868-0.flac",
+        "path": "/1785978241730-track-1785978240883-0.mp3",
         "curlExit": 0
       }
     ]
   },
   "history": [
-    {
-      "stamp": "2026-08-21T08:00:03.150203+07:00",
-      "slot": "2026-08-21T08:00:00+07:00",
-      "label": "08:00",
-      "kind": "audio",
-      "status": "GOOD",
-      "mibps": 8.706,
-      "avgMibps": 8.706,
-      "mbps": 73.03,
-      "ttfbMs": 108,
-      "durationMs": 124,
-      "sampleCount": 2,
-      "candidateCount": 404,
-      "samples": [
-        {
-          "status": "GOOD",
-          "mibps": 6.355,
-          "mbps": 53.31,
-          "httpCode": 206,
-          "ttfbMs": 144,
-          "durationMs": 157,
-          "bytesPerSecond": 6664014,
-          "bytesDownloaded": 1048576,
-          "path": "/1782472219748-track-1782472219051-0.mp3",
-          "curlExit": 0
-        },
-        {
-          "status": "GOOD",
-          "mibps": 11.057,
-          "mbps": 92.76,
-          "httpCode": 206,
-          "ttfbMs": 73,
-          "durationMs": 90,
-          "bytesPerSecond": 11594418,
-          "bytesDownloaded": 1048576,
-          "path": "/1779037857176-track-1779037856944-0.flac",
-          "curlExit": 0
-        }
-      ]
-    },
     {
       "stamp": "2026-08-21T08:30:02.722930+07:00",
       "slot": "2026-08-21T08:30:00+07:00",
@@ -2006,6 +1966,46 @@
           "bytesPerSecond": 4348501,
           "bytesDownloaded": 1048576,
           "path": "/1779030660897-track-1779030660868-0.flac",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T08:30:02.456847+07:00",
+      "slot": "2026-08-22T08:30:00+07:00",
+      "label": "08:30",
+      "kind": "audio",
+      "status": "GOOD",
+      "mibps": 2.592,
+      "avgMibps": 2.592,
+      "mbps": 21.74,
+      "ttfbMs": 376,
+      "durationMs": 392,
+      "sampleCount": 2,
+      "candidateCount": 405,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 2.256,
+          "mbps": 18.92,
+          "httpCode": 206,
+          "ttfbMs": 432,
+          "durationMs": 443,
+          "bytesPerSecond": 2365104,
+          "bytesDownloaded": 1048576,
+          "path": "/1779452757315-track-1779452756822-0.mp3",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 2.929,
+          "mbps": 24.57,
+          "httpCode": 206,
+          "ttfbMs": 319,
+          "durationMs": 341,
+          "bytesPerSecond": 3070770,
+          "bytesDownloaded": 1048576,
+          "path": "/1785978241730-track-1785978240883-0.mp3",
           "curlExit": 0
         }
       ]

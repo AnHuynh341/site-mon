@@ -1,23 +1,23 @@
 {
-  "generated": "2026-08-22T08:15:02+07:00",
-  "published": "2026-08-22T08:15:06.963679+07:00",
-  "analyticsGenerated": "2026-08-22T08:15:03.415124+07:00",
+  "generated": "2026-08-22T08:32:34+07:00",
+  "published": "2026-08-22T08:32:38.067874+07:00",
+  "analyticsGenerated": "2026-08-22T08:32:35.450610+07:00",
   "sourceFallback": {
     "analytics": false
   },
   "latest": {
     "frontend": {
       "status": "UP",
-      "ms": 274
+      "ms": 28
     },
     "database": {
       "status": "UP",
-      "ms": 1339
+      "ms": 260
     },
     "storage": {
       "status": "UP",
-      "ms": 93,
-      "worst": 200,
+      "ms": 71,
+      "worst": 104,
       "successfulSamples": 5,
       "totalSamples": 5
     },
@@ -37,9 +37,9 @@
       "objects": 0
     },
     "analytics": {
-      "visits": 25,
+      "visits": 26,
       "visitsWithoutBots": 0,
-      "pageLoad": 2294
+      "pageLoad": 2298
     }
   },
   "visits": {
@@ -93,7 +93,7 @@
       3,
       3,
       3,
-      1
+      2
     ],
     "withoutBots": [
       0,
@@ -173,14 +173,11 @@
       1703,
       1680,
       1662,
-      1797
+      2092
     ]
   },
   "r2History": {
     "labels": [
-      "08:20",
-      "08:25",
-      "08:30",
       "08:35",
       "08:40",
       "08:45",
@@ -465,12 +462,14 @@
       "08:00",
       "08:05",
       "08:10",
-      "08:15"
+      "08:15",
+      "08:19",
+      "08:20",
+      "08:25",
+      "08:30",
+      "08:32"
     ],
     "average": [
-      69,
-      82,
-      81,
       97,
       102,
       80,
@@ -755,12 +754,14 @@
       108,
       68,
       111,
-      93
+      93,
+      65,
+      72,
+      81,
+      85,
+      71
     ],
     "worst": [
-      89,
-      148,
-      157,
       208,
       242,
       141,
@@ -1045,54 +1046,56 @@
       234,
       81,
       278,
-      200
+      200,
+      67,
+      90,
+      148,
+      138,
+      104
     ]
   },
   "samples": [
     {
       "name": "Sample 1",
-      "ms": 200
+      "ms": 61
     },
     {
       "name": "Sample 2",
-      "ms": 56
-    },
-    {
-      "name": "Sample 3",
-      "ms": 59
-    },
-    {
-      "name": "Sample 4",
       "ms": 71
     },
     {
+      "name": "Sample 3",
+      "ms": 57
+    },
+    {
+      "name": "Sample 4",
+      "ms": 104
+    },
+    {
       "name": "Sample 5",
-      "ms": 81
+      "ms": 66
     }
   ],
   "audioProbeHealth": {
-    "good": 1409,
+    "good": 1419,
     "slow": 25,
     "unstable": 6,
-    "total": 1440,
+    "total": 1450,
     "averageMs": 134,
     "goodThroughMs": 500,
     "unstableAboveMs": 1500
   },
   "videoProbeHealth": {
-    "good": 972,
+    "good": 957,
     "slow": 12,
-    "unstable": 180,
-    "total": 1164,
-    "averageMs": 157,
+    "unstable": 185,
+    "total": 1154,
+    "averageMs": 158,
     "goodThroughMs": 500,
     "unstableAboveMs": 1500
   },
   "videoHistory": {
     "labels": [
-      "08:20",
-      "08:25",
-      "08:30",
       "08:35",
       "08:40",
       "08:45",
@@ -1377,12 +1380,14 @@
       "08:00",
       "08:05",
       "08:10",
-      "08:15"
+      "08:15",
+      "08:19",
+      "08:20",
+      "08:25",
+      "08:30",
+      "08:32"
     ],
     "average": [
-      83,
-      93,
-      102,
       83,
       87,
       102,
@@ -1667,12 +1672,14 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "worst": [
-      89,
-      153,
-      161,
       114,
       141,
       195,
@@ -1889,6 +1896,11 @@
       147,
       78,
       535,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,

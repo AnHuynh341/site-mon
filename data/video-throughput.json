@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-22T08:00:02.914508+07:00",
+  "generated": "2026-08-22T08:30:02.216875+07:00",
   "config": {
     "rangeBytes": 4194304,
     "sampleCount": 2,
@@ -10,86 +10,46 @@
     "slowAtOrAboveBps": 262144
   },
   "latest": {
-    "stamp": "2026-08-22T08:00:02.914508+07:00",
-    "slot": "2026-08-22T08:00:00+07:00",
-    "label": "08:00",
+    "stamp": "2026-08-22T08:30:02.216875+07:00",
+    "slot": "2026-08-22T08:30:00+07:00",
+    "label": "08:30",
     "kind": "video",
     "status": "GOOD",
-    "mibps": 22.649,
-    "avgMibps": 22.649,
-    "mbps": 189.99,
-    "ttfbMs": 95,
-    "durationMs": 182,
+    "mibps": 26.313,
+    "avgMibps": 26.313,
+    "mbps": 220.73,
+    "ttfbMs": 74,
+    "durationMs": 158,
     "sampleCount": 2,
     "candidateCount": 92,
     "samples": [
       {
         "status": "GOOD",
-        "mibps": 26.461,
-        "mbps": 221.97,
+        "mibps": 31.671,
+        "mbps": 265.68,
         "httpCode": 206,
-        "ttfbMs": 85,
-        "durationMs": 151,
-        "bytesPerSecond": 27746528,
+        "ttfbMs": 64,
+        "durationMs": 126,
+        "bytesPerSecond": 33209846,
         "bytesDownloaded": 4194304,
-        "path": "/youtube/kurzgesagt-in-a-nutshell/alcohol-is-amazing/video.mp4",
+        "path": "/youtube/kane-pixels/backrooms-the-third-test/video.mp4",
         "curlExit": 0
       },
       {
         "status": "GOOD",
-        "mibps": 18.837,
-        "mbps": 158.02,
+        "mibps": 20.954,
+        "mbps": 175.78,
         "httpCode": 206,
-        "ttfbMs": 105,
-        "durationMs": 212,
-        "bytesPerSecond": 19751936,
+        "ttfbMs": 83,
+        "durationMs": 191,
+        "bytesPerSecond": 21972130,
         "bytesDownloaded": 4194304,
-        "path": "/youtube/kurzgesagt-in-a-nutshell/our-minds-are-weirder-than-you-think/video.mp4",
+        "path": "/youtube/kane-pixels/backrooms-prototype/video.mp4",
         "curlExit": 0
       }
     ]
   },
   "history": [
-    {
-      "stamp": "2026-08-21T08:00:03.170709+07:00",
-      "slot": "2026-08-21T08:00:00+07:00",
-      "label": "08:00",
-      "kind": "video",
-      "status": "GOOD",
-      "mibps": 19.558,
-      "avgMibps": 19.558,
-      "mbps": 164.06,
-      "ttfbMs": 270,
-      "durationMs": 334,
-      "sampleCount": 2,
-      "candidateCount": 80,
-      "samples": [
-        {
-          "status": "GOOD",
-          "mibps": 31.738,
-          "mbps": 266.24,
-          "httpCode": 206,
-          "ttfbMs": 66,
-          "durationMs": 126,
-          "bytesPerSecond": 33279410,
-          "bytesDownloaded": 4194304,
-          "path": "/youtube/kurzgesagt-in-a-nutshell/this-is-the-scariest-place-in-the-universe/video.mp4",
-          "curlExit": 0
-        },
-        {
-          "status": "GOOD",
-          "mibps": 7.377,
-          "mbps": 61.89,
-          "httpCode": 206,
-          "ttfbMs": 474,
-          "durationMs": 542,
-          "bytesPerSecond": 7735642,
-          "bytesDownloaded": 4194304,
-          "path": "/youtube/greentext-animations/the-pigeon-man-full-version-4chan-greentext-animations/video.mp4",
-          "curlExit": 0
-        }
-      ]
-    },
     {
       "stamp": "2026-08-21T08:30:02.567522+07:00",
       "slot": "2026-08-21T08:30:00+07:00",
@@ -2006,6 +1966,46 @@
           "bytesPerSecond": 19751936,
           "bytesDownloaded": 4194304,
           "path": "/youtube/kurzgesagt-in-a-nutshell/our-minds-are-weirder-than-you-think/video.mp4",
+          "curlExit": 0
+        }
+      ]
+    },
+    {
+      "stamp": "2026-08-22T08:30:02.216875+07:00",
+      "slot": "2026-08-22T08:30:00+07:00",
+      "label": "08:30",
+      "kind": "video",
+      "status": "GOOD",
+      "mibps": 26.313,
+      "avgMibps": 26.313,
+      "mbps": 220.73,
+      "ttfbMs": 74,
+      "durationMs": 158,
+      "sampleCount": 2,
+      "candidateCount": 92,
+      "samples": [
+        {
+          "status": "GOOD",
+          "mibps": 31.671,
+          "mbps": 265.68,
+          "httpCode": 206,
+          "ttfbMs": 64,
+          "durationMs": 126,
+          "bytesPerSecond": 33209846,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-the-third-test/video.mp4",
+          "curlExit": 0
+        },
+        {
+          "status": "GOOD",
+          "mibps": 20.954,
+          "mbps": 175.78,
+          "httpCode": 206,
+          "ttfbMs": 83,
+          "durationMs": 191,
+          "bytesPerSecond": 21972130,
+          "bytesDownloaded": 4194304,
+          "path": "/youtube/kane-pixels/backrooms-prototype/video.mp4",
           "curlExit": 0
         }
       ]
